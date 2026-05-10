@@ -103,6 +103,11 @@ Planned future enhancements (no committed timeline):
 - **Briefing templates** — pre-filled templates for common mission types (CAS, CAP, SEAD)
 - **Per-page PNG export** — share single pages on Discord without exporting the full PDF
 - **URL-based sharing** — share a briefing via a single link
+- **Auto-import of METAR from .miz** — Create a .miz, set the meteo and import it
+- **Auto-import of radio frequencies from .miz** — Prepare all aircrafts freq from ME or import an existing .miz
+- **Embedded library of airport charts** — May need an online connexion to a chart repository)
+- **UI polish and improvments**
+- **More themes**
 
 ## 🤝 Contributing
 
