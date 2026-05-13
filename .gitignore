@@ -1,0 +1,83 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+ENV/
+
+# --- IDE / Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+.history/
+
+# --- macOS / Windows / Linux junk ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.lnk
+
+# --- Build outputs (the generated HTML files) ---
+# We keep them tracked in /releases/, but ignore local builds in root
+/DCS_World_Briefing_Generator.html
+
+# Local working copies, scratch outputs
+/scratch/
+/tmp/
+/.tmp/
+output/
+dist/
+build/
+
+# --- User-specific working briefing JSONs ---
+# (don't accidentally commit personal briefings)
+briefing_*.json
+my_briefing.json
+test_briefing.json
+*_local.json
+
+# Exception: the example wing config IS tracked
+!wing_config_4th_veaw.json
+!wing_config_*_example.json
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Misc ---
+.cache/
+.direnv/
+
+# --- AI tool helpers ---
+# Claude Code session data (if you use Claude Code locally)
+.claude/
+
+# --- Backup files ---
+*.bak
+*.backup
+*.orig
+
+# --- Node (if you ever add tooling) ---
+node_modules/
+package-lock.json
+yarn.lock
