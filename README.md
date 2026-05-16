@@ -2,7 +2,7 @@
 ![Intro-image](https://forum.dcs.world/uploads/monthly_2026_05/Capturedcran2026-05-08231721.png.cadb306c79dce1a6f6745893bebc0ac4.png)
 > Generate beautifully styled mission briefings for DCS World — fully offline, in a single HTML file.
 
-![Version](https://img.shields.io/badge/version-2.0.0-brown)
+![Version](https://img.shields.io/badge/version-2.1.0-brown)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Web-green)
 ![Offline](https://img.shields.io/badge/offline-yes-success)
@@ -19,7 +19,7 @@ Developped with the help of Claude AI (I'm not a dev !)
 - **Single HTML file** — open it, use it, share it
 - **Multi-wing configurable** — each wing customizes its branding, squadrons, and logos
 - **4 graphical themes** — Cold War NATO (default), Cold War Soviet, Modern NATO, Modern Eastern Bloc
-- **PDF export** — print-to-PDF from your browser, no extra tools needed
+- **PDF & PNG export** — print-to-PDF and export to PNG files from your browser, no extra tools needed
 - **Multi-platform** — works on PC (Windows/macOS/Linux) and tablets (Android/iOS)
 - **Auto-save** — your briefing is preserved in your browser's local storage
 - **Import/Export** — share briefings as JSON files, share wing configs across teams
@@ -59,6 +59,9 @@ The default `MY WING` configuration is generic. Replace it with your own to matc
 - **[User Guide (EN)](./Docs/DCS_World_Briefing_Generator_User_Guide_EN.html)** — Full user documentation in English
 - **[Technical Documentation](./DOCS_DCS_World_Briefing_Generator.md)** — For contributors and developers
 
+Current user guide version for release 2.0.0.
+Update in progress for 2.0.1 changes.
+
 ## 🏗️ Building from source
 
 If you want to modify the code yourself:
@@ -93,21 +96,33 @@ The output `DCS_World_Briefing_Generator.html` is the distributable file.
 ├── README.md
 └── LICENSE
 ```
-
 ## 🗺️ Roadmap
 
-Planned future enhancements (no committed timeline):
+### ⏳ Work in Progress
+- ⏳ **Auto-import of METAR from .miz** — Create a .miz, set the meteo and import it
+- ⏳ **Embedded library of airport charts** — May need an online connexion to a chart repository)
+- ⏳ **UI polish and improvments**
 
+### 📋 Planned
 - **English UI** — full internationalization (FR/EN toggle in toolbar)
 - **Auto-save indicator** — visible feedback when briefing is saved
 - **Briefing templates** — pre-filled templates for common mission types (CAS, CAP, SEAD)
-- **Per-page PNG export** — share single pages on Discord without exporting the full PDF
 - **URL-based sharing** — share a briefing via a single link
-- **Auto-import of METAR from .miz** — Create a .miz, set the meteo and import it
 - **Auto-import of radio frequencies from .miz** — Prepare all aircrafts freq from ME or import an existing .miz
-- **Embedded library of airport charts** — May need an online connexion to a chart repository)
-- **UI polish and improvments**
 - **More themes**
+
+<details>
+<summary>✅ Completed Features (Click to expand)</summary>
+
+#### 🚀 Version 2.1.0 (Current)
+- [x] **Per-page PNG export** — share single pages on Discord without exporting the full PDF
+
+#### 📦 Version 2.0.0
+- [x] Initial release of the offline generator (single HTML file)
+- [x] 4 graphic themes (Cold War NATO, Soviet, Modern NATO, Eastern Bloc)
+- [x] Native PDF export and Multi-wing management (JSON files)
+
+</details>
 
 ## 🤝 Contributing
 
