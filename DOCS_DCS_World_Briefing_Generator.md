@@ -1,26 +1,28 @@
 # DCS World Briefing Generator — Documentation technique
 
-## 1. Vue d'ensemble
+### 1. Vue d'ensemble
 
-Application HTML monofichier offline (~800 Ko). Génère des briefings militaires au format A4, style "document kraft" années 80, pour le simulateur DCS World. Conçue pour tablette (900px) avec interface éditeur + prévisualisation temps réel.
+Application HTML monofichier offline (~825 Ko). Génère des briefings militaires au format A4, style "document kraft" années 80, pour le simulateur DCS World. Conçue pour tablette (900px) avec interface éditeur + prévisualisation temps réel. Export PDF (impression navigateur) et **PNG kneeboard** (page unique ou ZIP multipages, format 794×1123 A4 strict).
 
 **Fichiers du projet :**
 
 | Fichier | Rôle |
 |---|---|
-| `build_html.py` | Template HTML + JavaScript complet (~3 300 lignes) |
-| `build_css.py` | CSS complet (~1 800 lignes) |
-| `assets.json` | Logos base64 + fond SVG kraft |
+| `build_html.py` | Template HTML + JavaScript complet (~3 700 lignes) |
+| `build_css.py` | CSS complet (~2 000 lignes) |
+| `assets.json` | Logos base64 + fond SVG kraft + html2canvas + JSZip (export PNG) |
+| `briefing.css` | Intermédiaire généré par `build_css.py`, consommé par `build_html.py` (non commit) |
 | `DCS_World_Briefing_Generator.html` | Livrable final (généré par le build) |
-| `wing_config_4th_veaw.json` | Exemple de configuration wing 4th VEAW |
+| `wing_config_4th-veaw.json` | Exemple de configuration wing 4th VEAW |
 
 **Build :**
 ```bash
-cd /home/claude
 python3 build_css.py && python3 build_html.py
 ```
-Le CSS est généré d'abord, puis injecté dans le HTML. Les assets (logos, SVG) sont injectés via des placeholders `__KRAFT_SVG__` et `__DEFAULT_WING_CONFIG__` remplacés par `str.replace()` dans `build_html.py`.
+Le CSS est généré d'abord, puis injecté dans le HTML. Les assets (logos, SVG, libs) sont injectés via des placeholders `__KRAFT_SVG__`, `__DEFAULT_WING_CONFIG__`, `__LIB_HTML2CANVAS__`, `__LIB_JSZIP__` remplacés par `str.replace()` dans `build_html.py`.
 
+Les scripts utilisent des chemins relatifs à eux-mêmes (`HERE = os.path.dirname(os.path.abspath(__file__))`), donc fonctionnels sur n'importe quel poste sans modification.
+````
 ---
 
 ## 2. Architecture
@@ -30,7 +32,9 @@ Le CSS est généré d'abord, puis injecté dans le HTML. Les assets (logos, SVG
 | Breakpoint | Mode |
 |---|---|
 | ≥ 1100px | Desktop : éditeur gauche (40%) + aperçu droite (60%) |
-| < 1100px | Tablette : 9 onglets en barre du bas + page plein écran |
+| < 1100px | Tablette : 11 onglets en barre du bas + page plein écran |
+
+> **⚠ Règle critique :** toute nouvelle section éditeur doit avoir son `data-active-tab` ajouté au mapping `@media (max-width: 1100px)` dans `build_css.py`, sinon la section est invisible en tablette portrait (bug constaté lors de l'ajout de la section Annexes en v2.1.0).
 
 ### 2.2 Stack technique
 
@@ -157,12 +161,16 @@ state = {
     }
   ],
 
-  annexes: {
-    chart1Name: 'AKROTIRI (LCRA) — Piste en service : 10',
-    chart1Img: '',               // data URL base64
-    chart2Name: 'PAPHOS (LCPH) — Piste en service : 11',
-    chart2Img: ''
-  },
+````javascript
+  charts: [                      // Pages charts aéroports — liste dynamique illimitée
+    { name: 'AKROTIRI (LCRA) — Piste en service : 10', img: '' },
+    { name: 'PAPHOS (LCPH) — Piste en service : 11', img: '' }
+  ],
+
+  annexes: [                     // Pages annexes libres — liste dynamique illimitée
+    { title: 'Notes additionnelles', img: '', caption: 'Commentaire optionnel' }
+  ],
+````
 
   roster: {
     groups: [
@@ -187,6 +195,8 @@ Appelées dans `loadState()` et `loadJsonFile()`, **jamais dans `buildPages()`**
 |---|---|
 | `normalizeExecution(exec)` | `string[]` legacy → `{text, subtasks[]}[]` |
 | `normalizePhaseImages(ph)` | `ph.mapImage` legacy → `ph.images[{title,data,caption}]` |
+| `normalizeCharts(state)` | `annexes.chart1*/chart2*` legacy → `state.charts[{name,img}]` |
+| `normalizeAnnexes(state)` | Normalise `state.annexes[{title,img,caption}]` |
 | `normalizeThreatLevel(lvl)` | `'Danger'`/`'Important'` → `'Élevé'` |
 
 > **⚠ Règle critique :** Ne jamais appeler `normalizePhaseImages(ph)` dans `buildPages()`. Cette fonction fait `ph.images = ph.images.map(...)`, ce qui remplace le tableau par un nouveau et invalide toutes les closures des event listeners de `renderPhaseImages`. Cela cause des bugs où titre/caption/upload/suppression semblent ne pas fonctionner.
@@ -241,6 +251,8 @@ Pour ajouter, modifier ou supprimer un escadron, utilisez l'interface de l'ongle
 | `renderChannels(container, ai, ri)` | Canaux d'une radio |
 | `renderRoster()` | Groupes équipage avec SELECT dynamique |
 | `renderPilots(container, gi)` | Lignes pilotes d'un groupe |
+| `renderCharts()` | Liste dynamique des charts (nom + image, ajout/suppression) |
+| `renderAnnexes()` | Liste dynamique des annexes libres (titre + image + caption) |
 
 > **⚠ `renderPhaseImages` — règle des closures :** tous les event listeners utilisent `state.phases[phaseIdx].images[k].xxx` directement. Ne jamais capturer `imgs[k]` (référence objet) — capturer uniquement les primitifs `phaseIdx` et `k`.
 
@@ -289,9 +301,13 @@ Pour ajouter, modifier ou supprimer un escadron, utilisez l'interface de l'ongle
 | 04 Plan Radio | `radio` | Items globaux (max 6) + plans par appareil |
 | 05 Missions | `phases` | N missions : exécution, images, escadrons |
 | 07 Équipage | `roster` | Groupes pilotes liés aux missions |
-| 08 Annexes | `annexes` | Charts aéroports |
-| 09 Wing | `wing` | Configuration du wing : branding, escadrons |
+| 08 Charts | `charts` | Charts aéroports — liste dynamique illimitée (v2.1.0) |
+| 09 Annexes | `annexes` | Pages annexes libres — liste dynamique illimitée (v2.1.0) |
+| 10 Wing | `wing` | Configuration du wing : branding, escadrons |
 | — Aperçu | `preview` | Prévisualisation PDF (tablette uniquement) |
+
+> Note v2.1.0 : la section 06 a été retirée (anciennement Plan Radio détaillé, désormais intégré dans 04). La section 08 anciennement "Annexes" est devenue "Charts" avec liste dynamique illimitée. Une nouvelle section 09 "Annexes" libre a été créée. La section Wing est passée de 09 à 10.
+
 
 ### Bindings déclaratifs
 
@@ -343,16 +359,21 @@ Champs par mission :
 | Classe | Rôle |
 |---|---|
 | `.page` | Conteneur A4 — fond SVG kraft |
+| `.page--for-png` | Variante du `.page` utilisée pour le clone html2canvas lors de l'export PNG (réplique les règles `@media print` en CSS standard) |
 | `.p-header` | En-tête (logos + titre + sous-titre) |
+| `.p-header-logo` | Conteneur `<div>` des logos du header (remplace `<img>`, utilise `background-image` pour compatibilité html2canvas) |
 | `.p-footer` | Pied de page absolu (position: absolute; bottom: 8mm) |
 | `.p-section` | Bandeau pleine largeur (titre section) |
 | `.p-subsection` | Sous-titre |
 | `.p-imgframe` | Cadre image (hachures si vide, centré avec `margin: auto`) |
+| `.p-annexe-caption` | Commentaire optionnel affiché sous l'image dans une page annexe libre |
 | `.p-bullets` | Liste à puces |
 | `.p-2col` | 2 colonnes (radio annexes) |
-| `.squadron-chip` | Identifiant escadron dans les missions |
+| `.squadron-chip` | Identifiant escadron dans les missions (`display: flex; width: fit-content` pour compatibilité html2canvas) |
 | `.squadron-grid` | Grille escadrons engagés (cellules identiques) |
+| `.squadron-logo-sm` | Logo d'escadron 38×38 ou 32×32, utilisé en `<div background-image>` (pas `<img>`) pour compatibilité html2canvas |
 | `.roster-mega` | Tableau roster 4 colonnes |
+
 
 ### Print CSS (`@media print`)
 
@@ -400,6 +421,53 @@ Champs par mission :
 
 **Fix :** ne pas utiliser `:not()` dans les sélecteurs généraux sur `.page > *` — conserver `background-image` directement sur `.page`.
 
+### Régression `btn-mode` (binding perdu — v2.1.0)
+
+**Cause :** lors d'une refonte intermédiaire, l'instruction `document.getElementById('btn-mode').addEventListener('click', toggleMode)` a été perdue. Le bouton œil/aperçu de la toolbar ne réagissait plus.
+
+**Fix :** suppression définitive du bouton (redondant avec la tab-bar mobile sur tablette et inutile sur desktop). Nettoyage complet de `toggleMode()`, `.app.preview-only`, `mode-label`, et du forçage `preview-only` dans `executePngExport()`.
+
+### PNG en 1985×2807 au lieu de 794×1123 (Bug A — v2.1.0)
+
+**Cause :** html2canvas applique par défaut `scale = window.devicePixelRatio` (= 2.5 sur Xiaomi Pad 6). Le commentaire de spec affirmant "scale par défaut = 1" était trompeur.
+
+**Fix :** `scale: 1` explicite dans les options `html2canvas()` de `renderPageToPng()`. Garantit un PNG de 794×1123 px exact, indépendamment du devicePixelRatio.
+
+### Logos déformés en PNG (Bug B — v2.1.0)
+
+**Cause :** html2canvas gère mal `<img>` + `object-fit: contain` (bugs documentés issues html2canvas #1322 et #2425). Les images sont étirées pour remplir leur boîte au lieu de préserver leur ratio.
+
+**Fix :** remplacement systématique des `<img>` capturés en PNG par des `<div>` avec `background-image` inline (data URL) + `background-size: contain`. Pattern recommandé par la communauté html2canvas. Concerné : `.squadron-logo-sm` (page Aperçu Mission) et `.p-header img` → `.p-header-logo` (header de toutes les pages).
+
+### Rectangle vide à la place du nom d'escadron en PNG (Bug C — v2.1.0)
+
+**Cause :** html2canvas gère mal `display: inline-flex` combiné avec `overflow: hidden`. La bordure est rendue mais le contenu interne (les 3 `<span>` colorés du chip) est absent.
+
+**Fix :** `display: flex; width: fit-content` sur `.squadron-chip` au lieu de `display: inline-flex`. Sémantiquement équivalent, mais correctement géré par html2canvas.
+
+### Bug intermittent "page qui disparaît" (v2.1.0)
+
+**Cause :** race condition entre régénération DOM (`buildPages()` réécrit `#preview.innerHTML`), chargement des polices web, et repaints navigateur. Reproductible 1 fois sur 5-10 tentatives, cross-browser (constaté Brave + Chrome + Firefox).
+
+**Fix CSS préventif multi-couches** (aucune touche au JS) :
+1. `font-display: block` → `font-display: swap` (4 occurrences `@font-face`) — élimine le black-out 3 secondes
+2. Suppression de `-webkit-overflow-scrolling: touch` (déprécié, activait du compositing inutile)
+3. Ajout de `overscroll-behavior: contain` sur `.editor` et `.preview-wrap` — isole le scroll, prévient les reflows en cascade
+4. Ajout de `contain: layout` sur `.ed-section` — isole le layout des sections éditables, réduit la pression sur le moteur de rendu
+
+### Section Annexes invisible en tablette portrait (v2.1.0)
+
+**Cause :** lors de l'ajout de la nouvelle section Annexes (v2.1.0), le mapping `@media (max-width: 1100px) [data-active-tab="annexes"] .ed-section[data-section="annexes"]` a été oublié dans `build_css.py`. La règle générale `body:not([data-active-tab="preview"]) .ed-section { display: none; }` cachait toutes les sections, et aucune règle ne ré-affichait Annexes.
+
+**Fix :** ajout de `body[data-active-tab="annexes"] .ed-section[data-section="annexes"]` dans la liste du bloc `@media (max-width: 1100px)`.
+
+**Règle de prévention :** voir § 2.1 — toute nouvelle section éditeur doit avoir son `data-active-tab` ajouté à ce mapping responsive.
+
+### Images de charts débordant la page A4 (v2.1.0)
+
+**Cause :** `max-height: 230mm` sur `.p-imgframe img` était trop ambitieux. La page A4 fait 297mm de hauteur, mais le header (logos + titre, ~25mm) + p-section (~10mm) + p-subsection (~8mm) + footer (~10mm) + padding (~20mm) consomment ~75mm. Reste ~222mm utilisables — moins 5mm de marge sécurité = **200mm sûr**.
+
+**Fix :** `max-height: 200mm` sur `.p-imgframe img`. Compromis entre agrandissement (vs 190mm origine) et marge de sécurité (vs 230mm trop large).
 ---
 
 ## 10. Persistance et Import/Export
@@ -464,6 +532,32 @@ pdf = await page.pdf(format='A4', print_background=True,
 Il est désormais possible de tester avec plusieurs configurations wing : injecter un wing de test via `localStorage.setItem('wing_config_v1', JSON.stringify(testWingConfig)); location.reload()` avant d'évaluer.
 
 6. **La page équipage doit avoir une seule `<table>` par paire de groupes** — c'est une contrainte architecturale pour la stabilité du rendu PDF, pas juste un choix esthétique.
+
+### Pièges JavaScript / CSS / html2canvas connus
+
+**Pièges JavaScript :**
+- **Ne JAMAIS écrire `*/` dans un commentaire de bloc** (même dans une chaîne ou un commentaire de spec partagé entre humains). Cela ferme prématurément le bloc et casse tout le script suivant. Préférer les commentaires `//` sur une ligne.
+- **`node --check` sur le script extrait du HTML** est un garde-fou efficace contre les erreurs de syntaxe introduites par mégarde. Pattern :
+  ```python
+  import re
+  with open('DCS_World_Briefing_Generator.html') as f: html = f.read()
+  scripts = re.findall(r'<script[^>]*>(.*?)</script>', html, re.DOTALL)
+  with open('/tmp/main.js', 'w') as f: f.write(scripts[3])
+  # node --check /tmp/main.js
+  ```
+
+**Pièges CSS responsive :**
+- **Toute nouvelle section éditeur doit avoir son `data-active-tab` ajouté au mapping `@media (max-width: 1100px)`** dans `build_css.py`, sinon elle est invisible en tablette portrait.
+
+**Pièges html2canvas (export PNG) :**
+- **Toute `<img>` qui sera capturée en PNG doit utiliser `<div background-image>` à la place** — `object-fit: contain` est mal géré par html2canvas et déforme les images.
+- **Toute `display: inline-flex` + `overflow: hidden` capturée en PNG doit passer en `display: flex; width: fit-content`** — sinon la bordure est rendue mais pas le contenu.
+- **Forcer `scale: 1` explicitement** dans les options `html2canvas()`, sinon `devicePixelRatio` est appliqué par défaut (× 2 ou × 3 selon l'appareil).
+
+**Pièges build pipeline :**
+- **Toujours rebuild le HTML après modif des `.py`**, puis grep sur le HTML final (pas sur les `.py`). Une livraison Sonnet apparemment correcte côté source peut produire un HTML incorrect si le rebuild s'est fait sur une ancienne copie.
+````
+
 
 ---
 
