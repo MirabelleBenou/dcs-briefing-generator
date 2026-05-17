@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DCS World Briefing Generator &mdash; User Guide v1.0</title>
+<title>DCS World Briefing Generator &mdash; User Guide v1.1</title>
 
 <style>
 
@@ -478,13 +478,13 @@ window.shotFallback = function(img) {
   <div class="cover-sub">User Guide</div>
   <div class="cover-divider"></div>
   <div class="cover-meta">
-    Version 1.0<br>
+    Version 1.1<br>
     Edition of 2026-05-17<br>
     <br>
     Print to PDF &rarr; Chrome <kbd>Ctrl+P</kbd>
   </div>
   <div class="cover-locale-notice">Application interface in French &mdash; English UI planned in a future release</div>
-  <div class="cover-stamp">V1.0 &mdash; 2026-05-17</div>
+  <div class="cover-stamp">V1.1 &mdash; 2026-05-17</div>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -504,7 +504,8 @@ window.shotFallback = function(img) {
   <div class="toc-entry toc-h2"><span>2.5 Radio plan &mdash; &#128251; tab</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>2.6 Individual missions &mdash; &#8853; tab</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>2.7 Crew &mdash; &#128100; tab</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.8 Appendices &mdash; &#128206; tab</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.8 Charts &mdash; 🗺 tab</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.9 Free-form Appendices &mdash; &#128206; tab</span><span class="toc-dots"></span></div>
 
   <div class="toc-entry toc-h1"><span>3. Saving and Resuming a Briefing</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>3.1 Automatic local save</span><span class="toc-dots"></span></div>
@@ -516,7 +517,8 @@ window.shotFallback = function(img) {
   <div class="toc-entry toc-h2"><span>4.1 Preview mode verification</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>4.2 Exporting to PDF (Windows / macOS)</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>4.3 Exporting to PDF on Android</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>4.4 Best practices</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>4.4 PNG kneeboard export</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>4.5 Best practices</span><span class="toc-dots"></span></div>
 
   <div class="toc-entry toc-h1"><span>5. Wing Configuration (Admin)</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>5.1 What is a wing config?</span><span class="toc-dots"></span></div>
@@ -560,7 +562,7 @@ A full English UI is planned for a future release.
 
 <p>When the application opens, you are in <strong>edit mode</strong>. The interface is split into two simple zones:</p>
 
-<figure class="ud-screenshot ud-wide" data-shot="01" data-desc="full toolbar in edit mode: Apercu / Sauver / Charger / Imprimer / Reset visible" data-caption="The toolbar at the top of the screen" data-dims="">
+<figure class="ud-screenshot ud-wide" data-shot="01" data-desc="full toolbar in edit mode: Sauver / Charger / Imprimer / Reset visible" data-caption="The toolbar at the top of the screen" data-dims="">
   <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_01.png" target="_blank" rel="noopener" title="Click to enlarge">
     <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_01.png" alt="The toolbar at the top of the screen" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
@@ -600,7 +602,8 @@ A full English UI is planned for a future release.
     <tr><td>&#128251;</td><td>Radio</td><td>Common frequencies and per-aircraft radio plans</td></tr>
     <tr><td>&#8853;</td><td>Missions</td><td>Individual mission cards per pilot</td></tr>
     <tr><td>&#128100;</td><td>Crew</td><td>Order of battle &mdash; groups and pilots</td></tr>
-    <tr><td>&#128206;</td><td>Appendices</td><td>Additional airport charts</td></tr>
+    <tr><td>🗺</td><td>Charts</td><td>Airport charts (approach, taxiway, communication…)</td></tr>
+    <tr><td>&#128206;</td><td>Free-form Appendices</td><td>Free illustrated content at the end of the briefing</td></tr>
     <tr><td>&#128737;</td><td>Wing</td><td>Wing configuration (admin section)</td></tr>
     <tr><td>&#9672;</td><td>Preview</td><td>Print-ready rendering of the briefing</td></tr>
   </tbody>
@@ -615,7 +618,7 @@ A full English UI is planned for a future release.
   <li><strong>Preview mode</strong> &mdash; the briefing is displayed in A4 format, exactly as it will print. No forms, just the final rendering.</li>
 </ul>
 
-<p>To switch: the <kbd>Aperçu</kbd> (Preview) button in the toolbar, or the <strong>&#9672; Aperçu</strong> tab directly.</p>
+<p>To switch: click the <strong>&#9672; Aperçu</strong> tab directly.</p>
 
 <figure class="ud-screenshot" data-shot="04" data-desc="active preview mode: A4 cover page rendered in military kraft style, no editor UI" data-caption="Preview mode &amp;mdash; what you will get in the final PDF" data-dims="">
   <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_04.png" target="_blank" rel="noopener" title="Click to enlarge">
@@ -756,22 +759,49 @@ A full English UI is planned for a future release.
   <li>Each group lists pilots with their callsign, rank, and optional notes.</li>
 </ul>
 
-<h2 class="subsec">2.8 Appendices &mdash; &#128206; Tab</h2>
+<h2 class="subsec">2.8 Charts &mdash; 🗺 Tab</h2>
 
-<p>Two slots for additional airport charts &mdash; parking diagrams, ILS procedures, runway layouts. Each slot takes up a full page in the printed briefing.</p>
+<p>The Charts tab lets you add airport charts to the briefing. These charts are typically approach, taxiway, or communication diagrams downloaded from sources such as Chartfox or official aeronautical publications.</p>
 
-<figure class="ud-screenshot" data-shot="10" data-desc="Appendices tab: an airport chart loaded with its label filled in" data-caption="&amp;#128206; Appendices tab" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_10.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_10.png" alt="&amp;#128206; Appendices tab" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<p>For each chart, you fill in:</p>
+<ul>
+  <li>A <strong>title</strong> (e.g., &ldquo;LFMN &mdash; ILS RWY 04R&rdquo;)</li>
+  <li>An <strong>image</strong> (PNG or JPEG) loaded by drag-and-drop or via the selection button</li>
+  <li>An optional <strong>comment</strong> to annotate or provide context for the chart</li>
+</ul>
+
+<p>The <code>+ Add a chart</code> button lets you add as many charts as needed. Charts appear in the final briefing in the order they were entered.</p>
+
+<figure class="ud-screenshot" data-shot="18" data-desc="Charts tab: list of charts with the '+ Add a chart' button visible" data-caption="The Charts tab" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_18.png" target="_blank" rel="noopener" title="Click to enlarge">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_18.png" alt="The Charts tab" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>&#128206; Appendices tab</figcaption>
+  <figcaption>The Charts tab</figcaption>
 </figure>
 
+<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>Optimise your chart images before loading them. A 4K PNG at 8 MB will add no visual value over a 1500 px PNG at 500 KB, and will only bloat the exported briefing.</div></aside>
+
+<h2 class="subsec">2.9 Free-form Appendices &mdash; &#128206; Tab</h2>
+
+<p>The Free-form Appendices tab fills the role of the Appendices tab in v2.0.0: it lets you add free illustrated content at the end of the briefing &mdash; diagrams, reference notes, photos, enemy OOB, etc.</p>
+
+<p>Each appendix combines:</p>
 <ul>
-  <li>Fill in the <strong>label</strong> (e.g., &ldquo;Kobuleti &mdash; Parking diagram&rdquo;) and load the image by drag-and-drop or by clicking the zone.</li>
-  <li>Leave a slot empty if you have no chart to add &mdash; those pages simply will not be generated.</li>
+  <li>A mandatory <strong>title</strong></li>
+  <li>An optional <strong>image</strong> (loaded by drag-and-drop)</li>
+  <li>A free-length <strong>comment field</strong></li>
 </ul>
+
+<figure class="ud-screenshot" data-shot="19" data-desc="Free-form Appendices tab: list entry showing title field, image zone, and comment area" data-caption="The Free-form Appendices tab" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_19.png" target="_blank" rel="noopener" title="Click to enlarge">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_19.png" alt="The Free-form Appendices tab" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+    <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
+  </a>
+  <figcaption>The Free-form Appendices tab</figcaption>
+</figure>
+
+<aside class="ud-admin"><span class="ud-ico">&#9881;</span><div>Appendices appear in the final briefing in the order they were entered. To reorder them, use the up/down arrows next to each appendix.</div></aside>
 
 </div>
 
@@ -835,7 +865,7 @@ A full English UI is planned for a future release.
 
 <h2 class="subsec">4.1 Preview Mode Verification</h2>
 
-<p>Before printing, take a quick look in <strong>Preview mode</strong> &mdash; the <kbd>Aper&ccedil;u</kbd> (Preview) button in the toolbar, or the &#9672;&nbsp;Aper&ccedil;u tab directly. Check that:</p>
+<p>Before printing, take a quick look in <strong>Preview mode</strong> &mdash; the &#9672;&nbsp;Aperçu tab. Check that:</p>
 <ul>
   <li>The cover page shows the correct title and map.</li>
   <li>Content pages are not truncated.</li>
@@ -888,7 +918,31 @@ A full English UI is planned for a future release.
 
 <aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>On Android, if the print preview appears cropped, verify that the scale is set to 100% and not &ldquo;Fit to page&rdquo; &mdash; Chrome on Android may offer both.</div></aside>
 
-<h2 class="subsec">4.4 Best Practices</h2>
+<h2 class="subsec">4.4 PNG Kneeboard Export</h2>
+
+<p>In addition to the standard PDF export, the generator produces a PNG export optimised for DCS <strong>kneeboards</strong> &mdash; the virtual kneepads displayed in-game during a flight.</p>
+
+<p>To export as PNG kneeboard:</p>
+<ol>
+  <li>Click the <code>Imprimer</code> (Print) button in the toolbar</li>
+  <li>In the export modal, select the <strong>PNG kneeboard</strong> option (default: PDF)</li>
+  <li>Check the pages to export in the list shown (all pages checked by default)</li>
+  <li>Click <code>Export</code></li>
+</ol>
+
+<p>A ZIP file is generated, containing one PNG per selected page. Each PNG is sized to standard DCS kneeboard ratios.</p>
+
+<figure class="ud-screenshot" data-shot="20" data-desc="briefing export modal: choice between PDF and PNG kneeboard, page selector with checkboxes" data-caption="The multi-format export modal" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_20.png" target="_blank" rel="noopener" title="Click to enlarge">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_20.png" alt="The multi-format export modal" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+    <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
+  </a>
+  <figcaption>The multi-format export modal</figcaption>
+</figure>
+
+<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>You can uncheck pages not needed during flight (cover page, administrative appendices) to keep only what matters in the kneeboard and reduce cognitive load in the cockpit.</div></aside>
+
+<h2 class="subsec">4.5 Best Practices</h2>
 
 <ul>
   <li><strong>Prepare early.</strong> A briefing done the evening before is a briefing you have time to review and fix.</li>

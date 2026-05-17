@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DCS World Briefing Generator — Guide utilisateur v1.0</title>
+<title>DCS World Briefing Generator — Guide utilisateur v1.1</title>
 
 <style>
 
@@ -478,12 +478,12 @@ window.shotFallback = function(img) {
   <div class="cover-sub">Guide Utilisateur</div>
   <div class="cover-divider"></div>
   <div class="cover-meta">
-    Version 1.0<br>
+    Version 1.1<br>
     Édition du 17/05/2026<br>
     <br>
     Imprimer en PDF → Chrome <kbd>Ctrl+P</kbd>
   </div>
-  <div class="cover-stamp">V1.0 — 17/05/2026</div>
+  <div class="cover-stamp">V1.1 — 17/05/2026</div>
 </div>
 
 <!-- TABLE DES MATIÈRES -->
@@ -503,7 +503,8 @@ window.shotFallback = function(img) {
   <div class="toc-entry toc-h2"><span>2.5 Plan radio — onglet 📻</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>2.6 Missions individuelles — onglet ⊕</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>2.7 Équipage — onglet 👤</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.8 Annexes — onglet 📎</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.8 Charts — onglet 🗺</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.9 Annexes libres — onglet 📎</span><span class="toc-dots"></span></div>
 
   <div class="toc-entry toc-h1"><span>3. Sauvegarder et reprendre un briefing</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>3.1 La sauvegarde automatique</span><span class="toc-dots"></span></div>
@@ -515,7 +516,8 @@ window.shotFallback = function(img) {
   <div class="toc-entry toc-h2"><span>4.1 Vérification en mode aperçu</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>4.2 Exporter en PDF (Windows / macOS)</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>4.3 Exporter en PDF depuis Android</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>4.4 Bonnes pratiques</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>4.4 Export PNG kneeboard</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>4.5 Bonnes pratiques</span><span class="toc-dots"></span></div>
 
   <div class="toc-entry toc-h1"><span>5. Configuration du wing</span><span class="toc-dots"></span></div>
   <div class="toc-entry toc-h2"><span>5.1 Qu'est-ce qu'un « wing config » ?</span><span class="toc-dots"></span></div>
@@ -548,7 +550,7 @@ window.shotFallback = function(img) {
 
 <p>Dès l'ouverture, vous êtes en mode <strong>édition</strong>. L'interface se divise en deux zones simples :</p>
 
-<figure class="ud-screenshot ud-wide" data-shot="01" data-desc="barre d'outils complète mode édition : Aperçu / Sauver / Charger / Imprimer / Reset visibles" data-caption="La barre d'outils en haut de l'écran" data-dims="">
+<figure class="ud-screenshot ud-wide" data-shot="01" data-desc="barre d'outils complète mode édition : Sauver / Charger / Imprimer / Reset visibles" data-caption="La barre d'outils en haut de l'écran" data-dims="">
   <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_01.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
     <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_01.png" alt="La barre d'outils en haut de l'écran" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
@@ -588,7 +590,8 @@ window.shotFallback = function(img) {
     <tr><td>📻</td><td>Radio</td><td>Fréquences communes et plans radio par appareil</td></tr>
     <tr><td>⊕</td><td>Missions</td><td>Fiches de mission individuelles par pilote</td></tr>
     <tr><td>👤</td><td>Équipage</td><td>Ordre de bataille — groupes et pilotes</td></tr>
-    <tr><td>📎</td><td>Annexes</td><td>Charts d'aéroport supplémentaires</td></tr>
+    <tr><td>🗺</td><td>Charts</td><td>Charts d'aéroport (approche, taxiway, communication…)</td></tr>
+    <tr><td>📎</td><td>Annexes libres</td><td>Contenu illustré libre en fin de briefing</td></tr>
     <tr><td>🛡</td><td>Wing</td><td>Configuration du wing (section admin)</td></tr>
     <tr><td>◈</td><td>Aperçu</td><td>Rendu final imprimable du briefing</td></tr>
   </tbody>
@@ -603,7 +606,7 @@ window.shotFallback = function(img) {
   <li><strong>Mode aperçu</strong> — le briefing s'affiche en format A4, exactement comme il s'imprimera. Plus de formulaires, juste le rendu final.</li>
 </ul>
 
-<p>Pour basculer : bouton <kbd>Aperçu</kbd> dans la toolbar, ou onglet <strong>◈ Aperçu</strong> directement.</p>
+<p>Pour basculer : cliquer directement sur l'onglet <strong>◈ Aperçu</strong>.</p>
 
 <figure class="ud-screenshot" data-shot="04" data-desc="mode aperçu actif : page de couverture rendue A4 style kraft militaire, sans interface édition" data-caption="Mode aperçu — ce qu'on retrouvera dans le PDF final" data-dims="">
   <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_04.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
@@ -744,22 +747,49 @@ window.shotFallback = function(img) {
   <li>Chaque groupe contient les pilotes avec leur indicatif, rang, et notes éventuelles.</li>
 </ul>
 
-<h2 class="subsec">2.8 Annexes — onglet 📎</h2>
+<h2 class="subsec">2.8 Charts — onglet 🗺</h2>
 
-<p>Deux emplacements pour des charts d'aéroport supplémentaires — plans de parking, procédures ILS, diagrammes de piste. Chacun prend une page entière dans le briefing imprimé.</p>
+<p>L'onglet Charts permet d'ajouter des cartes aéroportuaires (charts) au briefing. Ces charts sont typiquement des PDF ou images d'approche, taxiway, communication, etc., téléchargées depuis des sources comme Chartfox ou les sites officiels.</p>
 
-<figure class="ud-screenshot" data-shot="10" data-desc="onglet Annexes : chart d'aéroport chargé avec son nom renseigné" data-caption="Onglet 📎 Annexes" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_10.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_10.png" alt="Onglet 📎 Annexes" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<p>Pour chaque chart, vous renseignez :</p>
+<ul>
+  <li>Un <strong>titre</strong> (ex : « LFMN — ILS RWY 04R »)</li>
+  <li>Une <strong>image</strong> (PNG ou JPEG) chargée par glisser-déposer ou via le bouton de sélection</li>
+  <li>Un <strong>commentaire</strong> facultatif pour annoter ou contextualiser la chart</li>
+</ul>
+
+<p>Le bouton <code>+ Ajouter une chart</code> permet d'en ajouter autant que nécessaire. Les charts apparaissent dans le briefing final dans l'ordre où vous les avez saisies.</p>
+
+<figure class="ud-screenshot" data-shot="18" data-desc="onglet Charts : liste de charts avec bouton « + Ajouter une chart » visible" data-caption="L'onglet Charts" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_18.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_18.png" alt="L'onglet Charts" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>Onglet 📎 Annexes</figcaption>
+  <figcaption>L'onglet Charts</figcaption>
 </figure>
 
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Optimisez vos images de charts avant de les charger. Un PNG de 4K en 8 Mo n'apportera rien de plus visuellement qu'un PNG de 1500 px à 500 Ko, et alourdira inutilement le briefing exporté.</div></aside>
+
+<h2 class="subsec">2.9 Annexes libres — onglet 📎</h2>
+
+<p>L'onglet Annexes libres remplit le rôle qu'avait l'onglet Annexes en v2.0.0 : il permet d'ajouter du contenu illustré libre en fin de briefing — schémas, notes, photos de référence, OOB ennemi, etc.</p>
+
+<p>Chaque annexe combine :</p>
 <ul>
-  <li>Renseignez le <strong>nom</strong> (ex. « Kobuleti — Plan de parking ») et chargez l'image par glisser-déposer ou en cliquant.</li>
-  <li>Laissez vide si vous n'avez pas de chart à ajouter — ces pages ne seront simplement pas générées.</li>
+  <li>Un <strong>titre</strong> obligatoire</li>
+  <li>Une <strong>image</strong> facultative (chargée par glisser-déposer)</li>
+  <li>Une <strong>zone de commentaire</strong> textuelle de longueur libre</li>
 </ul>
+
+<figure class="ud-screenshot" data-shot="19" data-desc="onglet Annexes libres : liste avec champ titre, zone image et zone de commentaire pour une annexe" data-caption="L'onglet Annexes libres" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_19.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_19.png" alt="L'onglet Annexes libres" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+    <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
+  </a>
+  <figcaption>L'onglet Annexes libres</figcaption>
+</figure>
+
+<aside class="ud-admin"><span class="ud-ico">⚙</span><div>Les annexes apparaissent dans le briefing final dans l'ordre où vous les avez saisies. Pour réordonner, utilisez les flèches haut/bas à côté de chaque annexe.</div></aside>
 
 </div>
 
@@ -823,7 +853,7 @@ window.shotFallback = function(img) {
 
 <h2 class="subsec">4.1 Vérification en mode aperçu</h2>
 
-<p>Avant d'imprimer, jetez un œil en <strong>mode aperçu</strong> — bouton <kbd>Aperçu</kbd> ou onglet ◈. Vérifiez rapidement que :</p>
+<p>Avant d'imprimer, jetez un œil en <strong>mode aperçu</strong> — onglet ◈. Vérifiez rapidement que :</p>
 <ul>
   <li>La couverture affiche bien le titre et la carte.</li>
   <li>Les pages de contenu ne sont pas tronquées.</li>
@@ -876,7 +906,31 @@ window.shotFallback = function(img) {
 
 <aside class="ud-tip"><span class="ud-ico">☞</span><div>Sur Android, si l'aperçu d'impression semble tronqué, vérifiez que l'échelle est à 100 % et non « Ajuster à la page » — Chrome Android peut proposer les deux.</div></aside>
 
-<h2 class="subsec">4.4 Bonnes pratiques</h2>
+<h2 class="subsec">4.4 Export PNG kneeboard</h2>
+
+<p>En plus de l'export PDF classique, le générateur produit un export PNG optimisé pour les <strong>kneeboards</strong> de DCS — les blocs-notes virtuels affichés en jeu lors du vol.</p>
+
+<p>Pour exporter en PNG kneeboard :</p>
+<ol>
+  <li>Cliquer sur le bouton <code>Imprimer</code> dans la toolbar</li>
+  <li>Dans la modale d'export, choisir l'option <strong>PNG kneeboard</strong> (par défaut : PDF)</li>
+  <li>Cocher les pages à exporter dans la liste proposée (toutes par défaut)</li>
+  <li>Cliquer sur <code>Exporter</code></li>
+</ol>
+
+<p>Un fichier ZIP est généré, contenant un PNG par page sélectionnée. Chaque PNG est dimensionné aux ratios kneeboard DCS standard.</p>
+
+<figure class="ud-screenshot" data-shot="20" data-desc="modale d'export du briefing : choix entre PDF et PNG kneeboard, sélecteur de pages à cocher" data-caption="La modale d'export multi-format" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_20.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_20.png" alt="La modale d'export multi-format" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+    <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
+  </a>
+  <figcaption>La modale d'export multi-format</figcaption>
+</figure>
+
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Vous pouvez décocher les pages non nécessaires en vol (page de garde, annexes administratives) pour n'avoir que l'essentiel dans le kneeboard et économiser de l'espace mental en cockpit.</div></aside>
+
+<h2 class="subsec">4.5 Bonnes pratiques</h2>
 
 <ul>
   <li><strong>Préparez tôt.</strong> Un briefing fait la veille, c'est un briefing qu'on a le temps de relire et de corriger.</li>
