@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DCS World Briefing Generator &mdash; User Guide v1.0</title>
+<title>DCS World Briefing Generator — Guide utilisateur v1.0</title>
 
 <style>
 
@@ -451,8 +451,8 @@ table.ud-table {
 </head>
 <body>
 <script>
-/* Browser-side fallback: if a shot_NN.png image fails to load (404),
-   replace the clickable link with a visual placeholder. */
+/* Fallback navigateur : si une image shot_NN.png n'existe pas (404),
+   on remplace le lien cliquable par un placeholder visuel. */
 window.shotFallback = function(img) {
   var fig = img.closest('figure.ud-screenshot');
   if (!fig) return;
@@ -463,7 +463,7 @@ window.shotFallback = function(img) {
   var dimsText = dims ? ', ~' + dims : '';
   var ph = document.createElement('div');
   ph.className = 'ud-placeholder-box';
-  ph.textContent = '[SCREENSHOT ' + num + ': ' + desc + dimsText + ']';
+  ph.textContent = '[CAPTURE ' + num + ' : ' + desc + dimsText + ']';
   fig.classList.add('ud-placeholder');
   if (link && link.parentNode) {
     link.parentNode.replaceChild(ph, link);
@@ -471,613 +471,601 @@ window.shotFallback = function(img) {
 };
 </script>
 
-<!-- COVER -->
+<!-- COUVERTURE -->
 <div class="cover">
-  <div class="cover-badge">Reference Document // For Pilots &amp; Wing Admins</div>
+  <div class="cover-badge">DOCUMENT DE RÉFÉRENCE // POUR PILOTES &amp; WING ADMINS</div>
   <div class="cover-title">DCS World<br>Briefing Generator</div>
-  <div class="cover-sub">User Guide</div>
+  <div class="cover-sub">Guide Utilisateur</div>
   <div class="cover-divider"></div>
   <div class="cover-meta">
     Version 1.0<br>
-    Edition of 2026-05-17<br>
+    Édition du 17/05/2026<br>
     <br>
-    Print to PDF &rarr; Chrome <kbd>Ctrl+P</kbd>
+    Imprimer en PDF → Chrome <kbd>Ctrl+P</kbd>
   </div>
-  <div class="cover-locale-notice">Application interface in French &mdash; English UI planned in a future release</div>
-  <div class="cover-stamp">V1.0 &mdash; 2026-05-17</div>
+  <div class="cover-stamp">V1.0 — 17/05/2026</div>
 </div>
 
-<!-- TABLE OF CONTENTS -->
+<!-- TABLE DES MATIÈRES -->
 <div class="toc-page">
-  <div class="toc-title">Table of Contents</div>
+  <div class="toc-title">Table des matières</div>
 
-  <div class="toc-entry toc-h1"><span>1. Getting Started</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>1.1 Opening the application</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>1.2 Interface overview</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>1.3 Edit mode vs Preview mode</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h1"><span>1. Premier démarrage</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>1.1 Ouvrir l'application</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>1.2 Découverte de l'interface</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>1.3 Mode édition et mode aperçu</span><span class="toc-dots"></span></div>
 
-  <div class="toc-entry toc-h1"><span>2. Creating a Complete Briefing</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.1 Metadata &mdash; &#9881; tab</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.2 Cover page &mdash; &#9685; tab</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.3 Tactical situation &mdash; &#9635; SITAC tab</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.4 Mission overview &mdash; &#9992; tab</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.5 Radio plan &mdash; &#128251; tab</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.6 Individual missions &mdash; &#8853; tab</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.7 Crew &mdash; &#128100; tab</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>2.8 Appendices &mdash; &#128206; tab</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h1"><span>2. Créer un briefing complet</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.1 Métadonnées — onglet ⚙</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.2 Couverture — onglet ◉</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.3 Situation tactique — onglet ▣ SITAC</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.4 Aperçu mission — onglet ✈</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.5 Plan radio — onglet 📻</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.6 Missions individuelles — onglet ⊕</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.7 Équipage — onglet 👤</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>2.8 Annexes — onglet 📎</span><span class="toc-dots"></span></div>
 
-  <div class="toc-entry toc-h1"><span>3. Saving and Resuming a Briefing</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>3.1 Automatic local save</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>3.2 Exporting a briefing as JSON</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>3.3 Importing an existing briefing</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>3.4 Starting fresh</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h1"><span>3. Sauvegarder et reprendre un briefing</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>3.1 La sauvegarde automatique</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>3.2 Exporter en JSON</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>3.3 Importer un briefing existant</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>3.4 Recommencer à zéro</span><span class="toc-dots"></span></div>
 
-  <div class="toc-entry toc-h1"><span>4. Exporting to PDF</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>4.1 Preview mode verification</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>4.2 Exporting to PDF (Windows / macOS)</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>4.3 Exporting to PDF on Android</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>4.4 Best practices</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h1"><span>4. Exporter en PDF</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>4.1 Vérification en mode aperçu</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>4.2 Exporter en PDF (Windows / macOS)</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>4.3 Exporter en PDF depuis Android</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>4.4 Bonnes pratiques</span><span class="toc-dots"></span></div>
 
-  <div class="toc-entry toc-h1"><span>5. Wing Configuration (Admin)</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>5.1 What is a wing config?</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>5.2 Editing the wing identity</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>5.3 Managing squadrons</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>5.4 Loading logos</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h2"><span>5.5 Exporting, importing, resetting</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h1"><span>5. Configuration du wing</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>5.1 Qu'est-ce qu'un « wing config » ?</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>5.2 Modifier l'identité du wing</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>5.3 Gérer les escadrons</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>5.4 Charger des logos</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h2"><span>5.5 Exporter, importer, réinitialiser</span><span class="toc-dots"></span></div>
 
-  <div class="toc-entry toc-h1"><span>6. FAQ and Tips</span><span class="toc-dots"></span></div>
-  <div class="toc-entry toc-h1"><span>7. Appendix &mdash; Credits and Licenses</span><span class="toc-dots"></span></div>
-
+  <div class="toc-entry toc-h1"><span>6. FAQ et astuces</span><span class="toc-dots"></span></div>
+  <div class="toc-entry toc-h1"><span>7. Annexe — crédits et licences</span><span class="toc-dots"></span></div>
 </div>
 
-<!-- § 1 GETTING STARTED -->
+<!-- § 1 PREMIER DÉMARRAGE -->
 <div class="page">
-<h1 class="sec-title"><span class="sec-num">01</span> Getting Started</h1>
+<h1 class="sec-title"><span class="sec-num">01</span> Premier démarrage</h1>
 
-<aside class="ud-locale"><span class="ud-ico">&#127760;</span><div><div>
-<strong>About localization</strong><br><br>
-This guide is the English version of the user documentation.
-The application interface itself remains in French at the time of writing.
-Screenshots in this guide therefore show French labels &mdash; alongside each label
-you will find the English equivalent in parentheses
-(e.g., &laquo;&nbsp;<strong>Sauver</strong>&nbsp;(Save)&nbsp;&raquo;).
-A full English UI is planned for a future release.
-</div></div></aside>
+<h2 class="subsec">1.1 Ouvrir l'application</h2>
 
-<h2 class="subsec">1.1 Opening the Application</h2>
-
-<p>No installation, no server, no account required. Double-click <code>DCS_World_Briefing_Generator.html</code> and you are ready to go. The application runs entirely in your browser, offline.</p>
+<p>Pas d'installation, pas de serveur, pas de compte. Vous double-cliquez sur <code>DCS_World_Briefing_Generator.html</code> et c'est parti. L'application tourne entièrement dans votre navigateur, hors ligne.</p>
 
 <ul>
-  <li><strong>Recommended browser: Chrome (or any Chromium-based browser).</strong> PDF output is cleanest in Chrome, and that is the primary target platform.</li>
-  <li>Firefox and Safari work for editing, but may behave differently when printing.</li>
-  <li>On Android tablets, copy the HTML file to your device (USB cable, Drive, email&hellip;) and open it with Chrome.</li>
+  <li><strong>Navigateur recommandé : Chrome (ou un dérivé Chromium).</strong> C'est là que l'impression PDF est la plus propre, et c'est là que l'app a été conçue.</li>
+  <li>Firefox et Safari fonctionnent pour remplir les formulaires, mais peuvent se comporter différemment à l'impression.</li>
+  <li>Sur tablette Android, copiez le fichier HTML sur votre appareil (câble, Drive, mail…) et ouvrez-le avec Chrome.</li>
 </ul>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>Keep the HTML file in a fixed folder on your PC &mdash; your briefing data is tied to the file&rsquo;s location via browser storage.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Gardez le fichier HTML dans un dossier fixe sur votre PC — vos données de briefing sont liées à l'emplacement du fichier via le stockage du navigateur.</div></aside>
 
-<h2 class="subsec">1.2 Interface Overview</h2>
+<h2 class="subsec">1.2 Découverte de l'interface</h2>
 
-<p>When the application opens, you are in <strong>edit mode</strong>. The interface is split into two simple zones:</p>
+<p>Dès l'ouverture, vous êtes en mode <strong>édition</strong>. L'interface se divise en deux zones simples :</p>
 
-<figure class="ud-screenshot ud-wide" data-shot="01" data-desc="full toolbar in edit mode: Apercu / Sauver / Charger / Imprimer / Reset visible" data-caption="The toolbar at the top of the screen" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_01.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_01.png" alt="The toolbar at the top of the screen" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot ud-wide" data-shot="01" data-desc="barre d'outils complète mode édition : Aperçu / Sauver / Charger / Imprimer / Reset visibles" data-caption="La barre d'outils en haut de l'écran" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_01.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_01.png" alt="La barre d'outils en haut de l'écran" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>The toolbar at the top of the screen</figcaption>
+  <figcaption>La barre d'outils en haut de l'écran</figcaption>
 </figure>
 
-<p>At the top, the <strong>toolbar</strong> &mdash; your wing name on the left, the main action buttons on the right. Below it, the <strong>tabs</strong> that give access to each section of the briefing.</p>
+<p>En haut, la <strong>barre d'outils</strong> — avec le nom de votre wing à gauche et les boutons principaux à droite. En dessous, les <strong>onglets</strong> qui donnent accès à chaque section du briefing.</p>
 
-<figure class="ud-screenshot" data-shot="02" data-desc="full editor view on desktop: toolbar + tabs + open form, demo data visible" data-caption="The editor on a wide screen" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_02.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_02.png" alt="The editor on a wide screen" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="02" data-desc="vue éditeur globale PC : toolbar + onglets + formulaire ouvert, données de démonstration" data-caption="L'interface éditeur sur écran large" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_02.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_02.png" alt="L'interface éditeur sur écran large" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>The editor on a wide screen</figcaption>
+  <figcaption>L'interface éditeur sur écran large</figcaption>
 </figure>
 
-<p>On a tablet, the tabs move to the bottom of the screen, within thumb reach:</p>
+<p>Sur tablette, les onglets basculent en bas de l'écran, accessibles au pouce :</p>
 
-<figure class="ud-screenshot" data-shot="03" data-desc="editor on Android tablet: icon-only tabs at the bottom of the screen" data-caption="On tablet &amp;mdash; tabs move to the bottom" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_03.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_03.png" alt="On tablet &amp;mdash; tabs move to the bottom" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="03" data-desc="vue éditeur sur tablette Android : onglets iconiques en bas de l'écran" data-caption="Sur tablette — les onglets passent en bas" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_03.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_03.png" alt="Sur tablette — les onglets passent en bas" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>On tablet &mdash; tabs move to the bottom</figcaption>
+  <figcaption>Sur tablette — les onglets passent en bas</figcaption>
 </figure>
 
-<p>Available tabs, left to right:</p>
+<p>Les onglets disponibles, dans l'ordre :</p>
 
 <table class="ud-table">
-  <thead><tr><th>Icon</th><th>Name</th><th>What you do there</th></tr></thead>
+  <thead><tr><th>Icône</th><th>Nom</th><th>Ce qu'on y fait</th></tr></thead>
   <tbody>
-    <tr><td>&#9881;</td><td>Meta</td><td>Date, classification, document reference</td></tr>
-    <tr><td>&#9685;</td><td>Cover</td><td>Operation title, context, cover map</td></tr>
-    <tr><td>&#9635;</td><td>SITAC</td><td>Tactical situation, weather, SITREP entries</td></tr>
-    <tr><td>&#9992;</td><td>Mission</td><td>Objectives, bases, threats (mission overview)</td></tr>
-    <tr><td>&#128251;</td><td>Radio</td><td>Common frequencies and per-aircraft radio plans</td></tr>
-    <tr><td>&#8853;</td><td>Missions</td><td>Individual mission cards per pilot</td></tr>
-    <tr><td>&#128100;</td><td>Crew</td><td>Order of battle &mdash; groups and pilots</td></tr>
-    <tr><td>&#128206;</td><td>Appendices</td><td>Additional airport charts</td></tr>
-    <tr><td>&#128737;</td><td>Wing</td><td>Wing configuration (admin section)</td></tr>
-    <tr><td>&#9672;</td><td>Preview</td><td>Print-ready rendering of the briefing</td></tr>
+    <tr><td>⚙</td><td>Méta</td><td>Date, classification, référence du document</td></tr>
+    <tr><td>◉</td><td>Couv.</td><td>Titre de l'opération, contexte, carte de couverture</td></tr>
+    <tr><td>▣</td><td>SITAC</td><td>Situation tactique, météo, points de situation</td></tr>
+    <tr><td>✈</td><td>Mission</td><td>Objectifs, bases, menaces (aperçu mission)</td></tr>
+    <tr><td>📻</td><td>Radio</td><td>Fréquences communes et plans radio par appareil</td></tr>
+    <tr><td>⊕</td><td>Missions</td><td>Fiches de mission individuelles par pilote</td></tr>
+    <tr><td>👤</td><td>Équipage</td><td>Ordre de bataille — groupes et pilotes</td></tr>
+    <tr><td>📎</td><td>Annexes</td><td>Charts d'aéroport supplémentaires</td></tr>
+    <tr><td>🛡</td><td>Wing</td><td>Configuration du wing (section admin)</td></tr>
+    <tr><td>◈</td><td>Aperçu</td><td>Rendu final imprimable du briefing</td></tr>
   </tbody>
 </table>
 
-<h2 class="subsec">1.3 Edit Mode vs Preview Mode</h2>
+<h2 class="subsec">1.3 Mode édition et mode aperçu</h2>
 
-<p>The application has two modes, and switching between them takes a single click:</p>
+<p>L'app a deux modes, et on passe de l'un à l'autre en un clic :</p>
 
 <ul>
-  <li><strong>Edit mode</strong> &mdash; you fill in the forms. This is where all the work happens.</li>
-  <li><strong>Preview mode</strong> &mdash; the briefing is displayed in A4 format, exactly as it will print. No forms, just the final rendering.</li>
+  <li><strong>Mode édition</strong> — vous remplissez les formulaires. C'est là que se passe tout le travail.</li>
+  <li><strong>Mode aperçu</strong> — le briefing s'affiche en format A4, exactement comme il s'imprimera. Plus de formulaires, juste le rendu final.</li>
 </ul>
 
-<p>To switch: the <kbd>Aperçu</kbd> (Preview) button in the toolbar, or the <strong>&#9672; Aperçu</strong> tab directly.</p>
+<p>Pour basculer : bouton <kbd>Aperçu</kbd> dans la toolbar, ou onglet <strong>◈ Aperçu</strong> directement.</p>
 
-<figure class="ud-screenshot" data-shot="04" data-desc="active preview mode: A4 cover page rendered in military kraft style, no editor UI" data-caption="Preview mode &amp;mdash; what you will get in the final PDF" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_04.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_04.png" alt="Preview mode &amp;mdash; what you will get in the final PDF" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="04" data-desc="mode aperçu actif : page de couverture rendue A4 style kraft militaire, sans interface édition" data-caption="Mode aperçu — ce qu'on retrouvera dans le PDF final" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_04.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_04.png" alt="Mode aperçu — ce qu'on retrouvera dans le PDF final" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>Preview mode &mdash; what you will get in the final PDF</figcaption>
+  <figcaption>Mode aperçu — ce qu'on retrouvera dans le PDF final</figcaption>
 </figure>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>Check the preview regularly while you work. It is the best way to catch layout issues before printing.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Jetez un œil à l'aperçu régulièrement pendant que vous travaillez. C'est le meilleur moyen de voir si le briefing « rend » bien avant d'imprimer.</div></aside>
 
 </div>
 
-<!-- § 2 CREATING A COMPLETE BRIEFING -->
+<!-- § 2 CRÉER UN BRIEFING COMPLET -->
 <div class="page">
-<h1 class="sec-title"><span class="sec-num">02</span> Creating a Complete Briefing</h1>
+<h1 class="sec-title"><span class="sec-num">02</span> Créer un briefing complet</h1>
 
-<p>We will walk through the tabs in order, left to right. That is how a briefing naturally builds up, and it is the best way to make sure nothing gets missed.</p>
+<p>On va parcourir les onglets dans l'ordre, de gauche à droite. C'est comme ça que le briefing se construit, et c'est l'ordre le plus logique pour ne rien oublier.</p>
 
-<h2 class="subsec">2.1 Metadata &mdash; &#9881; Tab</h2>
+<h2 class="subsec">2.1 Métadonnées — onglet ⚙</h2>
 
-<p>These are the header fields that appear in the footer of every printed page. A few fields, quickly filled.</p>
+<p>Ce sont les données d'en-tête qui s'affichent en pied de page sur chaque feuille imprimée. Quelques champs, vite remplis.</p>
 
-<figure class="ud-screenshot" data-shot="05" data-desc="Metadata tab filled in: Operation, Mission code, Date, Classification, Reference visible" data-caption="&amp;#9881; Meta tab" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_05.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_05.png" alt="&amp;#9881; Meta tab" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="05" data-desc="onglet Métadonnées rempli : Opération, Mission code, Date, Classification, Référence visibles" data-caption="Onglet ⚙ Méta" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_05.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_05.png" alt="Onglet ⚙ Méta" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>&#9881; Meta tab</figcaption>
+  <figcaption>Onglet ⚙ Méta</figcaption>
 </figure>
 
 <ul>
-  <li><strong>Operation</strong> &mdash; the operation name (e.g., &ldquo;IRON DAWN&rdquo;).</li>
-  <li><strong>Mission code</strong> &mdash; a short code identifying the sortie (e.g., &ldquo;ALPHA-7&rdquo;).</li>
-  <li><strong>Mission date</strong> &mdash; free-form (e.g., &ldquo;14 JAN 2025 / ZULU&rdquo;).</li>
-  <li><strong>Classification</strong> &mdash; the fictional classification level displayed on every page: CONFIDENTIEL D&Eacute;FENSE, SECRET D&Eacute;FENSE, TR&Egrave;S SECRET, NON CLASSIFI&Eacute;, NATO RESTRICTED, NATO SECRET.</li>
-  <li><strong>Document reference</strong> &mdash; document number or internal reference (e.g., &ldquo;4VEAW/OPS/2025-001&rdquo;).</li>
+  <li><strong>Opération</strong> — le nom de l'opération (ex. « IRON DAWN »).</li>
+  <li><strong>Mission code</strong> — un code court pour identifier la sortie (ex. « ALPHA-7 »).</li>
+  <li><strong>Date mission</strong> — en format libre (ex. « 14 JAN 2025 / ZULU »).</li>
+  <li><strong>Classification</strong> — le niveau de classification fictif affiché sur les pages : CONFIDENTIEL DÉFENSE, SECRET DÉFENSE, TRÈS SECRET, NON CLASSIFIÉ, NATO RESTRICTED, NATO SECRET.</li>
+  <li><strong>Référence document</strong> — numéro de document ou référence interne (ex. « 4VEAW/OPS/2025-001 »).</li>
 </ul>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>Takes two minutes and gives the briefing an immediate professional feel. Don&rsquo;t skip it.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Ça prend deux minutes et ça donne un côté pro immédiat au briefing. Ne sautez pas cette étape.</div></aside>
 
-<h2 class="subsec">2.2 Cover Page &mdash; &#9685; Tab</h2>
+<h2 class="subsec">2.2 Couverture — onglet ◉</h2>
 
-<p>The first page of the printed briefing. This is where you set the scene for everything that follows.</p>
+<p>La première page du briefing imprimé. C'est ici que vous posez le décor pour tout ce qui suit.</p>
 
-<figure class="ud-screenshot" data-shot="06" data-desc="Cover tab filled in with an operation map loaded, title and context text visible" data-caption="&amp;#9685; Cover tab" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_06.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_06.png" alt="&amp;#9685; Cover tab" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="06" data-desc="onglet Couverture rempli avec carte d'opération chargée, titre et texte de contexte visibles" data-caption="Onglet ◉ Couv." data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_06.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_06.png" alt="Onglet ◉ Couv." loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>&#9685; Cover tab</figcaption>
+  <figcaption>Onglet ◉ Couv.</figcaption>
 </figure>
 
 <ul>
-  <li><strong>Operation title</strong> &mdash; displayed in large stencil lettering on the cover. Short and punchy works best.</li>
-  <li><strong>Narrative / Context</strong> &mdash; a free-text paragraph giving the situation to the pilots. This is the text they will read before take-off.</li>
-  <li><strong>Operation map</strong> &mdash; drag-and-drop an image, or click the zone to select one. PNG, JPEG, WEBP &mdash; all formats accepted.</li>
+  <li><strong>Titre opération</strong> — s'affiche en grand stencil sur la couverture. Courts et percutants, c'est mieux.</li>
+  <li><strong>Récit / Contexte</strong> — paragraphe libre qui donne la situation aux pilotes. C'est le texte qu'ils liront avant de décoller.</li>
+  <li><strong>Carte d'opération</strong> — glissez-déposez une image, ou cliquez sur la zone pour en choisir une. PNG, JPEG, WEBP — tout passe.</li>
 </ul>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>A DCS F10 map screenshot, cropped and annotated in 30 seconds in any image editor, works perfectly. Aim for 1200 px wide for clean print quality.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Un screenshot de la vue F10 DCS, recadré et annoté en 30 secondes dans Paint, fait parfaitement l'affaire. Visez 1200 px de large pour une belle qualité à l'impression.</div></aside>
 
-<h2 class="subsec">2.3 Tactical Situation &mdash; &#9635; SITAC Tab</h2>
+<h2 class="subsec">2.3 Situation tactique — onglet ▣ SITAC</h2>
 
-<p>A summary of the situation at mission time &mdash; where forces stand, what the context is, what the weather looks like.</p>
+<p>Le résumé de la situation au moment de la mission — où en sont les forces, quel est le contexte, quel temps il fait.</p>
 
 <ul>
-  <li><strong>SITAC date</strong> &mdash; may differ from the mission date if the SITAC was compiled the day before.</li>
-  <li><strong>SITREP entries</strong> &mdash; a list of short situation points (+ Add entry button). Enemy positions, restricted areas, red alerts&hellip;</li>
-  <li><strong>METAR</strong> &mdash; weather in METAR format or plain text (&ldquo;Ceiling 3 000 ft, wind 270/15 kt&rdquo;).</li>
-  <li><strong>SITAC map</strong> &mdash; optional: an annotated image showing friendly/enemy positions. If left blank, the page stays clean.</li>
+  <li><strong>Date SITAC affichée</strong> — peut être différente de la date de la mission si la SITAC date de la veille.</li>
+  <li><strong>Points de situation</strong> — une liste de points courts (bouton + Ajouter un point). Positions ennemies, zones interdites, alertes rouges…</li>
+  <li><strong>METAR</strong> — météo au format METAR ou en texte libre (« Plafond 3000 ft, vent 270/15 kt »).</li>
+  <li><strong>Carte SITAC</strong> — optionnel : une image annotée avec les positions amies/ennemies. Si vous n'en avez pas, la page reste propre.</li>
 </ul>
 
-<h2 class="subsec">2.4 Mission Overview &mdash; &#9992; Tab</h2>
+<h2 class="subsec">2.4 Aperçu mission — onglet ✈</h2>
 
-<p>The operational body of the mission: what needs to be done, where to land, and what can shoot back.</p>
+<p>Le corps opérationnel de la mission : ce qu'on doit faire, où on se pose, et ce qui peut nous tirer dessus.</p>
 
 <ul>
-  <li><strong>Primary objectives</strong> &mdash; a list (+ Add objective). One line, one idea &mdash; that is the right format.</li>
-  <li><strong>FARPs &amp; Airfields</strong> &mdash; available bases with their status (friendly, neutral, hostile).</li>
-  <li><strong>Threats</strong> &mdash; check-boxes by type (Armor, APC, AAA, SAM) with levels or short descriptions.</li>
-  <li><strong>Threat notes</strong> &mdash; free-text field for active SAMs, no-fly zones, or anything that does not fit the check-boxes.</li>
+  <li><strong>Objectifs principaux</strong> — une liste (+ Ajouter un objectif). Une ligne, une idée, c'est le bon format.</li>
+  <li><strong>FARP &amp; Aéroports</strong> — les bases disponibles avec leur statut (amie, neutre, hostile).</li>
+  <li><strong>Menaces</strong> — cases par type (Chars, APC, AAA, SAM) avec niveaux ou descriptions courtes.</li>
+  <li><strong>Note menaces</strong> — zone libre si vous avez des infos sur des SAM actifs, des zones à éviter, ou autre chose qui ne rentre pas dans les cases.</li>
 </ul>
 
-<h2 class="subsec">2.5 Radio Plan &mdash; &#128251; Tab</h2>
+<h2 class="subsec">2.5 Plan radio — onglet 📻</h2>
 
-<p>All frequencies in one place. This tab is split into two parts:</p>
+<p>Toutes les fréquences au même endroit. Cet onglet se divise en deux parties :</p>
 
-<figure class="ud-screenshot" data-shot="09" data-desc="Radio plan tab: common radio items filled in + one aircraft with its channels configured" data-caption="&amp;#128251; Radio tab" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_09.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_09.png" alt="&amp;#128251; Radio tab" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="09" data-desc="onglet Plan radio : items radio communs renseignés + un appareil avec ses canaux configurés" data-caption="Onglet 📻 Radio" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_09.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_09.png" alt="Onglet 📻 Radio" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>&#128251; Radio tab</figcaption>
+  <figcaption>Onglet 📻 Radio</figcaption>
 </figure>
 
 <ul>
-  <li><strong>Radio items</strong> (max 6) &mdash; frequencies common to all pilots: primary ATC, mission frequency, guard&hellip; These appear on page 3 of the printed briefing.</li>
-  <li><strong>Per-aircraft radio plans</strong> &mdash; for each aircraft type in use (F-16C, F/A-18C, Mi-8&hellip;), define the radios and their preset channels. You can also load an <strong>image</strong> (a screenshot of the in-game radio preset) to replace the generated table.</li>
+  <li><strong>Items radio</strong> (max 6) — les fréquences communes à tout le monde : ATC principal, fréquence de mission, urgence… Elles s'affichent sur la page 3 du briefing imprimé.</li>
+  <li><strong>Plans radio par appareil</strong> — pour chaque avion utilisé (F-16C, F/A-18C, Mi-8…), vous définissez les radios et leurs canaux. Vous pouvez aussi charger une <strong>image</strong> (screenshot de la radio préconfigurée en jeu) qui remplace la table générée.</li>
 </ul>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>Define the common radio items first, then map them to the per-aircraft presets. Consistency across pages is guaranteed that way.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Définissez d'abord les items radio communs, puis assignez-les aux canaux par appareil. La cohérence entre les pages s'en trouve garantie.</div></aside>
 
-<h2 class="subsec">2.6 Individual Missions &mdash; &#8853; Tab</h2>
+<h2 class="subsec">2.6 Missions individuelles — onglet ⊕</h2>
 
-<p>Often the longest section to fill in &mdash; and the most personalized. Each pilot or crew can have their own mission card.</p>
+<p>C'est souvent la section la plus longue à remplir — et la plus personnalisée. Chaque pilote ou équipage peut avoir sa propre fiche.</p>
 
-<figure class="ud-screenshot" data-shot="07" data-desc="Missions tab: one open mission card with pilot, squadron, aircraft and notes visible" data-caption="&amp;#8853; Missions tab &amp;mdash; an open card" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_07.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_07.png" alt="&amp;#8853; Missions tab &amp;mdash; an open card" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="07" data-desc="onglet Missions : une fiche mission ouverte avec pilote, escadron, appareil et notes visibles" data-caption="Onglet ⊕ Missions — une fiche ouverte" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_07.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_07.png" alt="Onglet ⊕ Missions — une fiche ouverte" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>&#8853; Missions tab &mdash; an open card</figcaption>
+  <figcaption>Onglet ⊕ Missions — une fiche ouverte</figcaption>
 </figure>
 
 <ul>
-  <li>The <kbd>&#9668;</kbd> <kbd>&#9658;</kbd> buttons navigate between missions; <kbd>+</kbd> creates one; <kbd>&#9672;</kbd> duplicates; <kbd>&#8593;</kbd> <kbd>&#8595;</kbd> reorder; <kbd>&times;</kbd> deletes.</li>
-  <li>Each mission card includes: pilot, <strong>Escadron affect&eacute;</strong> (Assigned squadron, from the wing roster), <strong>Sous-groupe</strong> (optional sub-element/flight name), aircraft type, loadout, execution steps, and free-text notes.</li>
+  <li>Les boutons <kbd>◄</kbd> <kbd>►</kbd> naviguent entre les missions, <kbd>+</kbd> en crée une, <kbd>⎘</kbd> duplique, <kbd>↑</kbd> <kbd>↓</kbd> réordonnent, <kbd>×</kbd> supprime.</li>
+  <li>Chaque mission : pilote, escadron (dans la liste du wing), appareil, emport, waypoints, notes libres.</li>
 </ul>
 
-<figure class="ud-screenshot" data-shot="08" data-desc="squadron selector drop-down: wing squadrons listed (541-TFS / DUFF, 329-Mira / ARROW...)" data-caption="The squadron selector" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_08.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_08.png" alt="The squadron selector" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="08" data-desc="sélecteur d'escadron déroulé : liste des escadrons du wing (541-TFS / DUFF, 329-Mira / ARROW…)" data-caption="Le sélecteur d'escadron" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_08.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_08.png" alt="Le sélecteur d'escadron" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>The squadron selector</figcaption>
+  <figcaption>Le sélecteur d'escadron</figcaption>
 </figure>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>The selector automatically lists the squadrons configured in the &#128737; Wing tab. If it is empty, the wing has no squadrons yet &mdash; see &sect; 5.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Le sélecteur liste automatiquement les escadrons configurés dans l'onglet 🛡 Wing. S'il est vide, c'est que le wing n'a pas encore d'escadrons — direction § 5 pour ça.</div></aside>
 
-<aside class="ud-warn"><span class="ud-ico">&#9888;</span><div>If a squadron is missing from the selector, missions that reference it will still display, but without squadron branding. No crash &mdash; just a blank field.</div></aside>
+<aside class="ud-warn"><span class="ud-ico">⚠</span><div>Si un escadron est absent de la liste, les missions qui y font référence restent affichables mais sans branding d'escadron. Pas de crash, juste un champ vide.</div></aside>
 
-<h2 class="subsec">2.7 Crew &mdash; &#128100; Tab</h2>
+<h2 class="subsec">2.7 Équipage — onglet 👤</h2>
 
-<p>The Crew tab generates an order of battle (ORBAT) page in the briefing &mdash; but only if you actually add pilots here. Leave it empty and no crew page is generated.</p>
+<p>L'onglet Équipage génère une page d'ordre de bataille dans le briefing — mais seulement si vous y mettez des pilotes. Si vous laissez ça vide, pas de page équipage, pas de problème.</p>
 
 <ul>
-  <li>Organize pilots into <strong>groups</strong> (flight, section, squadron&hellip;).</li>
-  <li>Each group lists pilots with their callsign, rank, and optional notes.</li>
+  <li>Organisez les pilotes par <strong>groupes</strong> (section, escadron, vol…).</li>
+  <li>Chaque groupe contient les pilotes avec leur indicatif, rang, et notes éventuelles.</li>
 </ul>
 
-<h2 class="subsec">2.8 Appendices &mdash; &#128206; Tab</h2>
+<h2 class="subsec">2.8 Annexes — onglet 📎</h2>
 
-<p>Two slots for additional airport charts &mdash; parking diagrams, ILS procedures, runway layouts. Each slot takes up a full page in the printed briefing.</p>
+<p>Deux emplacements pour des charts d'aéroport supplémentaires — plans de parking, procédures ILS, diagrammes de piste. Chacun prend une page entière dans le briefing imprimé.</p>
 
-<figure class="ud-screenshot" data-shot="10" data-desc="Appendices tab: an airport chart loaded with its label filled in" data-caption="&amp;#128206; Appendices tab" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_10.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_10.png" alt="&amp;#128206; Appendices tab" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="10" data-desc="onglet Annexes : chart d'aéroport chargé avec son nom renseigné" data-caption="Onglet 📎 Annexes" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_10.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_10.png" alt="Onglet 📎 Annexes" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>&#128206; Appendices tab</figcaption>
+  <figcaption>Onglet 📎 Annexes</figcaption>
 </figure>
 
 <ul>
-  <li>Fill in the <strong>label</strong> (e.g., &ldquo;Kobuleti &mdash; Parking diagram&rdquo;) and load the image by drag-and-drop or by clicking the zone.</li>
-  <li>Leave a slot empty if you have no chart to add &mdash; those pages simply will not be generated.</li>
+  <li>Renseignez le <strong>nom</strong> (ex. « Kobuleti — Plan de parking ») et chargez l'image par glisser-déposer ou en cliquant.</li>
+  <li>Laissez vide si vous n'avez pas de chart à ajouter — ces pages ne seront simplement pas générées.</li>
 </ul>
 
 </div>
 
-<!-- § 3 SAVING -->
+<!-- § 3 SAUVEGARDER -->
 <div class="page">
-<h1 class="sec-title"><span class="sec-num">03</span> Saving and Resuming a Briefing</h1>
+<h1 class="sec-title"><span class="sec-num">03</span> Sauvegarder et reprendre un briefing</h1>
 
-<h2 class="subsec">3.1 Automatic Local Save</h2>
+<h2 class="subsec">3.1 La sauvegarde automatique</h2>
 
-<p>Good news: there is nothing to do. The application continuously saves your current briefing to browser local storage (localStorage). Close the tab, shut down the PC, come back the next day &mdash; your work is still there.</p>
+<p>Bonne nouvelle : vous n'avez rien à faire. L'app sauvegarde en permanence votre briefing en cours dans le stockage local du navigateur (localStorage). Fermez l'onglet, éteignez le PC, revenez le lendemain — votre travail est là.</p>
 
-<aside class="ud-warn"><span class="ud-ico">&#9888;</span><div>This automatic save is tied to the <strong>browser</strong> and to the <strong>location of the HTML file</strong> on your drive. If you move or rename the HTML file, or if you clear browser data, the current briefing is lost with it. For a durable save, use the JSON export.</div></aside>
+<aside class="ud-warn"><span class="ud-ico">⚠</span><div>Cette sauvegarde automatique est liée au <strong>navigateur</strong> et à l'<strong>emplacement du fichier HTML</strong> sur votre disque. Si vous déplacez ou renommez le fichier HTML, ou si vous effacez les données du navigateur, le briefing en cours part avec. Pour une vraie sauvegarde durable, utilisez l'export JSON.</div></aside>
 
-<h2 class="subsec">3.2 Exporting a Briefing as JSON</h2>
+<h2 class="subsec">3.2 Exporter un briefing en JSON</h2>
 
-<p>The JSON export is the permanent save &mdash; a file you can archive, share with a squadronmate, or reload six months later.</p>
+<p>L'export JSON c'est la sauvegarde permanente — un fichier que vous pouvez archiver, envoyer à un camarade, ou recharger dans six mois.</p>
 
-<figure class="ud-screenshot ud-wide" data-shot="11" data-desc="close-up of the Sauver button in the toolbar, cursor hovering over it" data-caption="The Sauver (Save) button" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_11.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_11.png" alt="The Sauver (Save) button" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot ud-wide" data-shot="11" data-desc="zoom sur le bouton Sauver dans la toolbar, curseur positionné dessus" data-caption="Le bouton Sauver" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_11.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_11.png" alt="Le bouton Sauver" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>The Sauver (Save) button</figcaption>
+  <figcaption>Le bouton Sauver</figcaption>
 </figure>
 
 <ul>
-  <li>Click <kbd>Sauver</kbd> (Save) in the toolbar.</li>
-  <li>A file named <code>briefing_OPERATION_DATE.json</code> is downloaded automatically.</li>
-  <li>Keep it somewhere safe &mdash; it is your only portable copy of the briefing.</li>
+  <li>Cliquez sur <kbd>Sauver</kbd> dans la barre d'outils.</li>
+  <li>Un fichier <code>briefing_OPERATION_DATE.json</code> est téléchargé automatiquement.</li>
+  <li>Gardez-le quelque part de sûr — c'est votre seule copie portable du briefing.</li>
 </ul>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>Good habit: export to JSON as soon as the briefing has meaningful content. A simple naming convention &mdash; <code>OPNAME_YYYYMMDD.json</code> &mdash; will save you when searching your archives.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Bonne habitude : exportez en JSON dès que le briefing commence à avoir de la substance. Une convention de nommage simple — <code>OPNAME_YYYYMMDD.json</code> — vous sauvera la mise quand vous chercherez dans vos archives.</div></aside>
 
-<h2 class="subsec">3.3 Importing an Existing Briefing</h2>
+<h2 class="subsec">3.3 Importer un briefing existant</h2>
 
-<p>Resuming a briefing from a previous session, or a squadronmate sends you theirs:</p>
+<p>Vous reprenez un briefing d'une session précédente, ou un camarade vous envoie le sien :</p>
 
 <ul>
-  <li>Click <kbd>Charger</kbd> (Load) in the toolbar.</li>
-  <li>Select the <code>.json</code> file in the file picker.</li>
-  <li>The briefing loads immediately.</li>
+  <li>Cliquez sur <kbd>Charger</kbd> dans la barre d'outils.</li>
+  <li>Sélectionnez le fichier <code>.json</code> dans l'explorateur.</li>
+  <li>Le briefing se charge immédiatement.</li>
 </ul>
 
-<aside class="ud-warn"><span class="ud-ico">&#9888;</span><div>Loading <strong>replaces</strong> the current briefing without further confirmation. If you have unsaved work, export it as JSON first.</div></aside>
+<aside class="ud-warn"><span class="ud-ico">⚠</span><div>Le chargement <strong>remplace</strong> le briefing en cours, sans confirmation supplémentaire. Si vous avez du travail non sauvegardé, exportez-le en JSON d'abord.</div></aside>
 
-<h2 class="subsec">3.4 Starting Fresh</h2>
+<h2 class="subsec">3.4 Recommencer à zéro</h2>
 
 <ul>
-  <li>Click <kbd>R&eacute;initialiser</kbd> (Reset) in the toolbar.</li>
-  <li>A confirmation prompt appears &mdash; that is the only safeguard.</li>
-  <li>The entire briefing is cleared, including the automatic browser save.</li>
+  <li>Cliquez sur <kbd>Reset</kbd> dans la barre d'outils.</li>
+  <li>Une confirmation vous est demandée — c'est le seul garde-fou.</li>
+  <li>Tout le briefing est effacé, y compris la sauvegarde auto dans le navigateur.</li>
 </ul>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>If you have a template briefing you reuse regularly (fixed structure, wing configured, common radios set), export it as JSON and reload it at the start of each new mission rather than starting from scratch.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Si vous avez un briefing « template » que vous réutilisez souvent (structure fixe, wing configuré, radios communes), exportez-le en JSON et rechargez-le au début de chaque nouvelle mission plutôt que de repartir de zéro.</div></aside>
 
 </div>
 
-<!-- § 4 EXPORTING TO PDF -->
+<!-- § 4 EXPORTER EN PDF -->
 <div class="page">
-<h1 class="sec-title"><span class="sec-num">04</span> Exporting to PDF</h1>
+<h1 class="sec-title"><span class="sec-num">04</span> Exporter en PDF</h1>
 
-<h2 class="subsec">4.1 Preview Mode Verification</h2>
+<h2 class="subsec">4.1 Vérification en mode aperçu</h2>
 
-<p>Before printing, take a quick look in <strong>Preview mode</strong> &mdash; the <kbd>Aper&ccedil;u</kbd> (Preview) button in the toolbar, or the &#9672;&nbsp;Aper&ccedil;u tab directly. Check that:</p>
+<p>Avant d'imprimer, jetez un œil en <strong>mode aperçu</strong> — bouton <kbd>Aperçu</kbd> ou onglet ◈. Vérifiez rapidement que :</p>
 <ul>
-  <li>The cover page shows the correct title and map.</li>
-  <li>Content pages are not truncated.</li>
-  <li>All individual mission cards are present.</li>
-  <li>Map and chart images are legible.</li>
+  <li>La couverture affiche bien le titre et la carte.</li>
+  <li>Les pages de contenu ne sont pas tronquées.</li>
+  <li>Toutes les missions individuelles sont présentes.</li>
+  <li>Les images de cartes et de charts sont lisibles.</li>
 </ul>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>What you see in Preview is exactly what will appear in the final PDF. Better to catch issues now than after the export.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Ce que vous voyez en aperçu est exactement ce qui sera dans le PDF final. Mieux vaut repérer les problèmes maintenant qu'après l'export.</div></aside>
 
-<h2 class="subsec">4.2 Exporting to PDF (Windows / macOS)</h2>
+<h2 class="subsec">4.2 Exporter en PDF (Windows / macOS)</h2>
 
-<p>Everything happens inside Chrome &mdash; no third-party software needed. The <kbd>Imprimer</kbd> (Print) button automatically switches to Preview mode first.</p>
+<p>Tout se passe dans Chrome, sans logiciel tiers. Le bouton <kbd>Imprimer</kbd> bascule automatiquement en mode aperçu.</p>
 
 <ol>
-  <li>Press <kbd>Ctrl</kbd>+<kbd>P</kbd> (Windows / Linux) or <kbd>&#8984;</kbd>+<kbd>P</kbd> (macOS).</li>
-  <li>Select <strong>&ldquo;Save as PDF&rdquo;</strong> as the destination.</li>
-  <li>Set the following options:</li>
+  <li>Appuyez sur <kbd>Ctrl</kbd>+<kbd>P</kbd> (Windows/Linux) ou <kbd>⌘</kbd>+<kbd>P</kbd> (macOS).</li>
+  <li>Sélectionnez <strong>« Enregistrer en PDF »</strong> comme destination.</li>
+  <li>Réglez les options :</li>
 </ol>
 
-<figure class="ud-screenshot" data-shot="12" data-desc="Chrome print dialog: Save as PDF selected, Margins and Background graphics options visible" data-caption="The Chrome print dialog" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_12.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_12.png" alt="The Chrome print dialog" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="12" data-desc="boîte dialogue impression Chrome : 'Enregistrer en PDF' sélectionné, options Marges et Arrière-plans visibles" data-caption="La boîte de dialogue d'impression Chrome" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_12.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_12.png" alt="La boîte de dialogue d'impression Chrome" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>The Chrome print dialog</figcaption>
+  <figcaption>La boîte de dialogue d'impression Chrome</figcaption>
 </figure>
 
 <table class="ud-table">
-  <thead><tr><th>Option</th><th>Recommended value</th></tr></thead>
+  <thead><tr><th>Option</th><th>Valeur recommandée</th></tr></thead>
   <tbody>
-    <tr><td>Paper size</td><td>A4</td></tr>
+    <tr><td>Format</td><td>A4</td></tr>
     <tr><td>Orientation</td><td>Portrait</td></tr>
-    <tr><td>Margins</td><td>None (the app manages its own margins)</td></tr>
-    <tr><td>Scale</td><td>100%</td></tr>
-    <tr><td>Background graphics</td><td>&#10003; Enabled &mdash; required for the kraft background</td></tr>
+    <tr><td>Marges</td><td>Aucune (l'app gère ses propres marges)</td></tr>
+    <tr><td>Mise à l'échelle</td><td>100 %</td></tr>
+    <tr><td>Graphiques d'arrière-plan</td><td>✓ Activé — obligatoire pour le fond kraft</td></tr>
   </tbody>
 </table>
 
-<aside class="ud-warn"><span class="ud-ico">&#9888;</span><div>If you forget to enable <strong>Background graphics</strong>, the kraft background turns white and section headers lose their color. Content remains printable, but the visual effect disappears.</div></aside>
+<aside class="ud-warn"><span class="ud-ico">⚠</span><div>Si vous oubliez d'activer <strong>« Graphiques d'arrière-plan »</strong>, le fond kraft devient blanc et les en-têtes perdent leur couleur. Le contenu reste imprimable, mais l'effet visuel disparaît.</div></aside>
 
-<h2 class="subsec">4.3 Exporting to PDF on Android</h2>
+<h2 class="subsec">4.3 Exporter en PDF depuis Android</h2>
 
-<p>On Android with Chrome, the <kbd>Imprimer</kbd> (Print) button opens the native Android print system or share menu directly:</p>
+<p>Sur Android avec Chrome, le bouton <kbd>Imprimer</kbd> ouvre directement le système d'export natif Android ou le menu de partage (Web Share API) :</p>
 
 <ul>
-  <li>Tap <kbd>Imprimer</kbd> (Print) in the toolbar.</li>
-  <li>Select <strong>&ldquo;Save as PDF&rdquo;</strong> as the destination.</li>
-  <li>Same settings as the desktop version (scale 100&nbsp;%, backgrounds enabled, A4).</li>
+  <li>Touchez <kbd>Imprimer</kbd> dans la toolbar.</li>
+  <li>Sélectionnez <strong>« Enregistrer en PDF »</strong> comme destination.</li>
+  <li>Mêmes réglages qu'en version PC (échelle 100 %, arrière-plans activés, format A4).</li>
 </ul>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>On Android, if the print preview appears cropped, verify that the scale is set to 100% and not &ldquo;Fit to page&rdquo; &mdash; Chrome on Android may offer both.</div></aside>
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Sur Android, si l'aperçu d'impression semble tronqué, vérifiez que l'échelle est à 100 % et non « Ajuster à la page » — Chrome Android peut proposer les deux.</div></aside>
 
-<h2 class="subsec">4.4 Best Practices</h2>
+<h2 class="subsec">4.4 Bonnes pratiques</h2>
 
 <ul>
-  <li><strong>Prepare early.</strong> A briefing done the evening before is a briefing you have time to review and fix.</li>
-  <li><strong>Keep the exported PDF.</strong> It is the mission archive, and it comes in handy if a squadronmate missed the live brief.</li>
-  <li><strong>Share the JSON, not the PDF</strong>, if another pilot needs to edit the briefing.</li>
+  <li><strong>Préparez tôt.</strong> Un briefing fait la veille, c'est un briefing qu'on a le temps de relire et de corriger.</li>
+  <li><strong>Gardez le PDF généré</strong> après export — c'est l'archive de la mission, et ça peut servir si un camarade a raté le briefing oral.</li>
+  <li><strong>Partagez le JSON, pas le PDF</strong>, si un autre pilote veut modifier le briefing.</li>
 </ul>
 
 </div>
 
-<!-- § 5 WING CONFIGURATION -->
+<!-- § 5 CONFIGURATION WING -->
 <div class="page">
-<h1 class="sec-title"><span class="sec-num">05</span> Wing Configuration</h1>
+<h1 class="sec-title"><span class="sec-num">05</span> Configuration du wing</h1>
 
-<aside class="ud-admin"><span class="ud-ico">&#9881;</span><div>This section is for <strong>wing admins</strong> &mdash; those who configure the application for the whole team. If your admin has already taken care of this, you can skip ahead to &sect;&nbsp;6.</div></aside>
+<aside class="ud-admin"><span class="ud-ico">⚙</span><div>Cette section s'adresse aux <strong>wing admins</strong> — ceux qui configurent l'application pour toute l'équipe. Si votre admin a déjà fait ça, vous pouvez aller directement à la § 6.</div></aside>
 
-<h2 class="subsec">5.1 What Is a Wing Config?</h2>
+<h2 class="subsec">5.1 Qu'est-ce qu'un « wing config » ?</h2>
 
-<p>The wing configuration is the set of data that personalizes the app for your virtual wing:</p>
+<p>La configuration du wing, c'est l'ensemble des données qui personnalisent l'app pour votre wing virtuel. Concrètement :</p>
 
 <ul>
-  <li>The <strong>name and identity</strong> of the wing &mdash; what appears in the toolbar, page headers, and footers.</li>
-  <li>The list of <strong>squadrons</strong> with their names, callsigns, and logos.</li>
-  <li>The <strong>main wing logo</strong> displayed on the cover page.</li>
-  <li>The <strong>HQ stamp</strong> shown on the cover page.</li>
+  <li>Le <strong>nom et l'identité</strong> du wing — ce qui s'affiche dans la toolbar, les en-têtes, les pieds de page.</li>
+  <li>La liste des <strong>escadrons</strong> avec leurs noms, indicatifs et logos.</li>
+  <li>Le <strong>logo wing principal</strong> qui apparaît sur la couverture.</li>
+  <li>Le <strong>tampon HQ</strong> affiché sur la couverture.</li>
 </ul>
 
-<p>Once configured, this config applies to all briefings created with that installation. It exports to a single JSON file for easy distribution to every pilot in the wing.</p>
+<p>Une fois configurée, cette config s'applique à tous les briefings créés avec cette installation. Elle s'exporte en JSON pour être distribuée à tous les pilotes du wing en un fichier.</p>
 
-<aside class="ud-admin"><span class="ud-ico">&#9881;</span><div>The wing config and the briefing are two independent layers. Resetting the briefing does not touch the wing config. Changing the wing config does not affect the current briefing.</div></aside>
+<aside class="ud-admin"><span class="ud-ico">⚙</span><div>La config wing et le briefing sont deux couches indépendantes. Reset du briefing ne touche pas à la config wing. Changer de wing ne touche pas au briefing en cours.</div></aside>
 
-<h2 class="subsec">5.2 Editing the Wing Identity</h2>
+<h2 class="subsec">5.2 Modifier l'identité du wing</h2>
 
-<figure class="ud-screenshot" data-shot="13" data-desc="Wing tab fully open: wing Identity section with Short name, ID, Full name, logo loaded" data-caption="The &amp;#128737; Wing tab" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_13.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_13.png" alt="The &amp;#128737; Wing tab" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="13" data-desc="onglet Wing complet : section Identité du wing avec nom court, identifiant, nom complet, logo chargé" data-caption="Onglet 🛡 Wing" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_13.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_13.png" alt="Onglet 🛡 Wing" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>The &#128737; Wing tab</figcaption>
+  <figcaption>Onglet 🛡 Wing</figcaption>
 </figure>
 
-<p>In the <strong>&#128737;&nbsp;Wing</strong> tab, under the Wing identity section:</p>
+<p>Dans l'onglet <strong>🛡 Wing</strong>, section « Identité du wing » :</p>
 
 <ul>
-  <li><strong>Nom court</strong> (Short name) &mdash; displayed in the toolbar (e.g., &ldquo;4th VEAW&rdquo;). Keep it under 10 characters.</li>
-  <li><strong>Identifiant</strong> (ID) &mdash; a technical key with no spaces or slashes (e.g., &ldquo;4th-veaw&rdquo;). Used internally.</li>
-  <li><strong>Nom complet</strong> (Full name) &mdash; the wing&rsquo;s full name (e.g., &ldquo;4th Virtual Expeditionary Air Wing&rdquo;).</li>
-  <li><strong>Titre de l&rsquo;application</strong> (App title) &mdash; text shown in the browser tab.</li>
-  <li><strong>Tampon HQ</strong> (HQ stamp) &mdash; stamp text on the cover page (e.g., &ldquo;HQ VEAW // CLASSIFIED&rdquo;).</li>
+  <li><strong>Nom court</strong> — s'affiche dans la toolbar (ex. « 4th VEAW »). Gardez-le sous 10 caractères.</li>
+  <li><strong>Identifiant</strong> — clé technique sans espace ni slash (ex. « 4th-veaw »). Utilisé en interne.</li>
+  <li><strong>Nom complet</strong> — nom complet du wing (ex. « 4th Virtual Expeditionary Air Wing »).</li>
+  <li><strong>Titre de l'application</strong> — texte dans l'onglet du navigateur.</li>
+  <li><strong>Tampon HQ</strong> — texte affiché comme tampon sur la couverture (ex. « HQ VEAW // CLASSIFIED »).</li>
 </ul>
 
-<h2 class="subsec">5.3 Managing Squadrons</h2>
+<h2 class="subsec">5.3 Gérer les escadrons</h2>
 
-<p>The squadrons configured here feed directly into the squadron selector in the &#8853;&nbsp;Missions tab.</p>
+<p>Les escadrons configurés ici alimentent directement le sélecteur dans l'onglet ⊕ Missions.</p>
 
-<figure class="ud-screenshot" data-shot="14" data-desc="Squadron card expanded for editing: ID, Callsign, Full name, Nickname, Aircraft and Logo visible" data-caption="Editing a squadron card" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_14.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_14.png" alt="Editing a squadron card" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot" data-shot="14" data-desc="carte d'escadron ouverte en édition : champs Nom, Indicatif, Logo visibles" data-caption="Édition d'une fiche escadron" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_14.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_14.png" alt="Édition d'une fiche escadron" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>Editing a squadron card</figcaption>
-</figure>
-
-<ul>
-  <li>Click <kbd>+ Ajouter un escadron</kbd> (Add a squadron) to create a new squadron.</li>
-  <li>Each squadron entry includes: an <strong>ID</strong> (e.g., &ldquo;541-TFS&rdquo;), a <strong>callsign</strong> (e.g., &ldquo;DUFF&rdquo;), a <strong>full name</strong>, an optional <strong>nickname</strong>, the <strong>aircraft types</strong> it flies, and an optional <strong>logo</strong>.</li>
-  <li>Click an existing card to expand, edit, or delete it.</li>
-</ul>
-
-<aside class="ud-warn"><span class="ud-ico">&#9888;</span><div>Deleting a squadron does not modify missions that already reference it &mdash; they retain the ID, but the name and logo will no longer appear. Do this before distributing a final briefing, not after.</div></aside>
-
-<h2 class="subsec">5.4 Loading Logos</h2>
-
-<figure class="ud-screenshot ud-wide" data-shot="15" data-desc="Squadron logo drag-and-drop zone with active drop indicator" data-caption="Loading a logo by drag-and-drop" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_15.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_15.png" alt="Loading a logo by drag-and-drop" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
-    <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
-  </a>
-  <figcaption>Loading a logo by drag-and-drop</figcaption>
+  <figcaption>Édition d'une fiche escadron</figcaption>
 </figure>
 
 <ul>
-  <li><strong>Main wing logo</strong> &mdash; appears on the cover page. Recommended: transparent PNG, 400&times;400&nbsp;px minimum, &lt;&nbsp;200&nbsp;KB.</li>
-  <li><strong>Squadron logo</strong> (one per squadron) &mdash; displayed on mission cards. Same recommendations.</li>
+  <li>Cliquez sur <kbd>+ Ajouter un escadron</kbd> pour créer une nouvelle unité.</li>
+  <li>Chaque escadron : <strong>nom</strong> (ex. « 541st Tactical Fighter Squadron »), <strong>indicatif</strong> (ex. « DUFF »), <strong>logo</strong> optionnel.</li>
+  <li>Cliquez sur une carte existante pour la modifier ou la supprimer.</li>
 </ul>
 
-<p>Drag and drop an image onto the zone, or click it to open the file picker.</p>
+<aside class="ud-warn"><span class="ud-ico">⚠</span><div>Supprimer un escadron ne modifie pas les missions qui y font déjà référence — elles conservent l'identifiant, mais le nom et le logo n'apparaîtront plus. À faire avant de distribuer un briefing final, pas après.</div></aside>
 
-<aside class="ud-tip"><span class="ud-ico">&#9758;</span><div>Logos are stored as base64 inside the config file. Large logos (&gt;500&nbsp;KB) inflate the exported JSON considerably. Optimize your PNGs before loading &mdash; a wing logo does not need to be in 4K.</div></aside>
+<h2 class="subsec">5.4 Charger des logos</h2>
 
-<h2 class="subsec">5.5 Exporting, Importing, Resetting</h2>
-
-<figure class="ud-screenshot ud-wide" data-shot="16" data-desc="Import / Export / Reset buttons at the bottom of the Wing tab with config file size displayed" data-caption="Wing config management buttons" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_16.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_16.png" alt="Wing config management buttons" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot ud-wide" data-shot="15" data-desc="zone drag-drop d'un logo d'escadron avec indicateur de glisser-déposer actif" data-caption="Chargement d'un logo par glisser-déposer" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_15.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_15.png" alt="Chargement d'un logo par glisser-déposer" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>Wing config management buttons</figcaption>
+  <figcaption>Chargement d'un logo par glisser-déposer</figcaption>
 </figure>
 
 <ul>
-  <li><kbd>&#128229;&nbsp;Importer config</kbd> (Import config) &mdash; loads a wing configuration JSON file.</li>
-  <li><kbd>&#128228;&nbsp;Exporter config</kbd> (Export config) &mdash; downloads the current configuration as a JSON file.</li>
-  <li><kbd>&#9851;&nbsp;R&eacute;initialiser</kbd> (Reset) &mdash; restores the example wing configuration bundled with the app.</li>
+  <li><strong>Logo wing principal</strong> — apparaît sur la couverture. Recommandé : PNG transparent, 400×400 px minimum, &lt; 200 Ko.</li>
+  <li><strong>Logo d'escadron</strong> (un par escadron) — affiché sur les fiches de mission. Mêmes recommandations.</li>
 </ul>
 
-<aside class="ud-admin"><span class="ud-ico">&#9881;</span><div>Distribution workflow: once the admin has set up the wing, they export the config via <kbd>&#128228;&nbsp;Exporter config</kbd> and share the JSON file with all pilots (Discord, email, Drive&hellip;). Each pilot imports it via <kbd>&#128229;&nbsp;Importer config</kbd>. Everyone then sees the same squadrons in the selector.</div></aside>
+<p>Glissez-déposez l'image sur la zone, ou cliquez dessus pour ouvrir le sélecteur de fichiers.</p>
+
+<aside class="ud-tip"><span class="ud-ico">☞</span><div>Les logos sont stockés en base64 dans la config. Des logos volumineux (>500 Ko) alourdissent le JSON exporté. Optimisez vos PNG avant de les charger — un logo de wing n'a pas besoin d'être en 4K.</div></aside>
+
+<h2 class="subsec">5.5 Exporter, importer, réinitialiser</h2>
+
+<figure class="ud-screenshot ud-wide" data-shot="16" data-desc="boutons Import / Export / Reset en bas de l'onglet Wing avec taille de config affichée" data-caption="Boutons de gestion de la config wing" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_16.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_16.png" alt="Boutons de gestion de la config wing" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+    <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
+  </a>
+  <figcaption>Boutons de gestion de la config wing</figcaption>
+</figure>
+
+<ul>
+  <li><kbd>📥 Importer config</kbd> — charge un fichier JSON de configuration wing.</li>
+  <li><kbd>📤 Exporter config</kbd> — télécharge la configuration actuelle en JSON.</li>
+  <li><kbd>♻ Réinitialiser (4th VEAW)</kbd> — restaure la configuration d'exemple embarquée dans l'app.</li>
+</ul>
+
+<aside class="ud-admin"><span class="ud-ico">⚙</span><div>Le workflow de distribution : <ol style='margin:6px 0 0 16px'><li>L'admin configure le wing dans l'app.</li><li>Il exporte la config via <kbd>📤 Exporter config</kbd>.</li><li>Il distribue le fichier JSON aux pilotes (Discord, mail, Drive…).</li><li>Chaque pilote importe via <kbd>📥 Importer config</kbd>.</li><li>Tout le monde voit les mêmes escadrons dans le sélecteur.</li></ol></div></aside>
 
 </div>
 
 <!-- § 6 FAQ -->
 <div class="page">
-<h1 class="sec-title"><span class="sec-num">06</span> FAQ and Tips</h1>
+<h1 class="sec-title"><span class="sec-num">06</span> FAQ et astuces</h1>
 
 <div class="faq-entry">
-  <div class="faq-q">I accidentally closed the tab. Is my briefing lost?</div>
-  <div class="faq-a">No. The automatic save (localStorage) kept everything. Simply reopen <code>DCS_World_Briefing_Generator.html</code> in the same browser &mdash; your work is there. <em>Exception:</em> if you cleared browser data or moved the HTML file since then, the briefing is gone. Hence the importance of regular JSON exports.</div>
+  <div class="faq-q">J'ai fermé l'onglet par accident. Mon briefing est perdu ?</div>
+  <div class="faq-a">Non. La sauvegarde automatique (localStorage) a tout gardé. Rouvrez simplement <code>DCS_World_Briefing_Generator.html</code> dans le même navigateur — votre travail est là. <em>Exception :</em> si vous avez vidé les données du navigateur ou déplacé le fichier HTML depuis, là c'est perdu. D'où l'export JSON régulier.</div>
 </div>
 
 <div class="faq-entry">
-  <div class="faq-q">My squadron does not appear in the mission selector.</div>
-  <div class="faq-a">The selector only lists squadrons defined in the &#128737;&nbsp;Wing tab. Make sure at least one squadron is configured there. If you just imported a wing config, reload the page. A warning toast appears at the bottom of the screen to flag the issue.</div>
+  <div class="faq-q">Mon escadron n'apparaît pas dans le sélecteur de mission.</div>
+  <div class="faq-a">Le sélecteur liste uniquement les escadrons définis dans l'onglet 🛡 Wing. Vérifiez qu'au moins un escadron y est configuré. Si vous venez d'importer une config wing, rechargez la page. Un toast d'avertissement apparaît parfois en bas de l'écran pour vous signaler le problème.</div>
 </div>
 
-<figure class="ud-screenshot ud-wide" data-shot="17" data-desc="Warning toast at the bottom of the screen: missing squadron alert" data-caption="Warning toast &amp;mdash; missing squadron" data-dims="">
-  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_17.png" target="_blank" rel="noopener" title="Click to enlarge">
-    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_17.png" alt="Warning toast &amp;mdash; missing squadron" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
+<figure class="ud-screenshot ud-wide" data-shot="17" data-desc="toast d'avertissement bas d'écran : 'Aucun escadron configuré dans le wing'" data-caption="Toast d'avertissement — escadrons absents" data-dims="">
+  <a class="ud-shot-link" href="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_17.png" target="_blank" rel="noopener" title="Cliquer pour agrandir">
+    <img src="https://mirabellebenou.github.io/dcs-briefing-generator/docs/screenshots/shot_17.png" alt="Toast d'avertissement — escadrons absents" loading="lazy" onerror="window.shotFallback&amp;&amp;window.shotFallback(this)">
     <span class="ud-zoom-icon" aria-hidden="true">⤢</span>
   </a>
-  <figcaption>Warning toast &mdash; missing squadron</figcaption>
+  <figcaption>Toast d'avertissement — escadrons absents</figcaption>
 </figure>
 
 <div class="faq-entry">
-  <div class="faq-q">The PDF has blank pages inserted between sections.</div>
-  <div class="faq-a">This happens when a section overflows the A4 page height. In Chrome (<kbd>Ctrl+P</kbd>), verify that margins are set to &ldquo;None&rdquo; and scale to 100%. If it persists, shorten the content slightly &mdash; an overly long context paragraph or an objective list with too many items.</div>
+  <div class="faq-q">Le PDF a des pages blanches intercalées.</div>
+  <div class="faq-a">Ça arrive quand une section dépasse la hauteur d'une page A4. Dans Chrome (<kbd>Ctrl+P</kbd>), vérifiez que les marges sont sur « Aucune » et l'échelle à 100 %. Si ça persiste, raccourcissez légèrement le contenu incriminé — un paragraphe de contexte trop long, une liste d'objectifs trop fournie.</div>
 </div>
 
 <div class="faq-entry">
-  <div class="faq-q">What size should logos be?</div>
-  <div class="faq-a">Transparent PNG, 400&times;400&nbsp;px or larger, under 200&nbsp;KB where possible. The app scales automatically, but small logos will appear blurry when printed. Avoid JPEG &mdash; compression artifacts are visible on the kraft background.</div>
+  <div class="faq-q">Quelle taille pour les logos ?</div>
+  <div class="faq-a">PNG transparent, 400×400 px ou plus, moins de 200 Ko si possible. L'app redimensionne automatiquement, mais les petits logos seront flous à l'impression. Évitez les JPEG (artefacts visibles sur fond kraft).</div>
 </div>
 
 <div class="faq-entry">
-  <div class="faq-q">Can I use the app on multiple PCs with the same config?</div>
-  <div class="faq-a">Yes. Copy the HTML file to the other PC. Export your wing config from the first PC (<kbd>&#128228;&nbsp;Exporter config</kbd>) and import it on the second (<kbd>&#128229;&nbsp;Importer config</kbd>). Same workflow for in-progress briefings &mdash; JSON export on one PC, import on the other.</div>
+  <div class="faq-q">Puis-je utiliser l'app sur plusieurs PC avec la même config ?</div>
+  <div class="faq-a">Oui. Copiez le fichier HTML sur l'autre PC. Exportez votre config wing depuis le premier PC (<kbd>📤 Exporter config</kbd>) et importez-la sur le second (<kbd>📥 Importer config</kbd>). Idem pour les briefings en cours — export JSON sur un PC, import sur l'autre.</div>
 </div>
 
 <div class="faq-entry">
-  <div class="faq-q">The kraft background does not appear in the PDF.</div>
-  <div class="faq-a">In Chrome&rsquo;s print dialog, enable <strong>&ldquo;Background graphics&rdquo;</strong>. Chrome disables backgrounds by default to save ink &mdash; you need to re-enable it manually each time you print.</div>
+  <div class="faq-q">Le fond kraft n'apparaît pas dans le PDF.</div>
+  <div class="faq-a">Dans la boîte d'impression Chrome, activez <strong>« Graphiques d'arrière-plan »</strong>. Chrome désactive les backgrounds par défaut pour économiser l'encre — il faut le réactiver manuellement à chaque impression.</div>
 </div>
 
 <div class="faq-entry">
-  <div class="faq-q">Can we fill in the briefing as a team at the same time?</div>
-  <div class="faq-a">No &mdash; the app is designed for local, single-author use. The collaborative workflow is: one author prepares, exports the JSON, shares it on Discord or Drive, and the others load it for review.</div>
+  <div class="faq-q">Peut-on faire le briefing à plusieurs en même temps ?</div>
+  <div class="faq-a">Non — l'app est conçue pour un usage local, un seul rédacteur à la fois. Pour collaborer, la méthode est simple : un seul rédacteur prépare, exporte le JSON, le partage sur Discord ou Drive, et les autres le chargent pour consultation.</div>
 </div>
 
-<h2 class="subsec" style="margin-top:32px">General Best Practices</h2>
+<h2 class="subsec" style="margin-top:32px">Bonnes pratiques générales</h2>
 <ul>
-  <li><strong>Prepare early.</strong> A briefing done the evening before is one you have time to review and correct.</li>
-  <li><strong>Keep a template JSON.</strong> A briefing with the wing configured and common radios pre-set &mdash; reload it at the start of each mission and save ten minutes.</li>
-  <li><strong>Use consistent file naming.</strong> <code>OPNAME_YYYYMMDD.json</code> will save you when searching your archives six months from now.</li>
-  <li><strong>Include the wing config when sharing.</strong> If you send a briefing JSON to someone with a different wing config loaded, the squadrons will not display correctly.</li>
+  <li><strong>Préparez tôt.</strong> Un briefing fait la veille, c'est un briefing qu'on a le temps de relire et de corriger.</li>
+  <li><strong>Gardez un template JSON.</strong> Un briefing avec juste le wing configuré et les radios communes — rechargez-le au début de chaque nouvelle mission, gagnez 10 minutes.</li>
+  <li><strong>Nommez vos fichiers de façon cohérente.</strong> <code>OPNAME_YYYYMMDD.json</code> vous sauvera quand vous chercherez dans vos archives dans 6 mois.</li>
+  <li><strong>Incluez la config wing dans vos partages.</strong> Si vous envoyez un briefing JSON à quelqu'un qui n'a pas la même config, les escadrons s'afficheront mal.</li>
 </ul>
 
 </div>
 
-<!-- § 7 APPENDIX -->
+<!-- § 7 ANNEXE CRÉDITS -->
 <div class="page">
-<h1 class="sec-title"><span class="sec-num">07</span> Appendix &mdash; Credits and Licenses</h1>
+<h1 class="sec-title"><span class="sec-num">07</span> Annexe — Crédits et licences</h1>
 
 <h2 class="subsec">Application</h2>
-<p>The <strong>DCS World Briefing Generator</strong> is a community tool developed for DCS World virtual wings. It is freely distributed for personal and community use within virtual wings.</p>
+<p>Le <strong>DCS World Briefing Generator</strong> est un outil développé pour la communauté DCS World francophone. Elle est distribuée librement pour un usage personnel et communautaire au sein des wings virtuels.</p>
 
-<h2 class="subsec">Embedded Typefaces</h2>
+<h2 class="subsec">Typographies embarquées</h2>
 <table class="ud-table">
-  <thead><tr><th>Font</th><th>Usage</th><th>License</th></tr></thead>
+  <thead><tr><th>Police</th><th>Utilisation</th><th>Licence</th></tr></thead>
   <tbody>
-    <tr><td>Stardos Stencil</td><td>Titles, section headers, branding</td><td>Open Font License (OFL)</td></tr>
-    <tr><td>Special Elite</td><td>Application body text (typewriter style)</td><td>Apache License 2.0</td></tr>
+    <tr><td>Stardos Stencil</td><td>Titres, en-têtes de section, branding</td><td>Open Font License (OFL)</td></tr>
+    <tr><td>Special Elite</td><td>Corps de l'application (style machine à écrire)</td><td>Apache License 2.0</td></tr>
   </tbody>
 </table>
 
 <h2 class="subsec">DCS World</h2>
-<p>DCS World is a product of <strong>Eagle Dynamics SA</strong>. Aircraft names, theater names, and all DCS World-related elements are the property of their respective rights holders. This tool makes no claim to any of them.</p>
+<p>DCS World est un produit d'<strong>Eagle Dynamics SA</strong>. Les noms d'appareils, de théâtres et tous les éléments relatifs à DCS World sont la propriété de leurs ayants droit respectifs. Cet outil n'en revendique aucun.</p>
 
-<h2 class="subsec">This Guide</h2>
-<p>Distributed with the application, in the same spirit: free use, non-commercial, for the community.</p>
+<h2 class="subsec">Ce guide</h2>
+<p>Distribué avec l'application, dans le même esprit : usage libre, non commercial, pour la communauté.</p>
 
-<p style="margin-top:48px; text-align:center; font-family:var(--f-stencil); letter-spacing:3px; color:var(--khaki); font-size:13pt;">&#9670; GOOD HUNTING &#9670;</p>
+<p style="margin-top:48px; text-align:center; font-family:var(--f-stencil); letter-spacing:3px; color:var(--khaki); font-size:13pt;">◆ BON VOL ◆</p>
 </div>
 
 </body>
