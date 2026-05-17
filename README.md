@@ -59,9 +59,6 @@ The default `MY WING` configuration is generic. Replace it with your own to matc
 - **[User Guide (EN)](https://mirabellebenou.github.io/dcs-briefing-generator/docs/DCS_World_Briefing_Generator_User_Guide_EN.html)** — Full user documentation in English
 - **[Technical Documentation](./DOCS_DCS_World_Briefing_Generator.md)** — For contributors and developers
 
-Current user guide version for release 2.0.0.
-Update in progress for 2.0.1 changes.
-
 ## 🏗️ Building from source
 
 If you want to modify the code yourself:
