@@ -1,8 +1,8 @@
 # DCS World Briefing Generator — Documentation technique
 
-### 1. Vue d'ensemble
+## 1. Vue d'ensemble
 
-Application HTML monofichier offline (~825 Ko). Génère des briefings militaires au format A4, style "document kraft" années 80, pour le simulateur DCS World. Conçue pour tablette (900px) avec interface éditeur + prévisualisation temps réel. Export PDF (impression navigateur) et **PNG kneeboard** (page unique ou ZIP multipages, format 794×1123 A4 strict).
+Application HTML monofichier offline (~810 Ko). Génère des briefings militaires au format A4, style "document kraft" années 80, pour le simulateur DCS World. Conçue pour tablette (900px) avec interface éditeur + prévisualisation temps réel. Export PDF (impression navigateur) et **PNG kneeboard** (page unique ou ZIP multipages, format 794×1123 A4 strict).
 
 **Fichiers du projet :**
 
@@ -22,7 +22,7 @@ python3 build_css.py && python3 build_html.py
 Le CSS est généré d'abord, puis injecté dans le HTML. Les assets (logos, SVG, libs) sont injectés via des placeholders `__KRAFT_SVG__`, `__DEFAULT_WING_CONFIG__`, `__LIB_HTML2CANVAS__`, `__LIB_JSZIP__` remplacés par `str.replace()` dans `build_html.py`.
 
 Les scripts utilisent des chemins relatifs à eux-mêmes (`HERE = os.path.dirname(os.path.abspath(__file__))`), donc fonctionnels sur n'importe quel poste sans modification.
-````
+
 ---
 
 ## 2. Architecture
@@ -161,7 +161,6 @@ state = {
     }
   ],
 
-````javascript
   charts: [                      // Pages charts aéroports — liste dynamique illimitée
     { name: 'AKROTIRI (LCRA) — Piste en service : 10', img: '' },
     { name: 'PAPHOS (LCPH) — Piste en service : 11', img: '' }
@@ -170,7 +169,6 @@ state = {
   annexes: [                     // Pages annexes libres — liste dynamique illimitée
     { title: 'Notes additionnelles', img: '', caption: 'Commentaire optionnel' }
   ],
-````
 
   roster: {
     groups: [
@@ -281,12 +279,17 @@ Pour ajouter, modifier ou supprimer un escadron, utilisez l'interface de l'ongle
 
 | Fonction | Rôle |
 |---|---|
-| `compressImageFile(file)` | `Promise<{dataUrl}>` — JPEG via canvas |
+| `compressImageFile(file)` | `Promise<{dataUrl, width, height}>` — JPEG q82 via canvas, max 1600 px largeur, fond blanc. À appeler dans tout listener `change` d'upload d'image de contenu (pattern canonique `bindImgZoneEvents`). |
+| `compressLogoFile(file)` | `Promise<{dataUrl, width, height}>` — PNG via canvas, max 256 px côté long, **alpha préservé** (pas de fond blanc, fusion sur kraft requise). À utiliser uniquement pour les logos wing/escadron. |
+| `recompressDataUrl(dataUrl)` | `Promise<string|null>` — recompresse une data-URL existante (chargée depuis JSON ou localStorage) si elle dépasse `IMG_RECOMPRESS_THRESHOLD` (800 Ko base64). Retourne `null` si déjà sous le seuil ou si pas une image. Ajoutée en v2.1.1. |
+| `recompressOversizedImagesInState(state)` | `Promise<number>` — visite récursive du state (paths explicites), recompresse toute image oversized via `recompressDataUrl`. Retourne le nombre d'images recompressées. Appelée depuis `loadJsonFile` (await) et `init` (`.then` non-bloquant). Ajoutée en v2.1.1. |
 | `imgFrame(label, url)` | `<div class="p-imgframe">` avec fallback hachures |
 | `getPhaseSquadronInfo(ph)` | `{id, callsign, aircraft, subgroup, logo, isGuest}` |
 | `threatClass(lvl)` | `'t-faible'` / `'t-modere'` / `'t-eleve'` |
 | `genId(prefix)` | ID aléatoire (`prefix_xxxxxxxx`) |
 | `escapeHtml(s)` / `escapeAttr(s)` | Sanitisation XSS |
+
+> **⚠ Règle critique :** toute nouvelle section éditeur acceptant un upload d'image **doit** (a) appeler `compressImageFile(f)` dans son listener `change` (jamais un `readAsDataURL` direct), (b) ajouter le path de son image dans la liste explicite visitée par `recompressOversizedImagesInState`. Voir § 9 — bug compression Charts/Annexes v2.1.0.
 
 ---
 
@@ -468,6 +471,27 @@ Champs par mission :
 **Cause :** `max-height: 230mm` sur `.p-imgframe img` était trop ambitieux. La page A4 fait 297mm de hauteur, mais le header (logos + titre, ~25mm) + p-section (~10mm) + p-subsection (~8mm) + footer (~10mm) + padding (~20mm) consomment ~75mm. Reste ~222mm utilisables — moins 5mm de marge sécurité = **200mm sûr**.
 
 **Fix :** `max-height: 200mm` sur `.p-imgframe img`. Compromis entre agrandissement (vs 190mm origine) et marge de sécurité (vs 230mm trop large).
+
+### Images Charts et Annexes non compressées — PDF > 10 Mo (v2.1.0 → fix v2.1.1)
+
+**Symptôme :** un briefing avec 2 annexes uploadées en PNG (4 Mo chacune) générait un PDF de 13 Mo, au-dessus de la limite Discord (10 Mo). Empêchait le partage de briefings dans la communauté.
+
+**Cause :** les listeners `change` des sections Charts (`renderCharts`) et Annexes (`renderAnnexes`) — toutes deux nouvelles en v2.1.0 — faisaient un `reader.readAsDataURL(f)` direct et stockaient le résultat tel quel dans `state.charts[k].img` / `state.annexes[k].img`. Aucun passage par un canvas, aucune compression, aucune limitation de taille. Une image PNG 5 Mo en RGBA passait dans le state intacte. Les autres sections (cover, sitac, phases, plan radio) appelaient correctement `compressImageFile(f)` via le helper `bindImgZoneEvents`. **Audit complet** réalisé : 8 zones d'upload identifiées, 2 buggées (Charts + Annexes), 4 OK (cover, sitac, phases, plan radio), 2 intentionnellement différentes (logos via `compressLogoFile`).
+
+**Fix v2.1.1 — deux volets :**
+
+1. **Listeners corrigés** : `renderCharts` et `renderAnnexes` migrés sur le pattern canonique `async` + `await compressImageFile(f)` + toast + try/catch + `e.target.value = ''`. JPEG q82, max 1600 px, fond blanc.
+
+2. **Migration silencieuse** : nouvelle fonction `recompressOversizedImagesInState(state)` qui visite récursivement les paths d'images du state (liste explicite, pas de magic walk) et recompresse via canvas toute image dépassant `IMG_RECOMPRESS_THRESHOLD = 800 Ko` base64. Appelée à 2 endroits :
+   - Dans `loadJsonFile` (import JSON) : `await` + `persistState()` immédiat + toast `setTimeout(1500)` après le toast de chargement standard.
+   - Dans `init` (démarrage) : `.then()` non-bloquant, l'UI s'affiche immédiatement, la migration tourne en arrière-plan, suivi de `persistState()` + `schedulePreview()` + toast.
+   - Traitement séquentiel (`for...of await`) pour éviter de saturer la mémoire avec N canvas en parallèle.
+   - Erreurs silencieuses (`console.warn`) : une image illisible ne bloque pas le chargement.
+
+**Impact mesuré** sur briefing test `foothold_m6` : JSON 13 Mo → 2 Mo (-84 %), PDF 13 Mo → 5,3 Mo (-59 %), désormais sous Discord 10 Mo avec marge.
+
+**Règles de prévention :** voir § 6 (Utilitaires) — toute nouvelle section éditeur acceptant un upload d'image doit (a) appeler `compressImageFile(f)` dans son listener `change`, (b) ajouter le path de son image dans `recompressOversizedImagesInState`. La régression v2.1.0 a coûté un PDF dépassant 10 Mo en production.
+
 ---
 
 ## 10. Persistance et Import/Export
@@ -556,8 +580,12 @@ Il est désormais possible de tester avec plusieurs configurations wing : inject
 
 **Pièges build pipeline :**
 - **Toujours rebuild le HTML après modif des `.py`**, puis grep sur le HTML final (pas sur les `.py`). Une livraison Sonnet apparemment correcte côté source peut produire un HTML incorrect si le rebuild s'est fait sur une ancienne copie.
-````
 
+**Pièges compression d'images (v2.1.1) :**
+- **Tout listener `change` sur un `<input type="file" accept="image/*">` pour une image de contenu DOIT appeler `compressImageFile(f)`** — jamais un `reader.readAsDataURL(f)` direct. Sinon le PNG brut atterrit dans le state (4-5 Mo par image) et le PDF dépasse les 10 Mo de Discord.
+- **Toute nouvelle section d'images doit ajouter ses paths dans `recompressOversizedImagesInState`** — sinon les briefings existants importés conservent leurs images héritées non-optimisées.
+- **NE PAS toucher `compressLogoFile`** ni étendre la migration aux paths de logos — les logos doivent garder leur PNG + canal alpha pour fusionner correctement sur la texture kraft. La perte d'alpha ferait apparaître un carré blanc autour des logos.
+- **Le seuil `IMG_RECOMPRESS_THRESHOLD = 800 Ko` (base64)** est calibré pour ne déclencher que sur les images vraiment lourdes (PNG non-optimisés). Le baisser recompresserait des images déjà bien dimensionnées et dégraderait leur qualité inutilement.
 
 ---
 
