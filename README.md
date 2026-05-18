@@ -2,7 +2,7 @@
 ![Intro-image](https://forum.dcs.world/uploads/monthly_2026_05/Capturedcran2026-05-08231721.png.cadb306c79dce1a6f6745893bebc0ac4.png)
 > Generate beautifully styled mission briefings for DCS World — fully offline, in a single HTML file.
 
-![Version](https://img.shields.io/badge/version-2.1.0-brown)
+![Version](https://img.shields.io/badge/version-2.1.1-brown)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Web-green)
 ![Offline](https://img.shields.io/badge/offline-yes-success)
@@ -111,7 +111,10 @@ The output `DCS_World_Briefing_Generator.html` is the distributable file.
 <details>
 <summary>✅ Completed Features (Click to expand)</summary>
 
-#### 🚀 Version 2.1.0 (Current)
+#### 🚀 Version 2.1.1 (Current)
+- [x] **PDF file size optim** — Bug fix for PNG compression for Charts & Appendices
+
+#### 📦 Version 2.1.1 (Current)
 - [x] **Per-page PNG export** — share single pages on Discord without exporting the full PDF
 
 #### 📦 Version 2.0.0
