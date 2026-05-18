@@ -2523,7 +2523,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   </select>
   <div class="tb-spacer"></div>
   <div class="tb-classif">CLASSIFIED // FOR EYES ONLY</div>
-  <span class="tb-version">v2.1.0</span>
+  <span class="tb-version">v2.1.1</span>
 </header>
 
 <!-- ===== EXPORT MODAL ===== -->
@@ -2862,6 +2862,7 @@ const KEY_THEME    = 'theme_v1';
 const MOBILE_BREAKPOINT = 1100;
 const IMG_MAX_WIDTH = 1600;
 const IMG_JPEG_QUALITY = 0.82;
+const IMG_RECOMPRESS_THRESHOLD = 800 * 1024;  // 800 Ko base64 : seuil de déclenchement recompression auto
 
 /* ============= WING CONFIG (runtime, mutable) =============
    wingConfig is the single source of truth for wing branding and
@@ -3177,6 +3178,112 @@ function compressImageFile(file) {
     reader.onerror = () => reject(new Error('Lecture du fichier impossible.'));
     reader.readAsDataURL(file);
   });
+}
+
+/* ============= AUTO-RECOMPRESSION (briefings importés / hérités) =============
+   Parcourt toutes les images du state et recompresse silencieusement celles
+   qui dépassent IMG_RECOMPRESS_THRESHOLD via un canvas (JPEG q82, max 1600 px).
+   Retourne le nombre d'images recompressées. */
+function recompressDataUrl(dataUrl) {
+  return new Promise((resolve, reject) => {
+    if (typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/')) {
+      resolve(null);  // pas une image valide, on saute
+      return;
+    }
+    if (dataUrl.length < IMG_RECOMPRESS_THRESHOLD) {
+      resolve(null);  // déjà sous le seuil
+      return;
+    }
+    const img = new Image();
+    img.onload = () => {
+      try {
+        let { width, height } = img;
+        if (width > IMG_MAX_WIDTH) {
+          height = Math.round(height * IMG_MAX_WIDTH / width);
+          width = IMG_MAX_WIDTH;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', IMG_JPEG_QUALITY));
+      } catch (e) { reject(e); }
+    };
+    img.onerror = () => resolve(null);  // image illisible : on laisse intacte
+    img.src = dataUrl;
+  });
+}
+
+async function recompressOversizedImagesInState(s) {
+  if (!s || typeof s !== 'object') return 0;
+  let count = 0;
+  const tasks = [];
+
+  // Cover map
+  if (s.cover && typeof s.cover.mapImage === 'string') {
+    tasks.push(['cover.mapImage', s.cover, 'mapImage']);
+  }
+  // SITAC map
+  if (s.sitac && typeof s.sitac.mapImage === 'string') {
+    tasks.push(['sitac.mapImage', s.sitac, 'mapImage']);
+  }
+  // Phases
+  if (Array.isArray(s.phases)) {
+    s.phases.forEach((ph, pi) => {
+      if (typeof ph.mapImage === 'string') {
+        tasks.push(['phases[' + pi + '].mapImage', ph, 'mapImage']);
+      }
+      if (Array.isArray(ph.images)) {
+        ph.images.forEach((im, ii) => {
+          if (im && typeof im.data === 'string') {
+            tasks.push(['phases[' + pi + '].images[' + ii + '].data', im, 'data']);
+          }
+        });
+      }
+    });
+  }
+  // Charts
+  if (Array.isArray(s.charts)) {
+    s.charts.forEach((ch, ci) => {
+      if (ch && typeof ch.img === 'string') {
+        tasks.push(['charts[' + ci + '].img', ch, 'img']);
+      }
+    });
+  }
+  // Annexes
+  if (Array.isArray(s.annexes)) {
+    s.annexes.forEach((an, ai) => {
+      if (an && typeof an.img === 'string') {
+        tasks.push(['annexes[' + ai + '].img', an, 'img']);
+      }
+    });
+  }
+  // Plan radio
+  if (s.radioPlan && Array.isArray(s.radioPlan.aircraftPlans)) {
+    s.radioPlan.aircraftPlans.forEach((ap, api) => {
+      if (ap && typeof ap.image === 'string') {
+        tasks.push(['radioPlan.aircraftPlans[' + api + '].image', ap, 'image']);
+      }
+    });
+  }
+
+  // Traitement séquentiel pour éviter de saturer la mémoire
+  for (const [path, parent, key] of tasks) {
+    try {
+      const newUrl = await recompressDataUrl(parent[key]);
+      if (newUrl) {
+        parent[key] = newUrl;
+        count++;
+      }
+    } catch (e) {
+      // silencieux : on ne casse pas le chargement d'un briefing pour une image bizarre
+      console.warn('Recompression échouée pour ' + path + ':', e);
+    }
+  }
+  return count;
 }
 
 /* ============= EDITOR RENDERING ============= */
@@ -4148,16 +4255,20 @@ function renderCharts() {
   listEl.querySelectorAll('[data-chart-img-zone]').forEach(zone => {
     const k = parseInt(zone.dataset.chartImgZone, 10);
     const fileInp = zone.querySelector('input[type="file"]');
-    fileInp.addEventListener('change', () => {
-      const f = fileInp.files[0];
+    fileInp.addEventListener('change', async e => {
+      const f = e.target.files[0];
       if (!f) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        state.charts[k].img = e.target.result;
+      showToast('Compression image...');
+      try {
+        const { dataUrl } = await compressImageFile(f);
+        state.charts[k].img = dataUrl;
         renderCharts();
         schedulePreview();
-      };
-      reader.readAsDataURL(f);
+        showToast('Image chargée ✓');
+      } catch (err) {
+        showToast('Erreur : ' + err.message);
+      }
+      e.target.value = '';
     });
     const rmImg = zone.querySelector('.img-rm');
     if (rmImg) {
@@ -4241,16 +4352,20 @@ function renderAnnexes() {
   listEl.querySelectorAll('[data-annexe-img-zone]').forEach(zone => {
     const k = parseInt(zone.dataset.annexeImgZone, 10);
     const fileInp = zone.querySelector('input[type="file"]');
-    fileInp.addEventListener('change', () => {
-      const f = fileInp.files[0];
+    fileInp.addEventListener('change', async e => {
+      const f = e.target.files[0];
       if (!f) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        state.annexes[k].img = e.target.result;
+      showToast('Compression image...');
+      try {
+        const { dataUrl } = await compressImageFile(f);
+        state.annexes[k].img = dataUrl;
         renderAnnexes();
         schedulePreview();
-      };
-      reader.readAsDataURL(f);
+        showToast('Image chargée ✓');
+      } catch (err) {
+        showToast('Erreur : ' + err.message);
+      }
+      e.target.value = '';
     });
     const rmImg = zone.querySelector('.img-rm');
     if (rmImg) {
@@ -5217,7 +5332,7 @@ function fallbackDownload(blob, fname, toastMsg) {
 
 function loadJsonFile(file) {
   const reader = new FileReader();
-  reader.onload = () => {
+  reader.onload = async () => {
     try {
       const parsed = JSON.parse(reader.result);
       state = mergeDeep(structuredClone(DEFAULTS), parsed);
@@ -5229,6 +5344,13 @@ function loadJsonFile(file) {
         });
       }
       currentPhaseIdx = 0;
+
+      // v2.1.1 : recompresse silencieusement les images trop lourdes (briefings v2.1.0 et antérieurs)
+      const recompressed = await recompressOversizedImagesInState(state);
+      if (recompressed > 0) {
+        persistState();  // re-sauvegarde immédiate avec les images optimisées
+      }
+
       renderEditorBindings();
       schedulePreview();
       // 5.2 — Warn about squadron IDs referenced by this briefing but absent from current wing
@@ -5252,6 +5374,12 @@ function loadJsonFile(file) {
         }
       } else {
         showToast('Briefing chargé ✓');
+      }
+      // Toast supplémentaire si recompression effectuée
+      if (recompressed > 0) {
+        setTimeout(() => {
+          showToast(`Briefing optimisé — ${recompressed} image(s) recompressée(s) ✓`);
+        }, 1500);
       }
     } catch (e) {
       showToast('⚠ Fichier JSON invalide : ' + e.message);
@@ -5946,6 +6074,15 @@ function init() {
   setActiveTab('meta');
   renderPreview();
   initOverflowObserver();  // chatE étape A : détection débordement via MutationObserver
+
+  // v2.1.1 : recompresse silencieusement les images héritées (briefings localStorage v2.1.0 et antérieurs)
+  recompressOversizedImagesInState(state).then(recompressed => {
+    if (recompressed > 0) {
+      persistState();
+      schedulePreview();
+      showToast(`Briefing optimisé au chargement — ${recompressed} image(s) ✓`);
+    }
+  });
   document.getElementById('btn-save').addEventListener('click', downloadJson);
   document.getElementById('btn-load').addEventListener('click', () => document.getElementById('file-load').click());
   document.getElementById('file-load').addEventListener('change', e => {
