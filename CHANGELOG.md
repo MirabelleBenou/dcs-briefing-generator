@@ -77,7 +77,7 @@ The threshold of 800 KB was deliberately calibrated to leave already-optimized i
 
 ---
 
-## [2.0.0] — 2025-XX-XX
+## [2.0.0] — 2026-05-09
 
 ### Added
 
