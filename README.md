@@ -114,7 +114,7 @@ The output `DCS_World_Briefing_Generator.html` is the distributable file.
 #### 🚀 Version 2.1.1 (Current)
 - [x] **PDF file size optim** — Bug fix for PNG compression for Charts & Appendices
 
-#### 📦 Version 2.1.1 (Current)
+#### 📦 Version 2.1.0
 - [x] **Per-page PNG export** — share single pages on Discord without exporting the full PDF
 
 #### 📦 Version 2.0.0
