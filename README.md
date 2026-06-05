@@ -1,156 +1,192 @@
-# DCS World Briefing Generator
-![Intro-image](https://forum.dcs.world/uploads/monthly_2026_05/Capturedcran2026-05-08231721.png.cadb306c79dce1a6f6745893bebc0ac4.png)
-> Generate beautifully styled mission briefings for DCS World — fully offline, in a single HTML file.
+# DCS Mission Plan
 
-![Version](https://img.shields.io/badge/version-2.1.1-brown)
+<!-- Replace with a screenshot of the landing "situation board" (e.g. docs/screenshots/landing.png) -->
+![Intro-image](docs/screenshots/landing.png)
+> Prepare your DCS World missions end to end — a suite of tools behind one operational landing page. **Use it online, or download a single offline file.**
+
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Web-green)
 ![Offline](https://img.shields.io/badge/offline-yes-success)
+![Tablet & mobile](https://img.shields.io/badge/tablet%20%26%20mobile-ready-orange)
+![Tools](https://img.shields.io/badge/tools-3%20live%20%C2%B7%202%20planned-brown)
 
-A single-file, offline-capable web application designed for DCS World virtual pilots and wing administrators to compose professional-looking mission briefings styled as Cold War era kraft military documents.
+🌐 **[Use it online »](https://mirabellebenou.github.io/dcs-mission-plan/)** &nbsp;·&nbsp; 💾 **[Download the offline file »](../../releases)**
+
+A single-page **"situation board"** that brings together a suite of mission-prep tools for DCS World virtual pilots and wings — staged like a Cold War operations table. Open the board, pick a tool, prepare your mission. It runs entirely in your browser: **online for those who don't want to download**, or as **one offline HTML file** you can keep, share, and use without internet.
 
 Developped with the help of Claude AI (I'm not a dev !)
 
 ---
 
+## 📱 Built for the tablet (and your phone)
+
+Mission Plan is designed to be used **where you actually fly** — on a tablet next to your stick, or on your phone.
+
+- **Touch-first UI** — large tap targets, drag-and-drop, no tiny desktop-only controls
+- **Responsive layout** — split view on tablet/desktop, tabbed view on phone
+- **Rotation-safe** — keeps working when you flip the tablet between landscape and portrait
+- **No install** — open a link or a single file in the mobile browser; works offline once loaded
+- **Export on the go** — generate PDF/PNG straight from the device
+
+## 🧰 The suite
+
+The landing page presents each tool as a **pinned print** on the board. Active tools open in place; upcoming ones are stamped *Coming soon*.
+
+| Tool | What it does | Status |
+|------|--------------|--------|
+| **HQ** | Command post — configure your wing once (branding, squadrons), shared with the other tools; experimental `.miz` mission reader/patcher | 🧪 Beta `v0.1.0` |
+| **Briefing Generator** | Full mission briefings — SITAC, radio plan, airfields, charts, annexes — PDF & PNG export | ✅ `v2.2.0` |
+| **Recon Station** | Turn a screenshot into a reconnaissance analysis photo — sensor looks, annotations, lossless PNG | ✅ `v1.0.0` |
+| **Route Planner** | Route legs, turn points, interactive map and loadouts | ⏳ Planned |
+| **Kneeboard Generator** | Printable kneeboard cards — frequencies, waypoints, checklists | ⏳ Planned |
+
+> Each tool is a standalone HTML file with its own build; the landing page embeds the live tools and stages them all on one board.
+
+### 🛡️ HQ — your wing, configured once
+
+HQ is the suite's **command post**. Its main job today is the **wing hub**: set your wing name, logo, squadrons and callsigns **once**, and Briefing Generator + Recon Station pick it up automatically. HQ also ships an **experimental `.miz` engine** (read a mission, export a mission snapshot, apply surgical patches) — the advanced flight-package UI is still in development and in-game validation is pending, so HQ is published as **beta**.
+
+### 🚀 Briefing Generator — in detail
+
+Briefing Generator builds a **complete, shareable mission briefing** as a multi-section document, with **PDF and per-page PNG export** straight from the browser.
+
+- **Sections** — cover, situation map (SITAC), charts, annexes, and mission phases
+- **Radio & weather** — radio plan, METAR assistant, and **METAR import from a `.miz`**
+- **Airfields** — structured airfield information
+- **Wing branding** — pulled automatically from HQ (name, logo, squadrons)
+- **Images** — drop in your own maps/charts; oversized images are auto-recompressed
+- **4 themes, FR/EN**, multi-wing
+
+### 🛰️ Recon Station — in detail
+
+Recon Station turns any screenshot into a convincing **reconnaissance analysis photo**, fully in the browser, with **lossless full-resolution PNG export** (native Canvas 2D — what you preview is exactly what you export).
+
+- **Sensor looks** — EO (default), IR white-hot, IR black-hot, SAR (stylizations, not radiometric data)
+- **Image effects** — greyscale, contrast, vignette, grain, scanlines (sliders, off by default)
+- **Annotations** — numbered movable markers, a magnifier/loupe (crops after effects), shapes (ellipse, rectangle, polygon, arrow, bracket), and labels (stamp, cursive grease-pencil, plain)
+- **Editable info block** — 9 fields, bold text, black/white
+- **Classification banner** — top/bottom bars, 4 levels, off by default
+- **Wing logos** — upload manually or pull the shared wing branding from HQ; colour / grey / white modes
+
 ## ✨ Features
 
-- **Fully offline** — runs in any modern browser without internet, no installation, no server
-- **Single HTML file** — open it, use it, share it
-- **Multi-wing configurable** — each wing customizes its branding, squadrons, and logos
-- **4 graphical themes** — Cold War NATO (default), Cold War Soviet, Modern NATO, Modern Eastern Bloc
-- **PDF & PNG export** — print-to-PDF and export to PNG files from your browser, no extra tools needed
-- **Multi-platform** — works on PC (Windows/macOS/Linux) and tablets (Android/iOS)
-- **Auto-save** — your briefing is preserved in your browser's local storage
-- **Import/Export** — share briefings as JSON files, share wing configs across teams
+- **Online or fully offline** — use the hosted version, or one HTML file with no install, no server, no internet
+- **One landing page** — embeds the live tools; open it, use it, share it
+- **Tablet & mobile first** — see above 📱
+- **4 graphical themes** — Cold War NATO (default), Cold War Soviet, Modern NATO, Modern Eastern Bloc — chosen on the board, carried across the tools
+- **Bilingual** — full FR/EN toggle, shared across the suite
+- **Configure your wing once** (HQ) — branding/squadrons shared with the other tools
+- **PDF & PNG export** — straight from your browser
+- **Auto-save** — your work is preserved in your browser's local storage
 
 ## 📸 Screenshots
 
-![screen1](https://forum.dcs.world/uploads/monthly_2026_05/Capturedcran2026-05-08231452.png.383c79d043b2ab71ec6873fadfb92fd7.png)
+<!-- Drop your screenshots in docs/screenshots/ and update the paths below -->
+![board](docs/screenshots/board.png)
 
-![screen2](https://forum.dcs.world/uploads/monthly_2026_05/Capturedcran2026-05-08231550.png.db3fe247fdc66966887c1b98f0fc3858.png)
+![briefing-generator](docs/screenshots/briefing_generator.png)
 
-![screen3](https://forum.dcs.world/uploads/monthly_2026_05/Capturedcran2026-05-08231646.png.1a955e00f6f78059489012efe6f2669f.png)
+![recon-station](docs/screenshots/recon_station.png)
 
-## 🚀 Quick Start (for pilots)
+## 🚀 Quick Start
 
-1. Download the latest `DCS_World_Briefing_Generator.html` from the [Releases](../../releases) page
-2. Open it in **Chrome** (recommended) or any modern browser
-3. Edit your briefing using the tabs on the left
-4. Click **Aperçu** to preview, then **Imprimer** (Ctrl+P) to export as PDF
+**Option A — online (nothing to download)**
+1. Open **[the hosted version](https://mirabellebenou.github.io/dcs-mission-plan/)** in your browser (works on phone/tablet too)
+2. Pick a tool on the board and go
 
-That's it. No installation, no account, no internet required.
+**Option B — offline file**
+1. Download the latest `dcs_mission_plan.html` from the [Releases](../../releases) page
+2. Open it in any modern browser (Chrome recommended) — on PC or tablet
+3. It keeps working offline; bookmark or "Add to Home Screen" on mobile
 
-## 🛠️ For wing administrators
+No account, no internet required after the first load.
 
-Want to customize the branding for your virtual wing?
+## 🛡️ For wing administrators
 
-1. Open the application
-2. Go to the **🛡 WING** tab
-3. Edit wing name, logo, squadrons, callsigns, aircraft
-4. Click **📤 Exporter config** to save your wing configuration as JSON
-5. Distribute the JSON file to your pilots — they import it via **📥 Importer config**
+Customize the branding for your virtual wing — done once, in **HQ**, and shared with every tool:
 
-The default `MY WING` configuration is generic. Replace it with your own to match your virtual wing identity.
+1. Open **HQ** from the board
+2. Set the wing name, logo, squadrons, callsigns
+3. The configuration is shared automatically with Briefing Generator and Recon Station (and exportable to hand to your pilots)
 
-## 📚 Documentation
+The default `MY WING` configuration is generic — replace it with your own.
 
-- **[User Guide (FR)](https://mirabellebenou.github.io/dcs-briefing-generator/docs/DCS_World_Briefing_Generator_User_Guide_FR.html)** — Full user documentation in French
-- **[User Guide (EN)](https://mirabellebenou.github.io/dcs-briefing-generator/docs/DCS_World_Briefing_Generator_User_Guide_EN.html)** — Full user documentation in English
-- **[Technical Documentation](./DOCS_DCS_World_Briefing_Generator.md)** — For contributors and developers
+## 📓 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for the per-tool version history.
 
 ## 🏗️ Building from source
 
-If you want to modify the code yourself:
+If you want to modify the code yourself.
 
 ### Prerequisites
-
-- Python 3.8+ (no external dependencies, just standard library)
+- Python 3.8+ (standard library only)
 
 ### Build
+Each tool builds to a standalone HTML, then the landing page embeds the live tools:
 
 ```bash
-# Generate the CSS file
-python3 build_css.py
+# 1) Build the tools
+python3 build_css.py && python3 build_html.py   # → DCS_World_Briefing_Generator.html
+python3 build_recon_station.py                  # → dcs_recon_station.html
+python3 build_hq.py                             # → dcs_hq.html
 
-# Generate the final HTML (uses build_css.py output + assets.json)
-python3 build_html.py
+# 2) Assemble the landing page (embeds the tools + board tiles)
+python3 build_mission_plan.py                   # → dcs_mission_plan.html
 ```
 
-The output `DCS_World_Briefing_Generator.html` is the distributable file.
+The output `dcs_mission_plan.html` is the distributable (and the file published online).
 
 ### Project structure
-
 ```
 .
-├── build_html.py              # Main HTML builder (Python)
-├── build_css.py               # CSS builder (Python)
-├── assets.json                # Embedded fonts, kraft texture (base64)
-├── wing_config_4th_veaw.json  # Example wing configuration
-├── docs/
-│   └── DCS_World_Briefing_Generator_User_Guide.html
-├── DOCS_DCS_World_Briefing_Generator.md
+├── build_mission_plan.py          # Landing/shell builder — embeds tools + tiles
+├── build_html.py / build_css.py   # Briefing Generator builders
+├── build_recon_station.py         # Recon Station builder
+├── build_hq.py                    # HQ builder
+├── assets.json                    # Embedded fonts, kraft texture (base64)
+├── tiles/                         # Board tiles (512² WebP): hq, bg, rs, rp, kg
+├── docs/screenshots/              # README images
+├── CHANGELOG.md
 ├── README.md
 └── LICENSE
 ```
+
 ## 🗺️ Roadmap
 
 ### ⏳ Work in Progress
-- ⏳ **Auto-import of METAR from .miz** — Create a .miz, set the meteo and import it
-- ⏳ **Embedded library of airport charts** — May need an online connexion to a chart repository)
-- ⏳ **UI polish and improvments**
+- ⏳ **HQ** — flight-package / Commander UI, and in-game `.miz` validation (out of beta)
+- ⏳ **Route Planner** — route legs, turn points, interactive map
+- ⏳ **Kneeboard Generator** — printable kneeboard cards
+- ⏳ **In-app help** — embedded help module
+- ⏳ **UI polish** and more themes
 
-### 📋 Planned
-- **English UI** — full internationalization (FR/EN toggle in toolbar)
-- **Auto-save indicator** — visible feedback when briefing is saved
-- **Briefing templates** — pre-filled templates for common mission types (CAS, CAP, SEAD)
-- **URL-based sharing** — share a briefing via a single link
-- **Auto-import of radio frequencies from .miz** — Prepare all aircrafts freq from ME or import an existing .miz
-- **More themes**
-
-<details>
-<summary>✅ Completed Features (Click to expand)</summary>
-
-#### 🚀 Version 2.1.1 (Current)
-- [x] **PDF file size optim** — Bug fix for PNG compression for Charts & Appendices
-
-#### 📦 Version 2.1.0
-- [x] **Per-page PNG export** — share single pages on Discord without exporting the full PDF
-
-#### 📦 Version 2.0.0
-- [x] Initial release of the offline generator (single HTML file)
-- [x] 4 graphic themes (Cold War NATO, Soviet, Modern NATO, Eastern Bloc)
-- [x] Native PDF export and Multi-wing management (JSON files)
-
-</details>
+### 📋 Planned (Briefing Generator)
+- Auto-save indicator, briefing templates (CAS / CAP / SEAD), URL-based sharing
+- Full-screen presentation mode, recurring-charts library
+- Briefing versioning + diff, auto checklist validation
 
 ## 🤝 Contributing
 
 Bug reports and feature suggestions are welcome via the [Issues](../../issues) page.
 
-If you're a developer and want to contribute code:
+For code contributions: fork, branch, study the build scripts to understand the architecture, test by rebuilding and opening the result in a browser, then open a pull request.
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Read [`DOCS_DCS_World_Briefing_Generator.md`](./DOCS_DCS_World_Briefing_Generator.md) to understand the architecture
-4. Test your changes by rebuilding the HTML and opening it in Chrome
-5. Submit a pull request
+## ⚠️ Compatibility
 
-## ⚠️ Compatibility notes
-
-- **Chrome / Edge** (recommended): all features work, including print-to-PDF
-- **Firefox**: works but PDF rendering may differ slightly
-- **Safari**: works on macOS and iOS, with minor visual variations
-- **Mobile**: optimized for tablet (Android/iOS), usable on smartphone
+- **Chrome / Edge** (recommended): all features, including print-to-PDF
+- **Firefox**: works; PDF rendering may differ slightly
+- **Safari** (macOS & iOS): works, minor visual variations
+- **Mobile browsers** (Android/iOS): supported and a first-class target — touch, drag, rotation
 
 ## 📄 License
 
-[MIT License](./LICENSE) — free to use, modify, and distribute, including for commercial purposes.
+[MIT License](./LICENSE) — free to use, modify, and distribute, including commercially.
 
 ## 🙏 Acknowledgments
 
 - Built for the DCS World virtual aviation community
-- Initial version developed for the **4th VEAW** virtual wing — distributed as `wing_config_4th_veaw.json` example
+- Initial version developed for the **4th VEAW** virtual wing — distributed as a generic wing config example
 - Cold War kraft SVG file provided by Flappie, thanks to him !
 
 ---
