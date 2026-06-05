@@ -42,6 +42,15 @@ CSS = r"""
   font-display: swap;
   src: url('data:font/woff2;base64,__ROBOTO_MONO_400__') format('woff2');
 }
+@font-face {
+  /* Partie B (2c) — Chrome éditeur : Oswald Medium latin subset (~13 Ko woff2).
+     Rendu homogène PC ↔ tablette ; remplace Impact dans le chrome UI uniquement.
+     Pages imprimées conservent --f-condensed / Impact. */
+  font-family: 'Oswald';
+  font-weight: 500;
+  font-display: swap;
+  src: url('data:font/woff2;base64,__OSWALD_500__') format('woff2');
+}
 
 :root {
   /* Typography stack — partagée par tous les thèmes (la phase X — étape C
@@ -49,6 +58,7 @@ CSS = r"""
   --f-stencil: 'Stardos Stencil', 'Impact', 'Arial Narrow Bold', sans-serif;
   --f-typewriter: 'Special Elite', 'Courier New', 'Courier', monospace;
   --f-condensed: 'Impact', 'Arial Narrow', 'Helvetica Condensed', sans-serif;
+  --f-ui: 'Oswald', 'Arial Narrow', sans-serif; /* Chrome éditeur — 2c */
   --f-mono: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
 
   /* Variables sémantiques constantes sur tous les thèmes
@@ -214,7 +224,7 @@ body {
 }
 
 .tb-btn {
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 700;
   letter-spacing: 1.5px;
   font-size: 12px;
@@ -259,7 +269,7 @@ body {
    ne supportent pas les variables CSS — mais l'amber étant constant, c'est
    cohérent avec tous les thèmes). */
 .tb-select {
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 700;
   letter-spacing: 1.5px;
   font-size: 12px;
@@ -314,6 +324,31 @@ body {
   margin-left: 8px;
   user-select: none;
 }
+
+/* i18n — bouton drapeau langue (Phase 9 — v2.2.0)
+   Bouton bascule FR↔EN, positionné entre le sélecteur de thème et le spacer.
+   Affiche le drapeau de la langue CIBLE (celle vers laquelle on bascule). */
+.tb-lang-btn {
+  background: transparent;
+  border: 1px solid var(--khaki);
+  color: var(--paper);
+  height: 40px;
+  min-width: 44px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: all .15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+}
+.tb-lang-btn:hover, .tb-lang-btn:focus-visible {
+  background: var(--olive);
+  border-color: var(--amber);
+  outline: none;
+}
+.tb-lang-btn:active { transform: translateY(1px); }
 
 /* ============ MAIN APP ============ */
 .app {
@@ -380,6 +415,31 @@ body {
 }
 .ed-section > summary:hover { color: var(--paper-light); }
 
+/* Panneau assistant METAR — découplé du tab-system (correctif 2) */
+.metar-panel {
+  contain: layout;
+  margin-bottom: 14px;
+  border: 1px solid var(--khaki);
+  background: rgba(20, 24, 12, .5);
+}
+.metar-panel > summary {
+  cursor: pointer;
+  padding: 12px 14px;
+  background: linear-gradient(90deg, var(--olive) 0%, var(--olive-dark) 100%);
+  font-family: var(--f-stencil);
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--amber);
+  list-style: none;
+  display: flex; align-items: center;
+  border-bottom: 1px solid var(--amber-dark);
+  user-select: none;
+  min-height: 48px;
+}
+.metar-panel > summary::-webkit-details-marker { display: none; }
+.metar-panel > summary:hover { color: var(--paper-light); }
+.metar-panel > .ed-content { padding: 14px; }
+
 .ed-content {
   padding: 14px;
   display: flex; flex-direction: column; gap: 14px;
@@ -388,7 +448,7 @@ body {
 /* FIELDS */
 .ed-field { display: flex; flex-direction: column; gap: 5px; }
 .ed-field label {
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 700;
   font-size: 11px;
   letter-spacing: 1.8px;
@@ -441,7 +501,7 @@ body {
   background: var(--rust);
   border: 1px solid var(--red-faded);
   color: var(--paper-light);
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 700;
   cursor: pointer;
   padding: 0 12px;
@@ -461,7 +521,7 @@ body {
   background: transparent;
   border: 1px dashed var(--amber);
   color: var(--amber);
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 700;
   letter-spacing: 1.5px;
   padding: 12px;
@@ -481,7 +541,7 @@ body {
   padding: 14px;
   text-align: center;
   cursor: pointer;
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 600;
   font-size: 11px;
   color: var(--khaki-light);
@@ -523,7 +583,7 @@ body {
   cursor: pointer;
   font-weight: 700;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-size: 18px;
   line-height: 1;
   padding: 0;
@@ -556,7 +616,7 @@ body {
   background: var(--olive);
   border: 1px solid var(--khaki);
   color: var(--paper);
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
@@ -635,7 +695,7 @@ body {
   border: 1px solid var(--red-faded);
   cursor: pointer;
   padding: 2px 10px;
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 700;
   font-size: 11px;
   letter-spacing: 1px;
@@ -810,6 +870,67 @@ body {
   opacity: .45;
   cursor: wait !important;
   pointer-events: none;
+}
+
+/* ── Wing read-only panel (P1.B) ── */
+.wing-ro-info {
+  margin-bottom: 12px;
+}
+.wing-ro-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(0,0,0,.2);
+  border: 1px solid var(--khaki);
+  border-radius: 4px;
+}
+.wing-ro-logo {
+  width: 56px; height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: rgba(0,0,0,.1);
+  border-radius: 3px;
+}
+.wing-ro-text {
+  flex: 1;
+  min-width: 0;
+}
+.wing-ro-name {
+  font-family: var(--f-stencil);
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--amber);
+  text-transform: uppercase;
+}
+.wing-ro-full {
+  font-family: var(--f-typewriter);
+  font-size: 11px;
+  color: var(--paper-dark);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wing-ro-meta {
+  font-family: var(--f-ui);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--khaki-light);
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+.wing-hq-hint {
+  font-family: var(--f-ui);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--khaki-light);
+  text-align: center;
+  padding: 6px 0;
+  border-top: 1px dotted var(--khaki);
+  margin-top: 8px;
+  text-transform: uppercase;
+  opacity: .7;
 }
 
 /* ============ PREVIEW ============ */
@@ -1020,7 +1141,7 @@ body {
   display: flex; align-items: center; justify-content: center;
 }
 .p-imgframe.empty::after {
-  content: '◯ AUCUNE CARTE FOURNIE ◯';
+  content: attr(data-empty-label);
   font-family: var(--f-stencil);
   letter-spacing: 4px;
   color: var(--khaki);
@@ -1197,7 +1318,7 @@ body {
 }
 .ed-subtask-row input { flex: 1; font-size: 12px; }
 .ed-btn-subtask-add {
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 600;
   font-size: 10px;
   letter-spacing: 1px;
@@ -1378,7 +1499,7 @@ body {
   grid-template-columns: 44px 56px 1fr 1fr 58px 44px;
 }
 .ed-ch-toggle {
-  font-family: var(--f-condensed);
+  font-family: var(--f-ui);
   font-weight: 700;
   font-size: 10px;
   letter-spacing: 1px;
@@ -1426,20 +1547,153 @@ body {
 }
 .ed-guest-fields label::before { color: var(--red-stamp); }
 
+/* ── Assistant METAR (10A + 10C) ─────────────────────────────────── */
+.metar-form { padding: 10px 0; }
+.metar-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.metar-field { display: flex; flex-direction: column; gap: 3px; }
+.metar-field label {
+  font-family: var(--f-ui);
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--amber);
+  letter-spacing: 1px;
+}
+.metar-field input, .metar-field select {
+  font-family: var(--f-ui);
+  font-size: 13px;
+  width: 80px;
+  padding: 3px 6px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.metar-field input[type="text"] { width: 90px; }
+.metar-field input[type="number"] { width: 60px; }
+#ma-wspd, #ma-gust { width: 52px; }
+.metar-check-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--f-ui);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--amber);
+  cursor: pointer;
+}
+.metar-check-label input[type="checkbox"] {
+  accent-color: var(--amber);
+  width: 15px; height: 15px;
+}
+.metar-preview-line {
+  margin: 10px 0;
+  padding: 8px 12px;
+  background: rgba(0,0,0,.25);
+  border-left: 3px solid var(--amber);
+  font-family: var(--f-mono);
+  font-size: 13px;
+  color: var(--text);
+  letter-spacing: 1.5px;
+  word-break: break-all;
+}
+.metar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.metar-more > summary {
+  font-family: var(--f-ui);
+  font-size: 11px;
+  color: var(--text-dim);
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+
+
 @media (max-width: 600px) {
   .ed-channel-row.custom-mode {
     grid-template-columns: 44px 52px 1fr 50px 44px;
   }
 }
-.ed-radio-item-row {
+/* Ligne aérodrome structuré (Partie 1 — 10B-lite) */
+.ed-airfield-row {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 70px 44px;
+  grid-template-columns: 56px auto 1fr 52px auto 36px;
   gap: 6px;
   margin-bottom: 6px;
+  align-items: center;
+}
+/* Tablette portrait et + (>600px) : on NE surcharge PAS .ed-airfield-row
+   → la grille desktop "56px auto 1fr 52px auto 36px" s'applique = tout sur UNE ligne. */
+@media (max-width: 600px) {
+  .ed-airfield-row {
+    grid-template-columns: 56px auto 1fr auto;
+    grid-template-areas:
+      "icao farp name rm"
+      "rwy  atc  atc  atc";
+    gap: 6px 8px;
+  }
+  .ed-airfield-row .af-icao       { grid-area: icao; }
+  .ed-airfield-row .af-farp-check { grid-area: farp; }
+  .ed-airfield-row .af-name       { grid-area: name; }
+  .ed-airfield-row .af-rm         { grid-area: rm;  justify-self: end; }
+  .ed-airfield-row .af-rwy        { grid-area: rwy; }
+  .ed-airfield-row .af-atc-check  { grid-area: atc; justify-self: start; }
+  .ed-airfield-row .af-icao,
+  .ed-airfield-row .af-name,
+  .ed-airfield-row .af-rwy        { min-width: 0; }
+}
+.af-farp-check, .af-atc-check {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--f-ui);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--amber);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.af-farp-check input[type="checkbox"],
+.af-atc-check  input[type="checkbox"] {
+  accent-color: var(--amber);
+  width: 15px; height: 15px;
+  cursor: pointer;
+}
+
+.ed-radio-item-row {
+  display: grid;
+  grid-template-columns: 28px 1.5fr 1fr 70px 44px; /* 2b : colonne checkbox overview */
+  gap: 6px;
+  margin-bottom: 6px;
+  align-items: center;
 }
 .ed-radio-item-row input,
 .ed-radio-item-row select {
   min-width: 0;
+}
+/* Case à cocher overview (2b) */
+.ri-overview-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.ri-overview-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--amber);
+  cursor: pointer;
+}
+.ri-overview-check input[type="checkbox"]:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .ed-radio-block {
@@ -2462,6 +2716,7 @@ CSS = CSS.replace('__STARDOS_400__', A['STARDOS_400'])
 CSS = CSS.replace('__STARDOS_700__', A['STARDOS_700'])
 CSS = CSS.replace('__SPECIAL_ELITE__', A['SPECIAL_ELITE'])
 CSS = CSS.replace('__ROBOTO_MONO_400__', A['ROBOTO_MONO_400'])
+CSS = CSS.replace('__OSWALD_500__', A['OSWALD_500'])  # 2c
 
 # Write CSS to a separate file for now; we'll combine later
 with open(os.path.join(HERE, 'briefing.css'), 'w') as f:

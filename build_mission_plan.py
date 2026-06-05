@@ -1,0 +1,696 @@
+#!/usr/bin/env python3
+"""
+build_mission_plan.py — DCS Mission Plan shell v1.0
+Produit dcs_mission_plan.html (fichier autonome, single-file, offline).
+
+Usage : python3 build_mission_plan.py
+Sortie : ./dcs_mission_plan.html
+
+Sources modules actifs (à placer à côté de ce script) :
+  dcs_hq.html
+  DCS_World_Briefing_Generator.html
+  dcs_recon_station.html
+
+Sources images (à placer dans ./tiles/) :
+  tiles/hq.webp  tiles/bg.webp  tiles/rs.webp  tiles/rp.webp  tiles/kg.webp
+"""
+
+import base64
+import os
+import sys
+
+# ── Configuration ──────────────────────────────────────────────────────────────
+OUT_FILE = 'dcs_mission_plan.html'
+
+# status : 'active' = module embarqué ; 'soon' = carte voilée uniquement
+MODULES = [
+    {'id': 'hq', 'status': 'active', 'src': 'dcs_hq.html',                        'tile': 'tiles/hq.webp'},
+    {'id': 'bg', 'status': 'active', 'src': 'DCS_World_Briefing_Generator.html', 'tile': 'tiles/bg.webp'},
+    {'id': 'rs', 'status': 'active', 'src': 'dcs_recon_station.html',             'tile': 'tiles/rs.webp'},
+    {'id': 'rp', 'status': 'soon',   'src': '',                                    'tile': 'tiles/rp.webp'},
+    {'id': 'kg', 'status': 'soon',   'src': '',                                    'tile': 'tiles/kg.webp'},
+]
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+def encode_file_b64(path):
+    abs_path = os.path.join(SCRIPT_DIR, path)
+    if not os.path.exists(abs_path):
+        return None
+    with open(abs_path, 'rb') as f:
+        return base64.b64encode(f.read()).decode('ascii')
+
+
+def encode_module_b64(path):
+    abs_path = os.path.join(SCRIPT_DIR, path)
+    if not os.path.exists(abs_path):
+        return None
+    with open(abs_path, 'r', encoding='utf-8') as fh:
+        html = fh.read()
+    return base64.b64encode(html.encode('utf-8')).decode('ascii')
+
+
+def build_module_html_js(modules):
+    """N'encode que les modules 'active'."""
+    lines = ['const MODULE_HTML = {']
+    active = [m for m in modules if m['status'] == 'active']
+    for i, mod in enumerate(active):
+        b64 = encode_module_b64(mod['src'])
+        if b64 is None:
+            print(f'  [WARN] Source introuvable : {mod["src"]} — module {mod["id"]} désactivé', file=sys.stderr)
+            b64 = ''
+        comma = ',' if i < len(active) - 1 else ''
+        lines.append(f'  {mod["id"]}: "{b64}"{comma}')
+        print(f'  [OK] Module {mod["id"]} — {len(b64)//1024} Ko base64 (UTF-8)')
+    lines.append('};')
+    return '\n'.join(lines)
+
+
+def build_tile_uris(modules):
+    """Encode les 4 tuiles (active + soon)."""
+    uris = {}
+    for mod in modules:
+        b64 = encode_file_b64(mod['tile'])
+        if b64 is None:
+            print(f'  [WARN] Image tuile introuvable : {mod["tile"]} — placeholder utilisé', file=sys.stderr)
+            uris[mod['id']] = ''
+        else:
+            uris[mod['id']] = f'data:image/webp;base64,{b64}'
+            print(f'  [OK] Tuile {mod["id"]} — {len(b64)//1024} Ko base64')
+    return uris
+
+
+def build_html(module_html_js, tile_uris):
+    tile_hq = tile_uris.get('hq', '')
+    tile_bg = tile_uris.get('bg', '')
+    tile_rs = tile_uris.get('rs', '')
+    tile_rp = tile_uris.get('rp', '')
+    tile_kg = tile_uris.get('kg', '')
+
+    return f'''<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCS Mission Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Barlow+Condensed:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DCS MISSION PLAN — DA v4 (shell)
+   Landing « Mur de situation » — 4 thèmes
+   ============================================================ */
+:root{{
+  --paper:#d8c9a5; --paper-edge:#8a7a52; --ink:#1f1c16; --ink-2:#463f30;
+  --accent:#a98a4e; --olive:#4a5230; --stamp:#a83524; --amber:#c0892a;
+  --board:#2a2417; --board-2:#1a1610; --lamp:rgba(255,228,168,.22);
+  --line:rgba(192,137,42,.30); --grain:.08; --scan:0; --rot:-2.6deg; --rad:2px;
+  --f-disp:'Special Elite','Courier New',monospace;
+  --f-sten:'Saira Stencil One','Oswald',sans-serif;
+  --f-ui:'Oswald','Arial Narrow',sans-serif;
+  --f-body:'Barlow Condensed',sans-serif;
+  --f-mono:'JetBrains Mono',monospace;
+  --a-hq:#4FB286; --a-bg:#c0892a; --a-rp:#7ac97a; --a-kg:#8fb0c0; --a-rs:#c95a9c;
+}}
+[data-theme="cw-nato"]{{ --paper:#d8c9a5; --paper-edge:#8a7a52; --ink:#1f1c16; --ink-2:#463f30;
+  --accent:#a98a4e; --olive:#4a5230; --stamp:#a83524; --amber:#c0892a;
+  --board:#2a2417; --board-2:#1a1610; --lamp:rgba(255,228,168,.22);
+  --line:rgba(192,137,42,.30); --grain:.08; --scan:0; --rot:-2.6deg; --rad:2px; }}
+[data-theme="cw-soviet"]{{ --paper:#d8c479; --paper-edge:#8a7a30; --ink:#1f1c16; --ink-2:#463f30;
+  --accent:#c9b35c; --olive:#2a3a5a; --stamp:#841e1e; --amber:#d8b24a;
+  --board:#231d12; --board-2:#15110a; --lamp:rgba(255,224,150,.20);
+  --line:rgba(232,214,144,.28); --grain:.09; --scan:0; --rot:-4deg; --rad:1px; }}
+[data-theme="modern-nato"]{{ --paper:#e8e3d8; --paper-edge:#948c7c; --ink:#15181c; --ink-2:#3a4048;
+  --accent:#7a8a98; --olive:#2a3038; --stamp:#1a1a1a; --amber:#5c6b7a;
+  --board:#10141a; --board-2:#080b0f; --lamp:rgba(170,200,225,.14);
+  --line:rgba(122,138,152,.30); --grain:.03; --scan:.06; --rot:-.8deg; --rad:6px; }}
+[data-theme="modern-east"]{{ --paper:#cdc6b8; --paper-edge:#7a7466; --ink:#1a1610; --ink-2:#3d3024;
+  --accent:#8a7c5e; --olive:#3d3024; --stamp:#7a2424; --amber:#a98a4e;
+  --board:#16110b; --board-2:#0c0805; --lamp:rgba(220,190,150,.14);
+  --line:rgba(160,120,80,.26); --grain:.05; --scan:.04; --rot:-1.4deg; --rad:4px; }}
+
+*{{box-sizing:border-box;margin:0;padding:0;}}
+html,body{{height:100%;}}
+body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); min-height:100vh; overflow-x:hidden; transition:background .5s ease;}}
+.app{{position:relative; z-index:3; min-height:100vh; display:flex; flex-direction:column;}}
+
+/* ===== RAIL ===== */
+.rail{{display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding:11px 22px; border-bottom:1px solid var(--line);
+  position:relative; z-index:6; background:linear-gradient(180deg, rgba(0,0,0,.6), rgba(0,0,0,.18)); backdrop-filter:blur(2px);}}
+.plate{{display:flex; align-items:baseline; gap:9px; padding:5px 11px; border:1px solid var(--line); border-radius:var(--rad);
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.3));}}
+.plate .mark{{font-family:var(--f-sten); font-size:16px; letter-spacing:.05em; color:var(--amber);}}
+.plate .sub{{font-family:var(--f-mono); font-size:9px; letter-spacing:.24em; color:var(--accent); text-transform:uppercase;}}
+.rail .spacer{{flex:1;}}
+.ctrl{{display:flex; align-items:center; gap:8px;}}
+.seg{{display:inline-flex; border:1px solid var(--line); border-radius:var(--rad); overflow:hidden;}}
+.seg button{{font-family:var(--f-ui); font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; background:rgba(0,0,0,.4);
+  color:var(--accent); border:none; padding:7px 13px; cursor:pointer;}}
+.seg button + button{{border-left:1px solid var(--line);}}
+.seg button.on{{background:var(--amber); color:#15120c;}}
+.theme-sel{{font-family:var(--f-ui); font-size:12px; letter-spacing:.05em; text-transform:uppercase; background:rgba(0,0,0,.45);
+  color:var(--amber); border:1px solid var(--line); padding:7px 11px; border-radius:var(--rad); cursor:pointer; outline:none;}}
+.flag{{font-size:15px; background:rgba(0,0,0,.45); border:1px solid var(--line); width:38px; height:34px; border-radius:var(--rad); cursor:pointer; color:var(--amber);}}
+.classif{{font-family:var(--f-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--stamp);
+  border:1px solid var(--stamp); padding:5px 9px; border-radius:var(--rad); opacity:.85;}}
+
+.atmos{{position:fixed; inset:0; z-index:0; pointer-events:none;}}
+.atmos .grain{{position:absolute; inset:0; opacity:var(--grain); mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}}
+.atmos .scan{{position:absolute; inset:0; opacity:var(--scan); background:repeating-linear-gradient(to bottom, rgba(255,255,255,.5) 0 1px, transparent 1px 3px);}}
+
+/* ============ DIRECTION WALL ============ */
+.board{{position:relative; flex:1; padding:24px 26px 56px; overflow:hidden; isolation:isolate;}}
+.board::before{{content:''; position:absolute; inset:0; z-index:-1; transition:background .5s ease;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='t'><feTurbulence type='fractalNoise' baseFrequency='0.014' numOctaves='2' seed='4'/></filter><rect width='100%25' height='100%25' filter='url(%23t)' opacity='0.4'/></svg>"),
+    radial-gradient(58% 44% at 50% 20%, var(--lamp), transparent 62%),
+    radial-gradient(150% 130% at 50% 120%, transparent 30%, rgba(0,0,0,.82)),
+    linear-gradient(160deg, var(--board), var(--board-2));
+  background-size:420px 420px, auto, auto, auto;
+  background-blend-mode:overlay, normal, normal, normal;}}
+.board::after{{content:''; position:absolute; inset:0; z-index:-1; opacity:.09; color:var(--accent);
+  background-image:linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+  background-size:46px 46px; -webkit-mask:radial-gradient(78% 70% at 50% 34%, #000, transparent 88%); mask:radial-gradient(78% 70% at 50% 34%, #000, transparent 88%);}}
+
+.wall-head{{position:relative; z-index:2; max-width:1200px; margin:0 auto 22px; width:100%; display:flex; align-items:flex-end; gap:20px; flex-wrap:wrap;}}
+.tab{{position:relative; background:var(--paper); color:var(--ink); padding:13px 22px 15px; border-radius:6px 6px 0 0;
+  box-shadow:0 10px 26px rgba(0,0,0,.5); transform:rotate(-1deg); border:1px solid var(--paper-edge); border-bottom:none;}}
+.tab .ribbon{{font-family:var(--f-mono); font-size:9px; letter-spacing:.26em; color:var(--ink-2); text-transform:uppercase;}}
+.tab h1{{font-family:var(--f-sten); font-size:clamp(28px,4.8vw,48px); line-height:.9; letter-spacing:.02em; color:var(--ink); margin-top:4px;}}
+.tab h1 .x{{color:var(--stamp);}}
+.note{{display:flex; border:1px solid var(--line); border-radius:var(--rad); overflow:hidden; background:rgba(0,0,0,.32); transform:rotate(.6deg);}}
+.note .cell{{padding:8px 13px; border-right:1px solid var(--line);}} .note .cell:last-child{{border-right:none;}}
+.note .k{{font-family:var(--f-mono); font-size:9px; letter-spacing:.18em; color:var(--accent); text-transform:uppercase; display:block;}}
+.note .v{{font-family:var(--f-ui); font-size:13px; color:var(--amber);}}
+
+.wall-stage{{position:relative; z-index:1; max-width:1200px; margin:0 auto; width:100%; display:flex; flex-direction:column; gap:36px;}}
+.active-row{{display:grid; grid-template-columns:1fr 1fr 1fr; gap:26px;}}
+.soon-row{{display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:760px;}}
+
+.print{{position:relative; border:1px solid var(--paper-edge); border-radius:var(--rad); padding:11px 11px 0;
+  background:linear-gradient(158deg, color-mix(in srgb,var(--paper) 96%, #fff 4%), color-mix(in srgb,var(--paper) 80%, #1a1208 20%));
+  box-shadow:0 18px 40px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.18); transition:transform .4s cubic-bezier(.2,.75,.2,1), box-shadow .4s;}}
+.print::after{{content:''; position:absolute; inset:0; z-index:3; pointer-events:none; border-radius:inherit; mix-blend-mode:multiply; opacity:.7;
+  box-shadow:inset 0 0 42px rgba(52,34,12,.5), inset 0 0 8px rgba(0,0,0,.34);
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3'/></filter><rect width='100%25' height='100%25' filter='url(%23p)' opacity='0.75'/></svg>"); background-size:200px 200px;}}
+.print::before{{content:''; position:absolute; inset:0; z-index:3; pointer-events:none; border-radius:inherit; mix-blend-mode:multiply; opacity:.85;
+  background:radial-gradient(circle at 88% 92%, rgba(96,64,30,.5), transparent 15%), radial-gradient(circle at 10% 90%, rgba(96,64,30,.4), transparent 13%);}}
+#card-bg::before{{background:radial-gradient(circle at 93% 94%, rgba(96,64,30,.5), transparent 14%);}}
+#card-rs::before{{background:radial-gradient(circle at 8% 90%, rgba(96,64,30,.5), transparent 15%);}}
+.soon-row .print:nth-child(1)::before{{background:
+  radial-gradient(circle at 94% 88%, rgba(96,64,30,.54), transparent 18%), radial-gradient(circle at 10% 10%, rgba(80,52,24,.42), transparent 12%);}}
+.soon-row .print:nth-child(2)::before{{background:
+  radial-gradient(circle at 50% 92%, rgba(96,64,30,.48), transparent 16%);}}
+[data-theme^="modern"] .print::after{{opacity:.32;}}
+[data-theme^="modern"] .print::before{{opacity:.35;}}
+.pin{{position:absolute; width:15px; height:15px; border-radius:50%; z-index:6;
+  background:radial-gradient(circle at 35% 30%, #ff8f7e, var(--stamp)); box-shadow:0 4px 7px rgba(0,0,0,.55), inset 0 -2px 3px rgba(0,0,0,.35);}}
+.pin.tl{{top:-7px; left:18px;}} .pin.tr{{top:-7px; right:18px;}}
+.tape{{position:absolute; top:-12px; left:50%; transform:translateX(-50%) rotate(-3deg); width:118px; height:25px; z-index:5;
+  background:linear-gradient(180deg, rgba(230,225,200,.55), rgba(200,195,170,.42)); border:1px solid rgba(255,255,255,.22); box-shadow:0 2px 5px rgba(0,0,0,.3);}}
+.shot{{position:relative; border-radius:1px; overflow:hidden; background:var(--board-2) center/cover no-repeat;}}
+.shot .tagchip{{position:absolute; top:9px; left:9px; font-family:var(--f-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase;
+  color:#f3ecd9; background:rgba(0,0,0,.6); padding:3px 8px; border:1px solid rgba(255,255,255,.18);}}
+.caption{{padding:11px 8px 13px; color:var(--ink);}}
+.cap-row{{display:flex; align-items:center; gap:9px;}}
+.logo{{font-family:var(--f-mono); font-weight:700; font-size:12px; color:#15120c; padding:4px 7px; border-radius:3px; letter-spacing:.05em;}}
+.ptitle{{font-family:var(--f-ui); font-size:18px; font-weight:600; color:var(--ink);}}
+.pver{{margin-left:auto; font-family:var(--f-mono); font-size:10px; color:var(--ink-2); border:1px solid var(--paper-edge); padding:1px 6px; border-radius:2px;}}
+.pdesc{{font-family:var(--f-body); font-size:14px; color:var(--ink-2); line-height:1.4; margin-top:6px;}}
+.pstatus{{display:flex; align-items:center; gap:7px; margin-top:8px; font-family:var(--f-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--olive);}}
+.pstatus .dot{{width:7px; height:7px; border-radius:50%; background:#4f8a3a; box-shadow:0 0 8px #4f8a3a;}}
+
+/* ── Cartes ACTIVES (dossiers ouverts) : BG + Recon, traitement identique ── */
+.print.active{{cursor:pointer;}}
+.print.active .shot{{height:280px; cursor:pointer;}}
+#card-hq .shot{{background-image:url("{tile_hq}");}}
+#card-hq::before{{background:radial-gradient(circle at 12% 8%, rgba(96,64,30,.5), transparent 14%);}}
+#card-bg .shot{{background-image:url("{tile_bg}");}}
+#card-rs .shot{{background-image:url("{tile_rs}");}}
+.active-row .print:nth-child(1){{transform:rotate(-1.8deg);}}
+.active-row .print:nth-child(2){{transform:rotate(1.8deg);}}
+.active-row .print:nth-child(3){{transform:rotate(0deg);}}
+.print.active:hover{{transform:rotate(0) translateY(-7px); cursor:pointer; box-shadow:0 30px 64px rgba(0,0,0,.6), 0 0 0 2px var(--card-accent);}}
+.cta{{margin:2px 8px 12px; display:inline-block; font-family:var(--f-ui); font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
+  color:#15120c; background:var(--card-accent); border:1px solid var(--paper-edge); padding:9px 15px; border-radius:var(--rad);}}
+.print.active:hover .cta{{filter:brightness(1.12);}}
+
+/* sealed (à venir) — plus petites, voilées + tampon */
+.soon-row .print:nth-child(1){{transform:rotate(-3deg) translate(2px,0);}}
+.soon-row .print:nth-child(2){{transform:rotate(2.6deg) translate(-2px,0);}}
+.print.sealed .shot{{height:150px;}}
+.print.sealed .shot::after{{content:''; position:absolute; inset:0; background:rgba(10,8,6,.32);}}
+.avenir{{position:absolute; top:10px; right:10px; z-index:4; font-family:var(--f-disp); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--stamp); border:2px solid var(--stamp); padding:3px 8px; background:rgba(0,0,0,.4); transform:rotate(-6deg);}}
+[data-theme="modern-nato"] .avenir,[data-theme="modern-east"] .avenir{{border-width:1.5px; font-family:var(--f-mono); font-size:10px;}}
+.print.sealed .caption{{padding:9px 8px 11px;}}
+.print.sealed .ptitle{{font-size:16px; color:var(--ink-2);}}
+
+.bigstamp{{position:absolute; top:14px; right:30px; z-index:5; transform:rotate(var(--rot)); font-family:var(--f-disp); color:var(--stamp);
+  border:3px double var(--stamp); padding:9px 17px; font-size:19px; letter-spacing:.16em; text-transform:uppercase; opacity:.7; background:rgba(0,0,0,.14); border-radius:var(--rad);}}
+[data-theme="modern-nato"] .classif,[data-theme="modern-nato"] .bigstamp{{color:#8e9aa6; border-color:#5f6b76;}}
+[data-theme="modern-east"] .classif,[data-theme="modern-east"] .bigstamp{{color:#a4756c; border-color:#79554e;}}
+[data-theme="modern-nato"] .bigstamp,[data-theme="modern-east"] .bigstamp{{opacity:.5;}}
+.soviet-star{{position:absolute; top:18px; left:30px; width:58px; height:58px; z-index:5; opacity:0; transition:opacity .4s;}}
+[data-theme="cw-soviet"] .soviet-star{{opacity:.55;}}
+
+/* ── Déco diégétique du panneau (objets posés/épinglés, pas d'abstrait) ── */
+.props{{position:absolute; inset:0; z-index:0; pointer-events:none;}}
+.props .tape-label{{position:absolute; left:30px; bottom:70px; transform:rotate(-4deg);
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:rgba(22,16,10,.74);
+  padding:8px 18px; background:linear-gradient(180deg, rgba(228,221,193,.46), rgba(198,191,163,.34)); box-shadow:0 2px 6px rgba(0,0,0,.32);}}
+.props .tape-label::before,.props .tape-label::after{{content:''; position:absolute; top:0; bottom:0; width:8px; background:inherit; opacity:.85;}}
+.props .tape-label::before{{left:-8px; clip-path:polygon(0 16%,100% 0,100% 100%,0 84%);}}
+.props .tape-label::after{{right:-8px; clip-path:polygon(0 0,100% 16%,100% 84%,0 100%);}}
+.props .imprint{{position:absolute; right:64px; bottom:118px; transform:rotate(-13deg); opacity:.17;
+  font-family:var(--f-disp); font-size:14px; letter-spacing:.16em; text-transform:uppercase; color:var(--stamp);
+  border:2px double var(--stamp); padding:8px 14px; border-radius:2px;}}
+[data-theme="modern-nato"] .props .imprint{{color:#8e9aa6; border-color:#5f6b76;}}
+[data-theme="modern-east"] .props .imprint{{color:#a4756c; border-color:#79554e;}}
+.props .pin.s1{{position:absolute; top:96px; right:74px;}}
+.props .pin.s2{{position:absolute; bottom:62px; left:228px;}}
+.props .clip{{position:absolute; right:128px; top:118px; width:13px; height:32px; transform:rotate(26deg);
+  border:2px solid #b9bcc0; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,.45);}}
+.props .clip::before{{content:''; position:absolute; left:2px; right:2px; top:3px; bottom:7px; border:2px solid #a9acb0; border-bottom:none; border-radius:6px 6px 0 0;}}
+@media(max-width:1024px){{ .props{{display:none;}} }}
+
+/* ===== PIED ===== */
+.foot{{padding:13px 24px; border-top:1px solid var(--line); display:flex; gap:14px; align-items:center; flex-wrap:wrap; position:relative; z-index:6;
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.16em; color:var(--accent); text-transform:uppercase;}}
+.foot .dot{{opacity:.5;}} .foot .right{{margin-left:auto; color:var(--amber);}}
+
+/* Animations — translate, jamais transform (cf. DESIGN §6.1) */
+.reveal{{opacity:0; translate:0 12px; animation:rise .65s cubic-bezier(.2,.7,.2,1) forwards;}}
+@keyframes rise{{to{{opacity:1; translate:0 0;}}}}
+.d1{{animation-delay:.05s}}.d2{{animation-delay:.16s}}.d3{{animation-delay:.3s}}.d4{{animation-delay:.42s}}.d5{{animation-delay:.54s}}
+
+/* ===== VUE MODULE ===== */
+#landing{{display:flex; flex-direction:column; flex:1;}}
+#module-view{{display:none; position:fixed; inset:0; z-index:200;}}
+#module-view.active{{display:block;}}
+#module-view iframe{{width:100%; height:100%; border:none; display:block;}}
+#module-loading{{position:fixed; inset:0; z-index:201; background:rgba(10,8,6,.92);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--f-mono); font-size:13px; letter-spacing:.18em; color:var(--amber); text-transform:uppercase;}}
+#module-loading.hidden{{display:none;}}
+
+@media(max-width:900px){{ .active-row,.soon-row{{grid-template-columns:1fr;}} }}
+@media(max-width:768px){{
+  .bigstamp,.soviet-star{{display:none;}}
+}}
+</style>
+</head>
+<body data-theme="cw-nato">
+
+<div class="atmos"><div class="grain"></div><div class="scan"></div></div>
+
+<div id="landing">
+<div class="app">
+
+  <!-- RAIL -->
+  <div class="rail reveal d1">
+    <div class="plate"><span class="mark">DCS · MISSION PLAN</span></div>
+    <div class="spacer"></div>
+    <div class="ctrl">
+      <select class="theme-sel" id="theme-sel" onchange="setTheme(this.value)" title="Thème">
+        <option value="cw-nato" data-i18n="theme.cwnato">Cold War OTAN</option>
+        <option value="cw-soviet" data-i18n="theme.cwsoviet">Cold War Soviétique</option>
+        <option value="modern-nato" data-i18n="theme.modernnato">OTAN moderne</option>
+        <option value="modern-east" data-i18n="theme.moderneast">Bloc Est moderne</option>
+      </select>
+      <button class="flag" id="flag-btn" title="Langue / Language">🇬🇧</button>
+      <span class="classif" id="classif">Classified // Eyes Only</span>
+    </div>
+  </div>
+
+  <!-- ============ WALL ============ -->
+  <div id="dir-wall" class="board">
+    <svg class="soviet-star" viewBox="0 0 100 100"><polygon points="50,4 61,38 97,38 68,60 79,95 50,73 21,95 32,60 3,38 39,38" fill="var(--stamp)" stroke="var(--amber)" stroke-width="1.5"/></svg>
+
+    <div class="props">
+      <div class="tape-label">OPS · 06.2026</div>
+      <div class="imprint">Nº 047 — 06.26</div>
+      <span class="pin s1"></span>
+      <span class="pin s2"></span>
+      <span class="clip"></span>
+    </div>
+
+    <div class="bigstamp" id="bigstamp">Declassified</div>
+
+    <div class="wall-head">
+      <div class="tab reveal d2">
+        <div class="ribbon" data-i18n="ribbon">// Suite de préparation opérationnelle</div>
+        <h1>MISSION <span class="x">PLAN</span></h1>
+      </div>
+    </div>
+
+    <div class="wall-stage">
+
+      <!-- Modules actifs : dossiers ouverts, traitement identique -->
+      <div class="active-row">
+        <div class="print active reveal d3" id="card-hq" style="--card-accent:var(--a-hq)" tabindex="0" role="button" aria-label="HQ">
+          <span class="tape"></span><span class="pin tl"></span><span class="pin tr"></span>
+          <div class="shot"></div>
+          <div class="caption">
+            <div class="cap-row">
+              <span class="logo" style="background:var(--a-hq)">H·Q</span>
+              <span class="ptitle">HQ</span>
+              <span class="pver">v0.1.0</span>
+            </div>
+            <div class="pdesc" data-i18n="hq.desc">Poste de commandement — configuration Wing, identité escadrons, logos partagés avec tous les modules.</div>
+            <div class="pstatus"><span class="dot"></span> <span data-i18n="status.op">Opérationnel</span></div>
+          </div>
+          <span class="cta" data-i18n="cta">▶ Ouvrir le dossier</span>
+        </div>
+
+        <div class="print active reveal d3" id="card-bg" style="--card-accent:var(--a-bg)" tabindex="0" role="button" aria-label="Briefing Generator">
+          <span class="tape"></span><span class="pin tl"></span><span class="pin tr"></span>
+          <div class="shot"></div>
+          <div class="caption">
+            <div class="cap-row">
+              <span class="logo" style="background:var(--a-bg)">B·G</span>
+              <span class="ptitle">Briefing Generator</span>
+              <span class="pver">v2.2.0</span>
+            </div>
+            <div class="pdesc" data-i18n="bg.desc">Briefings complets — SITAC, plan radio, aérodromes, charts, annexes — export PDF prêt à partager.</div>
+            <div class="pstatus"><span class="dot"></span> <span data-i18n="status.op">Opérationnel</span></div>
+          </div>
+          <span class="cta" data-i18n="cta">▶ Ouvrir le dossier</span>
+        </div>
+
+        <div class="print active reveal d3" id="card-rs" style="--card-accent:var(--a-rs)" tabindex="0" role="button" aria-label="Recon Station">
+          <span class="tape"></span><span class="pin tl"></span><span class="pin tr"></span>
+          <div class="shot"></div>
+          <div class="caption">
+            <div class="cap-row">
+              <span class="logo" style="background:var(--a-rs)">R·S</span>
+              <span class="ptitle">Recon Station</span>
+              <span class="pver">v1.0.0</span>
+            </div>
+            <div class="pdesc" data-i18n="rs.desc">Transforme une capture en photo d'analyse de reconnaissance — niveaux de gris, annotations, export PNG pleine résolution.</div>
+            <div class="pstatus"><span class="dot"></span> <span data-i18n="status.op">Opérationnel</span></div>
+          </div>
+          <span class="cta" data-i18n="cta">▶ Ouvrir le dossier</span>
+        </div>
+      </div>
+
+      <!-- Modules à venir -->
+      <div class="soon-row">
+        <div class="print sealed reveal d4" aria-disabled="true">
+          <span class="pin tl"></span><span class="pin tr"></span>
+          <span class="avenir" data-i18n="soon">À venir</span>
+          <div class="shot" style="background-image:url('{tile_rp}')"></div>
+          <div class="caption">
+            <div class="cap-row">
+              <span class="logo" style="background:var(--a-rp)">R·P</span>
+              <span class="ptitle">Route Planner</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="print sealed reveal d5" aria-disabled="true">
+          <span class="pin tl"></span><span class="pin tr"></span>
+          <span class="avenir" data-i18n="soon">À venir</span>
+          <div class="shot" style="background-image:url('{tile_kg}')"></div>
+          <div class="caption">
+            <div class="cap-row">
+              <span class="logo" style="background:var(--a-kg)">K·G</span>
+              <span class="ptitle">Kneeboard Generator</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>DCS Mission Suite</span><span class="dot">·</span>
+    <span>Open source · MIT</span><span class="dot">·</span>
+    <span id="foot-info">Cold War OTAN</span>
+    <span class="right" id="foot-right">Mission Plan</span>
+  </div>
+
+</div>
+</div>
+
+<!-- Module view -->
+<div id="module-view"></div>
+<div id="module-loading" class="hidden">Chargement…</div>
+
+<script>
+  /* ── Données ──────────────────────────────────────────────── */
+  {module_html_js}
+
+  var APP_VERSION = '1.0';
+  var KEY_LANG  = 'lang_v1';
+  var KEY_THEME = 'theme_v1';
+
+  var THEMES = {{
+    'cw-nato':    {{label:'Cold War OTAN',       stamp:'Declassified', classif:'Classified // Eyes Only'}},
+    'cw-soviet':  {{label:'Cold War Soviétique', stamp:'Секретно',     classif:'Совершенно секретно'}},
+    'modern-nato':{{label:'OTAN moderne',        stamp:'Restricted',   classif:'Restricted // NoForn'}},
+    'modern-east':{{label:'Bloc Est moderne',    stamp:'MZ-7 // Restr',classif:'MZ-7 // Restricted'}}
+  }};
+
+  var I18N = {{
+    fr: {{
+      ribbon: '// Suite de préparation opérationnelle',
+      'hq.desc': 'Poste de commandement — configuration Wing, identité escadrons, logos partagés avec tous les modules.',
+      'bg.desc': 'Briefings complets — SITAC, plan radio, aérodromes, charts, annexes — export PDF prêt à partager.',
+      'rs.desc': "Transforme une capture en photo d'analyse de reconnaissance — niveaux de gris, annotations, export PNG pleine résolution.",
+      'status.op': 'Opérationnel',
+      cta: '▶ Ouvrir le dossier',
+      soon: 'À venir',
+      loading: 'Chargement',
+      back: '◄ Mission Plan',
+      'theme.cwnato': 'Cold War OTAN',
+      'theme.cwsoviet': 'Cold War Soviétique',
+      'theme.modernnato': 'OTAN moderne',
+      'theme.moderneast': 'Bloc Est moderne'
+    }},
+    en: {{
+      ribbon: '// Operational planning suite',
+      'hq.desc': 'Command hub — Wing configuration, squadron identity, logos shared across all modules.',
+      'bg.desc': 'Complete briefings — SITAC, radio plan, airfields, charts, annexes — PDF export ready to share.',
+      'rs.desc': 'Turns a screenshot into a reconnaissance analysis photo — greyscale, annotations, full-resolution PNG export.',
+      'status.op': 'Operational',
+      cta: '▶ Open the file',
+      soon: 'Coming soon',
+      loading: 'Loading',
+      back: '◄ Mission Plan',
+      'theme.cwnato': 'Cold War NATO',
+      'theme.cwsoviet': 'Cold War Soviet',
+      'theme.modernnato': 'Modern NATO',
+      'theme.moderneast': 'Modern East Bloc'
+    }}
+  }};
+
+  var CURRENT_LANG = 'fr';
+  var iframes = {{}};
+  var activeModule = null;
+
+  function t(key) {{
+    return (I18N[CURRENT_LANG] && I18N[CURRENT_LANG][key]) || key;
+  }}
+
+  /* ── Thème ─────────────────────────────────────────────────── */
+  function setTheme(val) {{
+    if (!THEMES[val]) return;
+    var d = THEMES[val];
+    document.body.setAttribute('data-theme', val);
+    document.getElementById('bigstamp').textContent = d.stamp;
+    document.getElementById('classif').textContent  = d.classif;
+    document.getElementById('theme-sel').value = val;
+    document.getElementById('foot-info').textContent = d.label;
+    /* i18n soon labels */
+    document.querySelectorAll('[data-i18n="soon"]').forEach(function(el) {{
+      el.textContent = val.indexOf('modern') === 0 ? (CURRENT_LANG === 'en' ? 'Coming' : 'Bientôt') : t('soon');
+    }});
+    try {{ localStorage.setItem(KEY_THEME, val); }} catch(e) {{}}
+  }}
+
+  /* ── Langue ────────────────────────────────────────────────── */
+  function applyI18n() {{
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {{
+      var key = el.getAttribute('data-i18n');
+      /* Les options select : mettre à jour textContent */
+      var txt = t(key);
+      if (txt !== key) el.textContent = txt;
+    }});
+    /* Sync bigstamp / classif via thème actuel */
+    var cur = document.body.getAttribute('data-theme') || 'cw-nato';
+    setTheme(cur);
+    /* Bouton chargement */
+    var loadEl = document.getElementById('module-loading');
+    if (loadEl) loadEl.textContent = t('loading') + '…';
+  }}
+
+  function updateFlagBtn() {{
+    var btn = document.getElementById('flag-btn');
+    if (btn) btn.textContent = CURRENT_LANG === 'fr' ? '🇬🇧' : '🇫🇷';
+  }}
+
+  function setLang(lang) {{
+    if (lang !== 'fr' && lang !== 'en') return;
+    CURRENT_LANG = lang;
+    try {{ localStorage.setItem(KEY_LANG, lang); }} catch(e) {{}}
+    applyI18n();
+    updateFlagBtn();
+  }}
+
+  function toggleLang() {{
+    setLang(CURRENT_LANG === 'fr' ? 'en' : 'fr');
+  }}
+
+  function initLang() {{
+    try {{
+      var stored = localStorage.getItem(KEY_LANG);
+      if (stored === 'fr' || stored === 'en') CURRENT_LANG = stored;
+    }} catch(e) {{}}
+  }}
+
+  /* ── Module : decode UTF-8 ─────────────────────────────────── */
+  function decodeModule(b64) {{
+    var bin = atob(b64);
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder('utf-8').decode(bytes);
+  }}
+
+  /* ── Navigation ────────────────────────────────────────────── */
+  function openModule(id) {{
+    if (!MODULE_HTML[id]) {{
+      console.warn('[M·P] Module ' + id + ' : base64 vide');
+      return;
+    }}
+    document.getElementById('landing').style.display = 'none';
+    var mv = document.getElementById('module-view');
+    mv.style.display = 'block';
+
+    Object.keys(iframes).forEach(function(iid) {{ iframes[iid].style.display = 'none'; }});
+
+    if (!iframes[id]) {{
+      var loading = document.getElementById('module-loading');
+      loading.classList.remove('hidden');
+      loading.textContent = t('loading') + '…';
+
+      var iframe = document.createElement('iframe');
+      iframe.id = 'iframe-' + id;
+      iframe.title = id;
+      iframe.srcdoc = decodeModule(MODULE_HTML[id]);
+
+      iframe.addEventListener('load', function() {{
+        loading.classList.add('hidden');
+        var doc = iframe.contentDocument;
+        /* Injection bouton retour dans .toolbar (pas #app-header — cf. vérif grep) */
+        var toolbar = doc && doc.querySelector('.toolbar');
+        if (toolbar && !toolbar.querySelector('.mp-back-injected')) {{
+          var back = doc.createElement('button');
+          back.className = 'mp-back-injected';
+          back.textContent = t('back');
+          back.style.cssText = 'font-family:inherit;font-size:11px;cursor:pointer;color:#c0892a;'
+            + 'background:transparent;border:1px solid #c0892a;border-radius:3px;padding:4px 10px;'
+            + 'margin-right:12px;letter-spacing:.03em;min-height:36px;flex-shrink:0;';
+          back.addEventListener('click', goHub);
+          toolbar.insertBefore(back, toolbar.firstChild);
+          /* Déplacer #btn-lang en fin de toolbar */
+          var btnLang = doc.getElementById('btn-lang');
+          if (btnLang) toolbar.appendChild(btnLang);
+        }}
+        console.log('[M·P v' + APP_VERSION + '] Module ' + id + ' chargé');
+      }});
+
+      mv.appendChild(iframe);
+      iframes[id] = iframe;
+    }} else {{
+      iframes[id].style.display = 'block';
+      document.getElementById('module-loading').classList.add('hidden');
+    }}
+
+    activeModule = id;
+  }}
+
+  function goHub() {{
+    Object.keys(iframes).forEach(function(iid) {{ iframes[iid].style.display = 'none'; }});
+    document.getElementById('module-view').style.display = 'none';
+    document.getElementById('landing').style.display = '';
+    activeModule = null;
+    /* Resync thème + langue si changé dans le module */
+    try {{
+      var storedTheme = localStorage.getItem(KEY_THEME);
+      if (storedTheme && THEMES[storedTheme]) setTheme(storedTheme);
+      var storedLang = localStorage.getItem(KEY_LANG);
+      if (storedLang && storedLang !== CURRENT_LANG) setLang(storedLang);
+    }} catch(e) {{}}
+  }}
+
+  /* ── Init ───────────────────────────────────────────────────── */
+  function init() {{
+    initLang();
+    /* Thème : lire localStorage */
+    try {{
+      var storedTheme = localStorage.getItem(KEY_THEME);
+      if (storedTheme && THEMES[storedTheme]) {{
+        document.body.setAttribute('data-theme', storedTheme);
+        document.getElementById('theme-sel').value = storedTheme;
+      }}
+    }} catch(e) {{}}
+    /* Appliquer thème courant (stamp, classif, foot-info) */
+    var cur = document.body.getAttribute('data-theme') || 'cw-nato';
+    setTheme(cur);
+    applyI18n();
+    updateFlagBtn();
+
+    /* Clics cartes */
+    document.getElementById('card-hq').addEventListener('click', function() {{ openModule('hq'); }});
+    document.getElementById('card-hq').addEventListener('keydown', function(e) {{
+      if (e.key === 'Enter' || e.key === ' ') {{ e.preventDefault(); openModule('hq'); }}
+    }});
+    document.getElementById('card-bg').addEventListener('click', function() {{ openModule('bg'); }});
+    document.getElementById('card-bg').addEventListener('keydown', function(e) {{
+      if (e.key === 'Enter' || e.key === ' ') {{ e.preventDefault(); openModule('bg'); }}
+    }});
+    document.getElementById('card-rs').addEventListener('click', function() {{ openModule('rs'); }});
+    document.getElementById('card-rs').addEventListener('keydown', function(e) {{
+      if (e.key === 'Enter' || e.key === ' ') {{ e.preventDefault(); openModule('rs'); }}
+    }});
+
+    document.getElementById('flag-btn').addEventListener('click', toggleLang);
+
+    console.log('[M·P v' + APP_VERSION + '] Initialisé — langue: ' + CURRENT_LANG);
+  }}
+
+  document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>'''
+
+
+def main():
+    print('=== build_mission_plan.py — DCS Mission Plan shell ===')
+
+    print('\n[1/3] Encodage modules HTML…')
+    module_html_js = build_module_html_js(MODULES)
+
+    print('\n[2/3] Encodage images tuiles…')
+    tile_uris = build_tile_uris(MODULES)
+
+    print(f'\n[3/3] Génération {OUT_FILE}…')
+    html = build_html(module_html_js, tile_uris)
+
+    out_path = os.path.join(SCRIPT_DIR, OUT_FILE)
+    with open(out_path, 'w', encoding='utf-8') as f:
+        f.write(html)
+
+    size_kb = os.path.getsize(out_path) // 1024
+    print(f'\n✓ Fichier généré : {out_path}')
+    print(f'  Taille : {size_kb} Ko')
+    print('\n=== Build terminé ===')
+
+
+if __name__ == '__main__':
+    main()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the v2 DCS World Briefing Generator HTML."""
+"""Build the v2.2.0 DCS World Briefing Generator HTML. Phase 9 — i18n FR/EN."""
 
 import base64
 import json
@@ -7,7 +7,7 @@ import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-APP_VERSION = "2.1.1"
+APP_VERSION = "2.2.0"
 
 with open(os.path.join(HERE, 'assets.json')) as f:
     A = json.load(f)
@@ -37,29 +37,30 @@ __CSS__
 <!-- ===== TOOLBAR ===== -->
 <header class="toolbar" role="toolbar" aria-label="Actions principales">
   <div class="tb-brand"><span class="tb-brand-main">MY WING</span> <span class="tb-brand-sub">░ BRIEFING</span></div>
-  <button class="tb-btn" id="btn-save" title="Exporter le briefing en JSON">
+  <button class="tb-btn" id="btn-save" data-i18n-title="toolbar.save.tooltip" title="Exporter le briefing en JSON">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-    <span class="tb-btn-label">Sauver</span>
+    <span class="tb-btn-label" data-i18n="toolbar.save">Sauver</span>
   </button>
-  <button class="tb-btn" id="btn-load" title="Charger un briefing JSON">
+  <button class="tb-btn" id="btn-load" data-i18n-title="toolbar.load.tooltip" title="Charger un briefing JSON">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-    <span class="tb-btn-label">Charger</span>
+    <span class="tb-btn-label" data-i18n="toolbar.load">Charger</span>
   </button>
   <input type="file" id="file-load" accept=".json,application/json" hidden>
-  <button class="tb-btn" id="btn-print" title="Exporter en PDF ou PNG (kneeboard DCS)">
+  <button class="tb-btn" id="btn-print" data-i18n-title="toolbar.export.tooltip" title="Exporter en PDF ou PNG (kneeboard DCS)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-    <span class="tb-btn-label">Exporter</span>
+    <span class="tb-btn-label" data-i18n="toolbar.export">Exporter</span>
   </button>
-  <button class="tb-btn danger" id="btn-reset" title="Réinitialiser au briefing par défaut">
+  <button class="tb-btn danger" id="btn-reset" data-i18n-title="toolbar.reset.tooltip" title="Réinitialiser au briefing par défaut">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-    <span class="tb-btn-label">Reset</span>
+    <span class="tb-btn-label" data-i18n="toolbar.reset">Reset</span>
   </button>
-  <select class="tb-select" id="theme-select" title="Thème graphique">
-    <option value="cw-nato">Cold War OTAN</option>
-    <option value="cw-soviet">Cold War Soviétique</option>
-    <option value="modern-nato">OTAN moderne</option>
-    <option value="modern-east">Bloc Est moderne</option>
+  <select class="tb-select" id="theme-select" data-i18n-title="toolbar.theme.tooltip" title="Thème graphique">
+    <option value="cw-nato"     data-i18n="theme.cw-nato">Cold War OTAN</option>
+    <option value="cw-soviet"   data-i18n="theme.cw-soviet">Cold War Soviétique</option>
+    <option value="modern-nato" data-i18n="theme.modern-nato">OTAN moderne</option>
+    <option value="modern-east" data-i18n="theme.modern-east">Bloc Est moderne</option>
   </select>
+  <button class="tb-lang-btn" id="btn-lang" data-i18n-title="toolbar.lang.tooltip" title="Switch language / Changer de langue">🇬🇧</button>
   <div class="tb-spacer"></div>
   <div class="tb-classif">CLASSIFIED // FOR EYES ONLY</div>
   <span class="tb-version">v__APP_VERSION__</span>
@@ -69,34 +70,34 @@ __CSS__
 <div class="export-modal" id="export-modal" hidden role="dialog" aria-labelledby="export-modal-title" aria-modal="true">
   <div class="export-modal-backdrop" id="export-modal-backdrop"></div>
   <div class="export-modal-panel" role="document">
-    <button class="export-modal-close" id="export-modal-close" aria-label="Fermer">×</button>
-    <h2 id="export-modal-title">Exporter le briefing</h2>
-    <p class="export-modal-subtitle">Choisissez le format de sortie</p>
+    <button class="export-modal-close" id="export-modal-close" data-i18n-aria-label="modal.export.close" aria-label="Fermer">×</button>
+    <h2 id="export-modal-title" data-i18n="modal.export.title">Exporter le briefing</h2>
+    <p class="export-modal-subtitle" data-i18n="modal.export.subtitle">Choisissez le format de sortie</p>
     <div class="export-modal-choices">
       <button class="export-choice" id="export-choice-pdf" type="button">
         <div class="export-choice-icon">🖨</div>
         <div class="export-choice-label">PDF</div>
-        <div class="export-choice-desc">Impression système · Toutes les pages</div>
+        <div class="export-choice-desc" data-i18n="modal.export.pdf.desc">Impression système · Toutes les pages</div>
       </button>
       <button class="export-choice" id="export-choice-png" type="button">
         <div class="export-choice-icon">🖼</div>
         <div class="export-choice-label">PNG</div>
-        <div class="export-choice-desc">Kneeboard DCS · 794×1123, A4</div>
+        <div class="export-choice-desc" data-i18n="modal.export.png.desc">Kneeboard DCS · 794×1123, A4</div>
       </button>
     </div>
     <!-- Le panneau PNG (sélecteur de pages) apparaît ici en step 2 — implémenté étape B -->
     <div class="export-png-config" id="export-png-config" hidden>
-      <h3>Pages à exporter</h3>
+      <h3 data-i18n="modal.export.png.pages">Pages à exporter</h3>
       <div class="export-png-actions-top">
-        <button type="button" class="export-png-toggle" id="export-png-all">Tout cocher</button>
-        <button type="button" class="export-png-toggle" id="export-png-none">Tout décocher</button>
+        <button type="button" class="export-png-toggle" id="export-png-all" data-i18n="modal.export.png.checkAll">Tout cocher</button>
+        <button type="button" class="export-png-toggle" id="export-png-none" data-i18n="modal.export.png.uncheckAll">Tout décocher</button>
       </div>
       <div class="export-png-list" id="export-png-list">
         <!-- checkboxes par page injectées dynamiquement -->
       </div>
       <div class="export-png-actions-bottom">
-        <button type="button" class="export-png-back" id="export-png-back">← Retour</button>
-        <button type="button" class="export-png-go" id="export-png-go">Exporter <span id="export-png-count"></span></button>
+        <button type="button" class="export-png-back" id="export-png-back" data-i18n="modal.export.png.back">← Retour</button>
+        <button type="button" class="export-png-go" id="export-png-go"><span data-i18n="modal.export.png.go">Exporter</span> <span id="export-png-count"></span></button>
       </div>
     </div>
   </div>
@@ -110,43 +111,43 @@ __CSS__
 
     <!-- 00 META -->
     <details class="ed-section" data-section="meta" open>
-      <summary>00 ░ MÉTADONNÉES</summary>
+      <summary data-i18n="editor.meta.summary">00 ░ MÉTADONNÉES</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">00 ░ MÉTADONNÉES</div>
+        <div class="panel-mobile-header" data-i18n="editor.meta.summary">00 ░ MÉTADONNÉES</div>
         <div class="ed-field-row">
-          <div class="ed-field"><label>Opération</label><input data-bind="meta.operation" type="text" placeholder="FOOTHOLD"></div>
-          <div class="ed-field"><label>Mission code</label><input data-bind="meta.mission" type="text" placeholder="M3"></div>
+          <div class="ed-field"><label data-i18n="editor.meta.operation">Opération</label><input data-bind="meta.operation" type="text" placeholder="FOOTHOLD"></div>
+          <div class="ed-field"><label data-i18n="editor.meta.missionCode">Mission code</label><input data-bind="meta.mission" type="text" placeholder="M3"></div>
         </div>
         <div class="ed-field-row">
-          <div class="ed-field"><label>Date mission</label><input data-bind="meta.date" type="date"></div>
-          <div class="ed-field"><label>Classification</label>
+          <div class="ed-field"><label data-i18n="editor.meta.date">Date mission</label><input data-bind="meta.date" type="date"></div>
+          <div class="ed-field"><label data-i18n="editor.meta.classification">Classification</label>
             <select data-bind="meta.classification">
-              <option>CONFIDENTIEL DÉFENSE</option>
-              <option>SECRET DÉFENSE</option>
-              <option>TRÈS SECRET</option>
-              <option>NON CLASSIFIÉ</option>
-              <option>NATO RESTRICTED</option>
-              <option>NATO SECRET</option>
+              <option value="confidential"    data-i18n="classif.confidential">CONFIDENTIEL DÉFENSE</option>
+              <option value="secret"          data-i18n="classif.secret">SECRET DÉFENSE</option>
+              <option value="top-secret"      data-i18n="classif.top-secret">TRÈS SECRET</option>
+              <option value="unclassified"    data-i18n="classif.unclassified">NON CLASSIFIÉ</option>
+              <option value="nato-restricted" data-i18n="classif.nato-restricted">NATO RESTRICTED</option>
+              <option value="nato-secret"     data-i18n="classif.nato-secret">NATO SECRET</option>
             </select>
           </div>
         </div>
-        <div class="ed-field"><label>Référence document</label><input data-bind="meta.docRef" type="text" placeholder="KHR26-FH-M3-1989"></div>
-        <div class="ed-help">Métadonnées présentes dans tous les pieds de page.</div>
+        <div class="ed-field"><label data-i18n="editor.meta.docRef">Référence document</label><input data-bind="meta.docRef" type="text" placeholder="KHR26-FH-M3-1989"></div>
+        <div class="ed-help" data-i18n="editor.meta.help">Métadonnées présentes dans tous les pieds de page.</div>
       </div>
     </details>
 
     <!-- 01 COVER -->
     <details class="ed-section" data-section="cover">
-      <summary>01 ░ OPÉRATION (COUVERTURE)</summary>
+      <summary data-i18n="editor.cover.summary">01 ░ OPÉRATION (COUVERTURE)</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">01 ░ OPÉRATION</div>
-        <div class="ed-field"><label>Titre opération</label><input data-bind="cover.title" type="text" placeholder="OPERATION FOOTHOLD"></div>
-        <div class="ed-field"><label>Récit / Contexte</label><textarea data-bind="cover.narrative" rows="6"></textarea></div>
+        <div class="panel-mobile-header" data-i18n="editor.cover.summaryShort">01 ░ OPÉRATION</div>
+        <div class="ed-field"><label data-i18n="editor.cover.title">Titre opération</label><input data-bind="cover.title" type="text" placeholder="OPERATION FOOTHOLD"></div>
+        <div class="ed-field"><label data-i18n="editor.cover.narrative">Récit / Contexte</label><textarea data-bind="cover.narrative" rows="6"></textarea></div>
         <div class="ed-field">
-          <label>Carte d'opération (image)</label>
+          <label data-i18n="editor.cover.map">Carte d'opération (image)</label>
           <label class="ed-img-zone" data-img-bind="cover.mapImage">
             <input type="file" accept="image/*">
-            <span class="img-text">▲ TOUCHER POUR CHARGER UNE CARTE ▲</span>
+            <span class="img-text" data-i18n="editor.imgZone.tap">▲ TOUCHER POUR CHARGER UNE CARTE ▲</span>
           </label>
         </div>
       </div>
@@ -154,21 +155,34 @@ __CSS__
 
     <!-- 02 SITAC -->
     <details class="ed-section" data-section="sitac">
-      <summary>02 ░ SITAC</summary>
+      <summary data-i18n="editor.sitac.summary">02 ░ SITAC</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">02 ░ SITAC</div>
-        <div class="ed-field"><label>Date SITAC (affichée)</label><input data-bind="sitac.date" type="text" placeholder="22-03-1989"></div>
+        <div class="panel-mobile-header" data-i18n="editor.sitac.summary">02 ░ SITAC</div>
+        <div class="ed-field"><label data-i18n="editor.sitac.date">Date SITAC (affichée)</label><input data-bind="sitac.date" type="text" placeholder="22-03-1989"></div>
         <div class="ed-field">
-          <label>Points de situation</label>
+          <label data-i18n="editor.sitac.points">Points de situation</label>
           <div class="ed-list" data-list="sitac.points"></div>
-          <button type="button" class="ed-btn-add" data-add="sitac.points">+ Ajouter un point</button>
+          <button type="button" class="ed-btn-add" data-add="sitac.points" data-i18n="editor.sitac.addPoint">+ Ajouter un point</button>
         </div>
-        <div class="ed-field"><label>METAR</label><input data-bind="sitac.metar" type="text" placeholder="LCRA 221000Z 18002KT 9999 SCT082 20/15 Q1013"></div>
         <div class="ed-field">
-          <label>Carte SITAC (image)</label>
+          <label data-i18n="editor.sitac.metar">METAR</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input data-bind="sitac.metar" type="text" placeholder="LCRA 221000Z 18002KT 9999 SCT082 20/15 Q1013" style="flex:1;">
+            <button type="button" class="ed-btn-add" id="metar-assistant-btn" data-i18n="editor.sitac.metarAssistant">🛠 Assistant METAR</button>
+          </div>
+        </div>
+        <!-- Panneau Assistant METAR (10A + 10C) -->
+        <details class="metar-panel" id="metar-assistant-panel" style="display:none;">
+          <summary data-i18n="editor.sitac.metarAssistant">🛠 Assistant METAR</summary>
+          <div class="ed-content" id="metar-assistant-content">
+            <!-- Rendu dynamique par renderMetarAssistant() -->
+          </div>
+        </details>
+        <div class="ed-field">
+          <label data-i18n="editor.sitac.map">Carte SITAC (image)</label>
           <label class="ed-img-zone" data-img-bind="sitac.mapImage">
             <input type="file" accept="image/*">
-            <span class="img-text">▲ TOUCHER POUR CHARGER UNE CARTE ▲</span>
+            <span class="img-text" data-i18n="editor.imgZone.tap">▲ TOUCHER POUR CHARGER UNE CARTE ▲</span>
           </label>
         </div>
       </div>
@@ -176,65 +190,65 @@ __CSS__
 
     <!-- 03 MISSION -->
     <details class="ed-section" data-section="mission">
-      <summary>03 ░ APERÇU MISSION</summary>
+      <summary data-i18n="editor.mission.summary">03 ░ APERÇU MISSION</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">03 ░ APERÇU MISSION</div>
+        <div class="panel-mobile-header" data-i18n="editor.mission.summary">03 ░ APERÇU MISSION</div>
         <div class="ed-field">
-          <label>Objectifs principaux</label>
+          <label data-i18n="editor.mission.objectives">Objectifs principaux</label>
           <div class="ed-list" data-list="mission.objectives"></div>
-          <button type="button" class="ed-btn-add" data-add="mission.objectives">+ Ajouter un objectif</button>
+          <button type="button" class="ed-btn-add" data-add="mission.objectives" data-i18n="editor.mission.addObjective">+ Ajouter un objectif</button>
         </div>
         <div class="ed-field">
-          <label>FARP & Aéroports</label>
-          <div class="ed-list" data-list="mission.farp"></div>
-          <button type="button" class="ed-btn-add" data-add="mission.farp">+ Ajouter une base</button>
+          <label data-i18n="editor.mission.farp">FARP &amp; Aéroports</label>
+          <div id="airfields-list"></div>
+          <button type="button" class="ed-btn-add" id="airfield-add" data-i18n="editor.mission.addFarp">+ Ajouter une base</button>
         </div>
         <div class="ed-field-row">
-          <div class="ed-field"><label>Menaces — Chars</label><input data-bind="mission.threats.tanks" type="text"></div>
-          <div class="ed-field"><label>Menaces — APC</label><input data-bind="mission.threats.apc" type="text"></div>
+          <div class="ed-field"><label data-i18n="editor.mission.tanks">Menaces — Chars</label><input data-bind="mission.threats.tanks" type="text"></div>
+          <div class="ed-field"><label data-i18n="editor.mission.apc">Menaces — APC</label><input data-bind="mission.threats.apc" type="text"></div>
         </div>
         <div class="ed-field-row">
-          <div class="ed-field"><label>Menaces — AAA</label><input data-bind="mission.threats.aaa" type="text"></div>
-          <div class="ed-field"><label>Menaces — SAM</label><input data-bind="mission.threats.sam" type="text"></div>
+          <div class="ed-field"><label data-i18n="editor.mission.aaa">Menaces — AAA</label><input data-bind="mission.threats.aaa" type="text"></div>
+          <div class="ed-field"><label data-i18n="editor.mission.sam">Menaces — SAM</label><input data-bind="mission.threats.sam" type="text"></div>
         </div>
-        <div class="ed-field"><label>Note menaces (libre)</label><textarea data-bind="mission.threats.note" rows="2"></textarea></div>
+        <div class="ed-field"><label data-i18n="editor.mission.threatsNote">Note menaces (libre)</label><textarea data-bind="mission.threats.note" rows="2"></textarea></div>
       </div>
     </details>
 
     <!-- 04 RADIO PLAN -->
     <details class="ed-section" data-section="radio" open>
-      <summary>04 ░ PLAN RADIO</summary>
+      <summary data-i18n="editor.radio.summary">04 ░ PLAN RADIO</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">04 ░ PLAN RADIO</div>
+        <div class="panel-mobile-header" data-i18n="editor.radio.summary">04 ░ PLAN RADIO</div>
         <div class="ed-field">
-          <label>Items radio (max 6) — affichés sur la page 3</label>
+          <label data-i18n="editor.radio.items">Items radio (max 6) — affichés sur la page 3</label>
           <div id="radio-items-list"></div>
-          <button type="button" class="ed-btn-add" id="radio-item-add">+ Ajouter un item</button>
+          <button type="button" class="ed-btn-add" id="radio-item-add" data-i18n="editor.radio.addItem">+ Ajouter un item</button>
         </div>
-        <div class="ed-help">Définissez ici les fréquences communes (ATC, MISSION, Groupes...). Vous les assignerez ensuite aux canaux radio par appareil ci-dessous.</div>
+        <div class="ed-help" data-i18n="editor.radio.help">Définissez ici les fréquences communes (ATC, MISSION, Groupes...). Vous les assignerez ensuite aux canaux radio par appareil ci-dessous.</div>
         <div class="ed-field" style="margin-top:8px;">
-          <label>Plans radio par appareil</label>
+          <label data-i18n="editor.radio.aircraft">Plans radio par appareil</label>
           <div id="radio-aircraft-list"></div>
-          <button type="button" class="ed-btn-add" id="radio-aircraft-add">+ Ajouter un appareil</button>
+          <button type="button" class="ed-btn-add" id="radio-aircraft-add" data-i18n="editor.radio.addAircraft">+ Ajouter un appareil</button>
         </div>
-        <div class="ed-help">Pour chaque appareil, configurez les radios et leurs canaux. Si une image est fournie, elle remplace la table générée.</div>
+        <div class="ed-help" data-i18n="editor.radio.helpAircraft">Pour chaque appareil, configurez les radios et leurs canaux. Si une image est fournie, elle remplace la table générée.</div>
       </div>
     </details>
 
     <!-- 05 PHASES -->
     <details class="ed-section" data-section="phases" open>
-      <summary>05 ░ MISSIONS</summary>
+      <summary data-i18n="editor.phases.summary">05 ░ MISSIONS</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">05 ░ MISSIONS</div>
+        <div class="panel-mobile-header" data-i18n="editor.phases.summary">05 ░ MISSIONS</div>
         <div class="phase-bar">
-          <button type="button" id="phase-prev" title="Mission précédente">◄</button>
+          <button type="button" id="phase-prev" data-i18n-title="editor.phases.prev" title="Mission précédente">◄</button>
           <div class="phase-indicator" id="phase-indicator">—</div>
-          <button type="button" id="phase-next" title="Mission suivante">►</button>
-          <button type="button" id="phase-add" title="Ajouter une mission">+</button>
-          <button type="button" id="phase-dup" title="Dupliquer cette mission">⎘</button>
-          <button type="button" id="phase-up" title="Monter la mission">↑</button>
-          <button type="button" id="phase-down" title="Descendre la mission">↓</button>
-          <button type="button" class="danger" id="phase-rm" title="Supprimer cette mission">×</button>
+          <button type="button" id="phase-next" data-i18n-title="editor.phases.next" title="Mission suivante">►</button>
+          <button type="button" id="phase-add" data-i18n-title="editor.phases.add" title="Ajouter une mission">+</button>
+          <button type="button" id="phase-dup" data-i18n-title="editor.phases.dup" title="Dupliquer cette mission">⎘</button>
+          <button type="button" id="phase-up" data-i18n-title="editor.phases.up" title="Monter la mission">↑</button>
+          <button type="button" id="phase-down" data-i18n-title="editor.phases.down" title="Descendre la mission">↓</button>
+          <button type="button" class="danger" id="phase-rm" data-i18n-title="editor.phases.remove" title="Supprimer cette mission">×</button>
         </div>
         <div id="phase-editor"></div>
       </div>
@@ -242,114 +256,66 @@ __CSS__
 
     <!-- 07 ÉQUIPAGE -->
     <details class="ed-section" data-section="roster">
-      <summary>07 ░ ÉQUIPAGE</summary>
+      <summary data-i18n="editor.roster.summary">07 ░ ÉQUIPAGE</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">07 ░ ÉQUIPAGE</div>
-        <div class="ed-help" style="margin-bottom:10px;">
+        <div class="panel-mobile-header" data-i18n="editor.roster.summary">07 ░ ÉQUIPAGE</div>
+        <div class="ed-help" style="margin-bottom:10px;" data-i18n="editor.roster.help">
           Définissez les pilotes par groupe ou sous-groupe. Une page d'ordre de bataille sera générée après l'aperçu mission si au moins un pilote est renseigné.
         </div>
         <div id="roster-groups-list"></div>
-        <button type="button" class="ed-btn-add" id="roster-group-add">+ Ajouter un groupe</button>
+        <button type="button" class="ed-btn-add" id="roster-group-add" data-i18n="editor.roster.addGroup">+ Ajouter un groupe</button>
       </div>
     </details>
 
     <!-- 08 CHARTS -->
     <details class="ed-section" data-section="charts">
-      <summary>08 ░ CHARTS</summary>
+      <summary data-i18n="editor.charts.summary">08 ░ CHARTS</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">08 ░ CHARTS</div>
+        <div class="panel-mobile-header" data-i18n="editor.charts.summary">08 ░ CHARTS</div>
         <div id="charts-list"></div>
-        <button type="button" class="ed-btn-add" id="chart-add">+ Ajouter une chart</button>
+        <button type="button" class="ed-btn-add" id="chart-add" data-i18n="editor.charts.add">+ Ajouter une chart</button>
       </div>
     </details>
 
     <!-- 09 ANNEXES -->
     <details class="ed-section" data-section="annexes">
-      <summary>09 ░ ANNEXES</summary>
+      <summary data-i18n="editor.annexes.summary">09 ░ ANNEXES</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">09 ░ ANNEXES</div>
+        <div class="panel-mobile-header" data-i18n="editor.annexes.summary">09 ░ ANNEXES</div>
         <div id="annexes-list"></div>
-        <button type="button" class="ed-btn-add" id="annexe-add">+ Ajouter une annexe</button>
+        <button type="button" class="ed-btn-add" id="annexe-add" data-i18n="editor.annexes.add">+ Ajouter une annexe</button>
       </div>
     </details>
 
-    <!-- 10 WING -->
+    <!-- 10 WING — read-only consumer (édition dans HQ) -->
     <details class="ed-section" data-section="wing">
-      <summary>10 ░ CONFIGURATION WING</summary>
+      <summary data-i18n="editor.wing.summary">10 ░ CONFIGURATION WING</summary>
       <div class="ed-content">
-        <div class="panel-mobile-header">10 ░ CONFIG WING</div>
+        <div class="panel-mobile-header" data-i18n="editor.wing.summaryShort">10 ░ CONFIG WING</div>
 
-        <!-- ── Identité du wing ── -->
-        <fieldset class="wing-fieldset">
-          <legend class="wing-legend">Identité du wing</legend>
+        <!-- Informations wing courantes (read-only) -->
+        <div id="wing-ro-info" class="wing-ro-info"></div>
 
-          <div class="ed-field-row">
-            <div class="ed-field">
-              <label>Nom court <span class="wing-hint">(toolbar, branding)</span></label>
-              <input type="text" id="wing-shortName" maxlength="40" placeholder="MY WING">
-            </div>
-            <div class="ed-field">
-              <label>Identifiant <span class="wing-hint">(sans espace ni /)</span></label>
-              <input type="text" id="wing-id" maxlength="32" placeholder="MY-WING">
-            </div>
-          </div>
-
-          <div class="ed-field">
-            <label>Nom complet</label>
-            <input type="text" id="wing-fullName" maxlength="120" placeholder="Mon Wing Virtuel">
-          </div>
-
-          <div class="ed-field-row">
-            <div class="ed-field">
-              <label>Titre de l'application</label>
-              <input type="text" id="wing-appTitle" maxlength="60" placeholder="GÉNÉRATEUR DE BRIEFING">
-            </div>
-            <div class="ed-field">
-              <label>Tampon HQ <span class="wing-hint">(couverture)</span></label>
-              <input type="text" id="wing-hqStamp" maxlength="60" placeholder="HQ ░ MY WING">
-            </div>
-          </div>
-
-          <div class="ed-field">
-            <label>Logo wing principal</label>
-            <label class="ed-img-zone wing-logo-zone" id="wing-logo-zone">
-              <input type="file" accept="image/*" id="wing-logo-input">
-              <span class="img-text">▲ TOUCHER POUR CHARGER UN LOGO ▲</span>
-            </label>
-          </div>
-        </fieldset>
-
-        <!-- ── Liste des escadrons ── -->
-        <fieldset class="wing-fieldset">
-          <legend class="wing-legend">Escadrons</legend>
-          <div id="wing-squadrons-list"></div>
-          <button type="button" class="ed-btn-add" id="wing-sq-add">+ Ajouter un escadron</button>
-        </fieldset>
-
-        <!-- ── Actions ── -->
+        <!-- Filet d'import standalone / fallback -->
         <div class="wing-actions">
-          <label class="wing-action-btn wing-action-import" title="Importer un fichier wing_config.json">
+          <label class="wing-action-btn wing-action-import" data-i18n-title="editor.wing.importTooltip" title="Importer un fichier wing_config.json">
             <input type="file" accept=".json" id="wing-import-input">
-            📥 Importer config
+            <span data-i18n="editor.wing.import">📥 Importer config</span>
           </label>
-          <button type="button" class="wing-action-btn wing-action-export" id="wing-export-btn">
-            📤 Exporter config
-          </button>
-          <button type="button" class="wing-action-btn wing-action-reset" id="wing-reset-btn">
+          <button type="button" class="wing-action-btn wing-action-reset" id="wing-reset-btn" data-i18n="editor.wing.reset">
             ♻ Réinitialiser
           </button>
         </div>
 
-        <!-- ── Compteur taille ── -->
-        <div class="wing-size-counter" id="wing-size-counter">Taille config : —</div>
+        <p class="wing-hq-hint" data-i18n="editor.wing.hqHint">✦ Édition complète disponible dans HQ</p>
 
       </div>
     </details>
 
     <div class="ed-help" data-wing-label style="text-align:center; padding:12px 4px;">
       ◆ MY WING ◆<br>
-      Sauvegarde locale automatique<br>
-      Export JSON pour conserver vos templates
+      <span data-i18n="editor.autoSave">Sauvegarde locale automatique</span><br>
+      <span data-i18n="editor.exportTip">Export JSON pour conserver vos templates</span>
     </div>
   </aside>
 
@@ -362,17 +328,17 @@ __CSS__
 
 <!-- ============ MOBILE TAB BAR ============ -->
 <nav class="tab-bar" id="tab-bar" role="tablist" aria-label="Sections du briefing">
-  <button type="button" data-tab="meta" role="tab"><span class="tab-ico">⚙</span>Méta</button>
-  <button type="button" data-tab="cover" role="tab"><span class="tab-ico">◉</span>Couv.</button>
-  <button type="button" data-tab="sitac" role="tab"><span class="tab-ico">▣</span>SITAC</button>
-  <button type="button" data-tab="mission" role="tab"><span class="tab-ico">✈</span>Mission</button>
-  <button type="button" data-tab="radio" role="tab"><span class="tab-ico">📻</span>Radio</button>
-  <button type="button" data-tab="phases" role="tab"><span class="tab-ico">⊕</span>Missions</button>
-  <button type="button" data-tab="roster" role="tab"><span class="tab-ico">👤</span>Équipage</button>
-  <button type="button" data-tab="charts" role="tab"><span class="tab-ico">🗺</span>Charts</button>
-  <button type="button" data-tab="annexes" role="tab"><span class="tab-ico">📎</span>Annexes</button>
-  <button type="button" data-tab="wing" role="tab"><span class="tab-ico">🛡</span>Wing</button>
-  <button type="button" data-tab="preview" role="tab"><span class="tab-ico">◈</span>Aperçu</button>
+  <button type="button" data-tab="meta" role="tab"><span class="tab-ico">⚙</span><span data-i18n="tab.meta">Méta</span></button>
+  <button type="button" data-tab="cover" role="tab"><span class="tab-ico">◉</span><span data-i18n="tab.cover">Couv.</span></button>
+  <button type="button" data-tab="sitac" role="tab"><span class="tab-ico">▣</span><span data-i18n="tab.sitac">SITAC</span></button>
+  <button type="button" data-tab="mission" role="tab"><span class="tab-ico">✈</span><span data-i18n="tab.mission">Mission</span></button>
+  <button type="button" data-tab="radio" role="tab"><span class="tab-ico">📻</span><span data-i18n="tab.radio">Radio</span></button>
+  <button type="button" data-tab="phases" role="tab"><span class="tab-ico">⊕</span><span data-i18n="tab.phases">Missions</span></button>
+  <button type="button" data-tab="roster" role="tab"><span class="tab-ico">👤</span><span data-i18n="tab.roster">Équipage</span></button>
+  <button type="button" data-tab="charts" role="tab"><span class="tab-ico">🗺</span><span data-i18n="tab.charts">Charts</span></button>
+  <button type="button" data-tab="annexes" role="tab"><span class="tab-ico">📎</span><span data-i18n="tab.annexes">Annexes</span></button>
+  <button type="button" data-tab="wing" role="tab"><span class="tab-ico">🛡</span><span data-i18n="tab.wing">Wing</span></button>
+  <button type="button" data-tab="preview" role="tab"><span class="tab-ico">◈</span><span data-i18n="tab.preview">Aperçu</span></button>
 </nav>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -398,10 +364,724 @@ const DEFAULT_WING_CONFIG = JSON.parse(__DEFAULT_WING_CONFIG__);
 const STORAGE_KEY = 'khr26_briefing_state_v2';
 const KEY_WING     = 'wing_config_v1';
 const KEY_THEME    = 'theme_v1';
+const KEY_LANG     = 'lang_v1';  // Phase 9 — i18n FR/EN
 const MOBILE_BREAKPOINT = 1100;
 const IMG_MAX_WIDTH = 1600;
 const IMG_JPEG_QUALITY = 0.82;
 const IMG_RECOMPRESS_THRESHOLD = 800 * 1024;  // 800 Ko base64 : seuil de déclenchement recompression auto
+
+/* ============= i18n FR/EN (Phase 9 — v2.2.0) =============
+   Architecture :
+   - I18N : dictionnaires clés-valeurs par langue (notation pointée par domaine)
+   - CURRENT_LANG : état courant ('fr' | 'en')
+   - t(key) : résolution d'une clé avec fallback FR
+   - initLang() : lecture localStorage + détection navigator.language
+   - setLang(lang) : bascule + persistance + mise à jour DOM
+   - applyI18nStatic() : peuple les éléments data-i18n* dans le DOM
+
+   CLASSIF_LEGACY_MAP : migration des anciennes valeurs textuelles de
+   meta.classification vers les clés canoniques. Les labels affichés
+   sont désormais gérés par I18N (classif.*), pas stockés dans le state. */
+
+const I18N = {
+  fr: {
+    // ── Toolbar ──
+    'toolbar.save':           'Sauver',
+    'toolbar.load':           'Charger',
+    'toolbar.export':         'Exporter',
+    'toolbar.reset':          'Reset',
+    'toolbar.save.tooltip':   'Exporter le briefing en JSON',
+    'toolbar.load.tooltip':   'Charger un briefing JSON',
+    'toolbar.export.tooltip': 'Exporter en PDF ou PNG (kneeboard DCS)',
+    'toolbar.reset.tooltip':  'Réinitialiser au briefing par défaut',
+    'toolbar.theme.tooltip':  'Thème graphique',
+    'toolbar.lang.tooltip':   'Switch language / Changer de langue',
+    // ── Document ──
+    'doc.title.suffix': 'GÉNÉRATEUR DE BRIEFING',
+    // ── Tab bar ──
+    'tab.meta':    'Méta',
+    'tab.cover':   'Couv.',
+    'tab.sitac':   'SITAC',
+    'tab.mission': 'Mission',
+    'tab.radio':   'Radio',
+    'tab.phases':  'Missions',
+    'tab.roster':  'Équipage',
+    'tab.charts':  'Charts',
+    'tab.annexes': 'Annexes',
+    'tab.wing':    'Wing',
+    'tab.preview': 'Aperçu',
+    // ── Modale export ──
+    'modal.export.close':          'Fermer',
+    'modal.export.title':          'Exporter le briefing',
+    'modal.export.subtitle':       'Choisissez le format de sortie',
+    'modal.export.pdf.desc':       'Impression système · Toutes les pages',
+    'modal.export.png.desc':       'Kneeboard DCS · 794×1123, A4',
+    'modal.export.png.pages':      'Pages à exporter',
+    'modal.export.png.checkAll':   'Tout cocher',
+    'modal.export.png.uncheckAll': 'Tout décocher',
+    'modal.export.png.back':       '← Retour',
+    'modal.export.png.go':         'Exporter',
+    'modal.export.titlePng':       'Export PNG kneeboard',
+    // ── Section 00 META ──
+    'editor.meta.summary':        '00 ░ MÉTADONNÉES',
+    'editor.meta.operation':      'Opération',
+    'editor.meta.missionCode':    'Mission code',
+    'editor.meta.date':           'Date mission',
+    'editor.meta.classification': 'Classification',
+    'editor.meta.docRef':         'Référence document',
+    'editor.meta.help':           'Métadonnées présentes dans tous les pieds de page.',
+    // ── Section 01 COVER ──
+    'editor.cover.summary':      '01 ░ OPÉRATION (COUVERTURE)',
+    'editor.cover.summaryShort': '01 ░ OPÉRATION',
+    'editor.cover.title':        'Titre opération',
+    'editor.cover.narrative':    'Récit / Contexte',
+    'editor.cover.map':          'Carte d\'opération (image)',
+    // ── Section 02 SITAC ──
+    'editor.sitac.summary':  '02 ░ SITAC',
+    'editor.sitac.date':     'Date SITAC (affichée)',
+    'editor.sitac.points':   'Points de situation',
+    'editor.sitac.addPoint': '+ Ajouter un point',
+    'editor.sitac.metar':           'METAR',
+    'editor.sitac.metarAssistant':  '🛠 Assistant METAR',
+    'editor.sitac.metarOverwrite':   'Remplacer le METAR existant ?',
+    'editor.sitac.metarMizOverwrite':'Écraser les champs avec les données du .miz ?',
+    'editor.sitac.map':      'Carte SITAC (image)',
+    // ── Section 03 MISSION ──
+    'editor.mission.summary':      '03 ░ APERÇU MISSION',
+    'editor.mission.objectives':   'Objectifs principaux',
+    'editor.mission.addObjective': '+ Ajouter un objectif',
+    'editor.mission.farp':         'FARP & Aéroports',
+    'editor.mission.addFarp':      '+ Ajouter une base',
+    'editor.mission.icao':         'ICAO',
+    'editor.mission.name':         'Nom',
+    'editor.mission.farpCheck':    'FARP',
+    'editor.mission.rwyAirport':   'Piste en service',
+    'editor.mission.rwyFarp':      'Cap D/A',
+    'editor.mission.atc':          'ATC',
+    'editor.mission.tanks':        'Menaces — Chars',
+    'editor.mission.apc':          'Menaces — APC',
+    'editor.mission.aaa':          'Menaces — AAA',
+    'editor.mission.sam':          'Menaces — SAM',
+    'editor.mission.threatsNote':  'Note menaces (libre)',
+    // ── Section 04 RADIO ──
+    'editor.radio.summary':      '04 ░ PLAN RADIO',
+    'editor.radio.items':        'Items radio — cochez jusqu\'à 6 pour l\'aperçu',
+    'editor.radio.addItem':      '+ Ajouter un item',
+    'editor.radio.help':         'Définissez ici les fréquences communes (ATC, MISSION, Groupes...). Vous les assignerez ensuite aux canaux radio par appareil ci-dessous.',
+    'editor.radio.aircraft':     'Plans radio par appareil',
+    'editor.radio.addAircraft':  '+ Ajouter un appareil',
+    'editor.radio.helpAircraft': 'Pour chaque appareil, configurez les radios et leurs canaux. Si une image est fournie, elle remplace la table générée.',
+    'editor.radio.customName':   'Nom personnalisé',
+    'editor.radio.radioName':    'Nom radio (R-863, UHF, ...)',
+    'editor.radio.labelEx':      'Libellé (ex: ATC)',
+    'editor.radio.freqLabel':    'Fréq.',
+    'editor.radio.chLabel':      'Ch.',
+    'editor.radio.chanLabel':    'Libellé',
+    'editor.radio.chanFreq':     'Fréq.',
+    'editor.radio.imgNote':      '⚠ Image fournie : la table sera remplacée par l\'image dans le briefing.',
+    'editor.radio.delAircraftConfirm': 'Supprimer la configuration radio de l\'appareil',
+    'editor.radio.delChanAriaLabel':   'Supprimer canal',
+    'editor.radio.delAircraftAriaLabel': 'Supprimer appareil',
+    'editor.radio.freeFreqTooltip':   'Fréquence libre — tap pour passer en Item global',
+    'editor.radio.globalItemTooltip': 'Item global — tap pour passer en Fréquence libre',
+    // ── Section 05 PHASES ──
+    'editor.phases.summary': '05 ░ MISSIONS',
+    'editor.phases.prev':    'Mission précédente',
+    'editor.phases.next':    'Mission suivante',
+    'editor.phases.add':     'Ajouter une mission',
+    'editor.phases.dup':     'Dupliquer cette mission',
+    'editor.phases.up':      'Monter la mission',
+    'editor.phases.down':    'Descendre la mission',
+    'editor.phases.remove':  'Supprimer cette mission',
+    'editor.phases.dupSuffix':     ' (copie)',
+    'editor.phases.deleteConfirm': 'Supprimer la mission',
+    'editor.phases.objective':     'Objectif',
+    'editor.phases.title':         'Titre de la mission',
+    'editor.phases.flightPlan':    'Plan de vol',
+    'editor.phases.threatLevel':   'Niveau de menace',
+    'editor.phases.notes':         'Notes / repères tactiques',
+    'editor.phases.images':        'Images de mission (pages dédiées, 2 par page)',
+    'editor.phases.execSteps':     'Étapes d\'exécution',
+    'editor.phases.addStep':       '+ Ajouter une étape',
+    'editor.phases.addImage':      '+ Ajouter une image',
+    'editor.phases.squadron':      'Escadron affecté',
+    'editor.phases.subgroup':      'Sous-groupe',
+    'editor.phases.subgroupHint':  '(optionnel)',
+    'editor.phases.aircraft':      'Appareil utilisé',
+    'editor.phases.guestName':     'Nom de l\'escadron',
+    'editor.phases.guestSub':      'Nom du groupe',
+    'editor.phases.guestAircraft': 'Appareil',
+    'editor.phases.guestOption':   '— Escadron invité... —',
+    'editor.phases.addSubtask':    '+ Sous-tâche',
+    'editor.phases.noImage':          'Aucune image. Toucher « + Ajouter une image ».',
+    'editor.phases.imgTitle':          'Titre / tâche associée',
+    'editor.phases.imgCaption':        'Commentaire / légende',
+    'editor.phases.imgCaptionPlaceholder': 'Commentaire optionnel affiché sous l\'image',
+    'editor.phases.noMission':     'Aucune mission définie.',
+    'editor.phases.addFirst':      'Touchez + pour ajouter une mission.',
+    'editor.phases.indicatorLabel':'Mission',
+    // ── Section 07 ROSTER ──
+    'editor.roster.summary':  '07 ░ ÉQUIPAGE',
+    'editor.roster.help':     'Définissez les pilotes par groupe ou sous-groupe. Une page d\'ordre de bataille sera générée après l\'aperçu mission si au moins un pilote est renseigné.',
+    'editor.roster.addGroup': '+ Ajouter un groupe',
+    'editor.roster.noGroup':  'Aucun groupe. Toucher « + Ajouter un groupe ».',
+    'editor.roster.noPilot':  'Aucun pilote.',
+    'editor.roster.delGroupConfirm': 'Supprimer ce groupe ?',
+    'editor.roster.pilotPlaceholder':    'Nom / indicatif pilote',
+    'editor.roster.callsignPlaceholder': 'Callsign',
+    'editor.roster.pilotsLabel': 'Pilotes',
+    // ── Section 08 CHARTS ──
+    'editor.charts.summary':       '08 ░ CHARTS',
+    'editor.charts.add':           '+ Ajouter une chart',
+    'editor.charts.noChart':       'Aucune chart. Toucher « + Ajouter une chart ».',
+    'editor.charts.airportLabel':  'Nom de l\'aéroport / chart',
+    // ── Section 09 ANNEXES ──
+    'editor.annexes.summary':  '09 ░ ANNEXES',
+    'editor.annexes.add':      '+ Ajouter une annexe',
+    'editor.annexes.noAnnex':      'Aucune annexe. Toucher « + Ajouter une annexe ».',
+    'editor.annexes.titleLabel':    'Titre',
+    'editor.annexes.captionLabel':  'Commentaire / légende',
+    'editor.annexes.captionPlaceholder': 'Commentaire optionnel affiché sous l\'image',
+    // ── Section 10 WING ──
+    'editor.wing.summary':      '10 ░ CONFIGURATION WING',
+    'editor.wing.summaryShort': '10 ░ CONFIG WING',
+    'editor.wing.import':       '📥 Importer config',
+    'editor.wing.hqHint':        '✦ Édition complète disponible dans HQ',
+    'editor.wing.resetConfirm.ro':'Réinitialiser le wing au défaut ?\nToutes les modifications seront perdues.',
+    'editor.wing.roWing':        'Wing actif',
+    'editor.wing.roSquadrons':   'Escadrons enregistrés',
+    'toast.wingLoaded':          'Config wing chargée ✓',
+    'toast.wingReset':           'Wing réinitialisé ✓',
+    'toast.wingInvalid':         '⚠ Config invalide : ',
+    'toast.wingJsonInvalid':     '⚠ JSON invalide : ',
+    'toast.wingFileError':       '⚠ Lecture du fichier impossible',
+    'editor.wing.importTooltip':'Importer un fichier wing_config.json',
+    'editor.wing.reset':        '♻ Réinitialiser',
+    // ── Shared editor strings ──
+    'editor.imgZone.tap':     '▲ TOUCHER POUR CHARGER UNE CARTE ▲',
+    'editor.imgZone.tapLogo': '▲ TOUCHER POUR CHARGER UN LOGO ▲',
+    'editor.autoSave':        'Sauvegarde locale automatique',
+    'editor.exportTip':       'Export JSON pour conserver vos templates',
+    // ── Strings résiduelles externalisées (Étape C) ──
+    'select.noSquadron':           '— Aucun escadron —',
+    'select.noGroup':              '— Sélectionner un groupe —',
+    'select.customAircraft':       '— Autre (libre) —',
+    'select.noItem':               '— Item —',
+    'phase.newTitle':              'Nouvelle mission',
+    'placeholder.guestName':       'Ex : WOLF',
+    'placeholder.guestSub':        'Ex : WOLF 1 (optionnel)',
+    'placeholder.guestAircraft':   'Ex : F-16CM',
+    'placeholder.subgroup':        'Ex : ANTON, CAESAR, WOLF 2…',
+    'placeholder.imgTitle':        'Ex : Route d\'approche — Attaque ERCAN',
+    'placeholder.chartName':       'Ex : AKROTIRI (LCRA) — Piste 10',
+    'placeholder.annexeTitle':     'Ex : Notes additionnelles',
+    'editor.image.label':         'Image',
+    'editor.imgZone.tapShort':    '▲ TOUCHER POUR CHARGER ▲',
+    'editor.imgCard.remove':      'Suppr.',
+    'editor.phases.moveUp':       'Monter',
+    'editor.phases.moveDown':     'Descendre',
+    'phase.defaultMapTitle':      'Carte phase',
+    'placeholder.optional':       '(optionnel)',
+    'preview.objectives':             'Objectifs',
+    'preview.sitrepPoints':           'Points de Situation',
+    'preview.metar':                  'METAR',
+    'preview.sitacImgCaption':        'SITUATION TACTIQUE',
+    'preview.noPoints':               'Aucun point renseigné',
+    'preview.metarMissing':           '— METAR NON RENSEIGNÉ —',
+    'preview.threatTanks':            '◣ Chars / MBT',
+    'preview.threatApc':              '◣ APC / VBL',
+    'preview.threatAaa':              '◣ AAA',
+    'preview.threatSam':              '◣ SAM',
+    'editor.phases.aircraftSigle':    'APPAREIL',
+    'editor.roster.groupSigle':       'GROUPE',
+    'editor.roster.groupSelectLabel': 'Groupe / sous-groupe (depuis les missions)',
+    'editor.roster.addPilot':         '+ Ajouter un pilote',
+    // Éditeur radio — strings oubliées
+    'editor.radio.radiosChannelsLabel':  'Radios & canaux',
+    'editor.radio.addRadio':             '+ Ajouter une radio',
+    'editor.radio.addChannel':           '+ Canal',
+    // Preview — strings oubliées
+    'preview.theaterMap':                'CARTE THÉÂTRE',
+    'preview.radioAnnexHeader':          'ANNEXE ░ PLAN RADIO',
+    'preview.airportFallback':           'AÉROPORT',
+    'preview.noMapProvided':             '◯ AUCUNE CARTE FOURNIE ◯',
+    'preview.receivedOn':                'REÇU LE',
+    'preview.atc':                       'ATC',
+    'preview.autoinfo':                  'Auto-info',
+    'preview.capLabel':                  'Cap D/A',
+    'preview.noRadioItems':              'Aucun item radio défini',
+    'preview.noRadioConfig':             'Aucune radio configurée pour cet appareil',
+    'preview.guestFallback':             'INVITÉ',
+    // Misc strings dynamiques
+    'editor.phases.subtaskPlaceholder':  'Sous-tâche',
+    'toast.fileMustBeImage':             'Le fichier doit être une image.',
+    'toast.exportSingle':                '1 page exportée ✓',
+    'toast.exportMulti':                 'pages exportées ✓',
+    'error.canvasToBlob':                'Conversion canvas → blob PNG échouée',
+    'editor.imgZone.removeImageAria': 'Retirer l\'image',
+    'editor.annexes.numSigle':        'ANNEXE',
+    // ── Toasts ──
+    'toast.langSwitched':      'Interface en français',
+    'toast.briefingSaved':     'Briefing exporté ✓',
+    'toast.briefingLoaded':    'Briefing chargé ✓',
+    'toast.briefingReset':     'Briefing réinitialisé ✓',
+    'toast.briefingOptimized': 'Briefing optimisé — {n} image(s) recompressée(s) ✓',
+    'toast.briefingOptimizedOnLoad': 'Briefing optimisé au chargement — {n} image(s) ✓',
+    'toast.imageCompressing':  'Compression image...',
+    'toast.imageLoaded':       'Image chargée ✓',
+    'toast.logoInvalid':       '⚠ Logo invalide : ',
+    'toast.imageError':        'Erreur : ',
+    'toast.jsonInvalid':       '⚠ Fichier JSON invalide : ',
+    'toast.fileUnreadable':    '⚠ Lecture impossible',
+    'toast.exportError':       '⚠ Erreur export PNG : ',
+    'toast.exportGenProgress': 'Génération ',
+    // ── Confirmations ──
+    'confirm.resetBriefing': 'Réinitialiser tout le briefing ?',
+    'confirm.deletePhase':   'Supprimer la mission',
+    'confirm.deleteRadioAc': 'Supprimer la configuration radio de l\'appareil',
+    'confirm.deleteGroup':   'Supprimer ce groupe ?',
+    // ── Aperçu rendu (preview) ──
+    'preview.missionOverview':   'APERÇU MISSION',
+    'preview.squadronsEngaged':  'Escadrons Engagés',
+    'preview.farpAirports':      'FARP & Aéroports',
+    'preview.radioPlan':         'Plan Radio',
+    'preview.threatsIdentified': 'Menaces Identifiées',
+    'preview.rosterPage':        'ÉQUIPAGE ░ ORDRE DE BATAILLE',
+    'preview.radioAnnex':        'ANNEXE ░ PLAN RADIO',
+    'preview.chartPage':         'CHART ░ AÉROPORT',
+    'preview.objective':         '◆ Objectif',
+    'preview.execution':         '◆ Exécution',
+    'preview.flightPlan':        '◆ Plan de Vol',
+    'preview.tacticalNotes':     '◆ Notes Tactiques',
+    'preview.noSteps':           'Aucune étape',
+    'preview.missionSingular':   'Mission',
+    'preview.missionPlural':     'Missions',
+    'preview.rosterName':        'NOM / INDICATIF',
+    'preview.rosterCallsign':    'CALLSIGN',
+    // ── Niveaux de menace ──
+    'threatLevel.low':      'Faible',
+    'threatLevel.moderate': 'Modéré',
+    'threatLevel.high':     'Élevé',
+    // ── Classifications ──
+    'classif.confidential':    'CONFIDENTIEL DÉFENSE',
+    'classif.secret':          'SECRET DÉFENSE',
+    'classif.top-secret':      'TRÈS SECRET',
+    'classif.unclassified':    'NON CLASSIFIÉ',
+    'classif.nato-restricted': 'NATO RESTRICTED',
+    'classif.nato-secret':     'NATO SECRET',
+    // ── Thèmes graphiques ──
+    'theme.cw-nato':      'Cold War OTAN',
+    'theme.cw-soviet':    'Cold War Soviétique',
+    'theme.modern-nato':  'OTAN moderne',
+    'theme.modern-east':  'Bloc Est moderne'
+  },
+  en: {
+    // ── Toolbar ──
+    'toolbar.save':           'Save',
+    'toolbar.load':           'Load',
+    'toolbar.export':         'Export',
+    'toolbar.reset':          'Reset',
+    'toolbar.save.tooltip':   'Export briefing as JSON',
+    'toolbar.load.tooltip':   'Load a JSON briefing',
+    'toolbar.export.tooltip': 'Export to PDF or PNG (DCS kneeboard)',
+    'toolbar.reset.tooltip':  'Reset to default briefing',
+    'toolbar.theme.tooltip':  'Graphic theme',
+    'toolbar.lang.tooltip':   'Switch language / Changer de langue',
+    // ── Document ──
+    'doc.title.suffix': 'BRIEFING GENERATOR',
+    // ── Tab bar ──
+    'tab.meta':    'Meta',
+    'tab.cover':   'Cover',
+    'tab.sitac':   'SITAC',
+    'tab.mission': 'Mission',
+    'tab.radio':   'Radio',
+    'tab.phases':  'Missions',
+    'tab.roster':  'Crew',
+    'tab.charts':  'Charts',
+    'tab.annexes': 'Annexes',
+    'tab.wing':    'Wing',
+    'tab.preview': 'Preview',
+    // ── Export modal ──
+    'modal.export.close':          'Close',
+    'modal.export.title':          'Export briefing',
+    'modal.export.subtitle':       'Choose output format',
+    'modal.export.pdf.desc':       'System print · All pages',
+    'modal.export.png.desc':       'DCS Kneeboard · 794×1123, A4',
+    'modal.export.png.pages':      'Pages to export',
+    'modal.export.png.checkAll':   'Check all',
+    'modal.export.png.uncheckAll': 'Uncheck all',
+    'modal.export.png.back':       '← Back',
+    'modal.export.png.go':         'Export',
+    'modal.export.titlePng':       'PNG kneeboard export',
+    // ── Section 00 META ──
+    'editor.meta.summary':        '00 ░ METADATA',
+    'editor.meta.operation':      'Operation',
+    'editor.meta.missionCode':    'Mission code',
+    'editor.meta.date':           'Mission date',
+    'editor.meta.classification': 'Classification',
+    'editor.meta.docRef':         'Document reference',
+    'editor.meta.help':           'Metadata shown in all page footers.',
+    // ── Section 01 COVER ──
+    'editor.cover.summary':      '01 ░ OPERATION (COVER)',
+    'editor.cover.summaryShort': '01 ░ OPERATION',
+    'editor.cover.title':        'Operation title',
+    'editor.cover.narrative':    'Narrative / Context',
+    'editor.cover.map':          'Operation map (image)',
+    // ── Section 02 SITAC ──
+    'editor.sitac.summary':  '02 ░ SITAC',
+    'editor.sitac.date':     'SITREP date (displayed)',
+    'editor.sitac.points':   'SITREP points',
+    'editor.sitac.addPoint': '+ Add point',
+    'editor.sitac.metar':           'METAR',
+    'editor.sitac.metarAssistant':  '🛠 METAR Assistant',
+    'editor.sitac.metarOverwrite':   'Replace existing METAR?',
+    'editor.sitac.metarMizOverwrite':'Overwrite assistant fields with .miz data?',
+    'editor.sitac.map':      'SITAC map (image)',
+    // ── Section 03 MISSION ──
+    'editor.mission.summary':      '03 ░ MISSION OVERVIEW',
+    'editor.mission.objectives':   'Main objectives',
+    'editor.mission.addObjective': '+ Add objective',
+    'editor.mission.farp':         'FARP & Airfields',
+    'editor.mission.addFarp':      '+ Add airfield',
+    'editor.mission.icao':         'ICAO',
+    'editor.mission.name':         'Name',
+    'editor.mission.farpCheck':    'FARP',
+    'editor.mission.rwyAirport':   'Active runway',
+    'editor.mission.rwyFarp':      'In/Out',
+    'editor.mission.atc':          'ATC',
+    'editor.mission.tanks':        'Threats — Armor (MBT)',
+    'editor.mission.apc':          'Threats — APC',
+    'editor.mission.aaa':          'Threats — AAA',
+    'editor.mission.sam':          'Threats — SAM',
+    'editor.mission.threatsNote':  'Threats note (free text)',
+    // ── Section 04 RADIO ──
+    'editor.radio.summary':      '04 ░ RADIO PLAN',
+    'editor.radio.items':        'Radio items — check up to 6 for the overview',
+    'editor.radio.addItem':      '+ Add item',
+    'editor.radio.help':         'Define shared frequencies here (ATC, MISSION, Groups...). Assign them to aircraft radio channels below.',
+    'editor.radio.aircraft':     'Radio plans by aircraft',
+    'editor.radio.addAircraft':  '+ Add aircraft',
+    'editor.radio.helpAircraft': 'For each aircraft, configure radios and their channels. If an image is provided, it replaces the generated table.',
+    'editor.radio.customName':   'Custom name',
+    'editor.radio.radioName':    'Radio name (R-863, UHF, ...)',
+    'editor.radio.labelEx':      'Label (e.g. ATC)',
+    'editor.radio.freqLabel':    'Freq.',
+    'editor.radio.chLabel':      'Ch.',
+    'editor.radio.chanLabel':    'Label',
+    'editor.radio.chanFreq':     'Freq.',
+    'editor.radio.imgNote':      '⚠ Image provided: the table will be replaced by the image in the briefing.',
+    'editor.radio.delAircraftConfirm':   'Delete radio config for aircraft',
+    'editor.radio.delChanAriaLabel':     'Delete channel',
+    'editor.radio.delAircraftAriaLabel': 'Delete aircraft',
+    'editor.radio.freeFreqTooltip':   'Custom frequency — tap to switch to global item',
+    'editor.radio.globalItemTooltip': 'Global item — tap to switch to custom frequency',
+    // ── Section 05 PHASES ──
+    'editor.phases.summary': '05 ░ MISSIONS',
+    'editor.phases.prev':    'Previous mission',
+    'editor.phases.next':    'Next mission',
+    'editor.phases.add':     'Add mission',
+    'editor.phases.dup':     'Duplicate this mission',
+    'editor.phases.up':      'Move mission up',
+    'editor.phases.down':    'Move mission down',
+    'editor.phases.remove':  'Delete this mission',
+    'editor.phases.dupSuffix':     ' (copy)',
+    'editor.phases.deleteConfirm': 'Delete mission',
+    'editor.phases.objective':     'Objective',
+    'editor.phases.title':         'Mission title',
+    'editor.phases.flightPlan':    'Flight Plan',
+    'editor.phases.threatLevel':   'Threat Level',
+    'editor.phases.notes':         'Tactical Notes / Cues',
+    'editor.phases.images':        'Mission Images (dedicated pages, 2 per page)',
+    'editor.phases.execSteps':     'Execution Steps',
+    'editor.phases.addStep':       '+ Add step',
+    'editor.phases.addImage':      '+ Add image',
+    'editor.phases.squadron':      'Assigned squadron',
+    'editor.phases.subgroup':      'Sub-group',
+    'editor.phases.subgroupHint':  '(optional)',
+    'editor.phases.aircraft':      'Aircraft type',
+    'editor.phases.guestName':     'Squadron name',
+    'editor.phases.guestSub':      'Group name',
+    'editor.phases.guestAircraft': 'Aircraft',
+    'editor.phases.guestOption':   '— Guest squadron... —',
+    'editor.phases.addSubtask':    '+ Sub-task',
+    'editor.phases.noImage':          'No image. Tap « + Add image ».',
+    'editor.phases.imgTitle':          'Title / associated task',
+    'editor.phases.imgCaption':        'Caption / legend',
+    'editor.phases.imgCaptionPlaceholder': 'Optional caption shown below the image',
+    'editor.phases.noMission':     'No mission defined.',
+    'editor.phases.addFirst':      'Tap + to add a mission.',
+    'editor.phases.indicatorLabel':'Mission',
+    // ── Section 07 ROSTER ──
+    'editor.roster.summary':  '07 ░ CREW / ROSTER',
+    'editor.roster.help':     'Define pilots by group or sub-group. A battle order page will be generated after the mission overview if at least one pilot is listed.',
+    'editor.roster.addGroup': '+ Add group',
+    'editor.roster.noGroup':  'No groups. Tap « + Add group ».',
+    'editor.roster.noPilot':  'No pilots.',
+    'editor.roster.delGroupConfirm': 'Delete this group?',
+    'editor.roster.pilotPlaceholder':    'Name / pilot callsign',
+    'editor.roster.callsignPlaceholder': 'Callsign',
+    'editor.roster.pilotsLabel': 'Pilots',
+    // ── Section 08 CHARTS ──
+    'editor.charts.summary':      '08 ░ CHARTS',
+    'editor.charts.add':          '+ Add chart',
+    'editor.charts.noChart':      'No charts. Tap « + Add chart ».',
+    'editor.charts.airportLabel': 'Airfield / chart name',
+    // ── Section 09 ANNEXES ──
+    'editor.annexes.summary':  '09 ░ ANNEXES',
+    'editor.annexes.add':      '+ Add annex',
+    'editor.annexes.noAnnex':          'No annexes. Tap « + Add annex ».',
+    'editor.annexes.titleLabel':        'Title',
+    'editor.annexes.captionLabel':      'Caption / legend',
+    'editor.annexes.captionPlaceholder': 'Optional caption shown below the image',
+    // ── Section 10 WING ──
+    'editor.wing.summary':      '10 ░ WING CONFIGURATION',
+    'editor.wing.summaryShort': '10 ░ WING CONFIG',
+    'editor.wing.import':       '📥 Import config',
+    'editor.wing.hqHint':        '✦ Full editing available in HQ',
+    'editor.wing.resetConfirm.ro':'Reset wing to default?\nAll changes will be lost.',
+    'editor.wing.roWing':        'Active wing',
+    'editor.wing.roSquadrons':   'Registered squadrons',
+    'toast.wingLoaded':          'Wing config loaded ✓',
+    'toast.wingReset':           'Wing reset ✓',
+    'toast.wingInvalid':         '⚠ Invalid config: ',
+    'toast.wingJsonInvalid':     '⚠ Invalid JSON: ',
+    'toast.wingFileError':       '⚠ Cannot read file',
+    'editor.wing.importTooltip':'Import a wing_config.json file',
+    'editor.wing.reset':        '♻ Reset',
+    // ── Shared editor strings ──
+    'editor.imgZone.tap':     '▲ TAP TO LOAD A MAP ▲',
+    'editor.imgZone.tapLogo': '▲ TAP TO LOAD A LOGO ▲',
+    'editor.autoSave':        'Automatic local save',
+    'editor.exportTip':       'Export JSON to keep your templates',
+    // ── Residual strings externalized (Step C) ──
+    'select.noSquadron':           '— No squadron —',
+    'select.noGroup':              '— Select a group —',
+    'select.customAircraft':       '— Other (custom) —',
+    'select.noItem':               '— Item —',
+    'phase.newTitle':              'New mission',
+    'placeholder.guestName':       'e.g. WOLF',
+    'placeholder.guestSub':        'e.g. WOLF 1 (optional)',
+    'placeholder.guestAircraft':   'e.g. F-16CM',
+    'placeholder.subgroup':        'e.g. ANTON, CAESAR, WOLF 2…',
+    'placeholder.imgTitle':        'e.g. Approach route — ERCAN Strike',
+    'placeholder.chartName':       'e.g. AKROTIRI (LCRA) — RWY 10',
+    'placeholder.annexeTitle':     'e.g. Additional notes',
+    'editor.image.label':         'Image',
+    'editor.imgZone.tapShort':    '▲ TAP TO LOAD ▲',
+    'editor.imgCard.remove':      'Remove',
+    'editor.phases.moveUp':       'Move up',
+    'editor.phases.moveDown':     'Move down',
+    'phase.defaultMapTitle':      'Phase map',
+    'placeholder.optional':       '(optional)',
+    'preview.objectives':             'Objectives',
+    'preview.sitrepPoints':           'Situation Points',
+    'preview.metar':                  'METAR',
+    'preview.sitacImgCaption':        'TACTICAL SITUATION',
+    'preview.noPoints':               'No points provided',
+    'preview.metarMissing':           '— METAR NOT PROVIDED —',
+    'preview.threatTanks':            '◣ Tanks / MBT',
+    'preview.threatApc':              '◣ APC / IFV',
+    'preview.threatAaa':              '◣ AAA',
+    'preview.threatSam':              '◣ SAM',
+    'editor.phases.aircraftSigle':    'AIRCRAFT',
+    'editor.roster.groupSigle':       'GROUP',
+    'editor.roster.groupSelectLabel': 'Group / subgroup (from missions)',
+    'editor.roster.addPilot':         '+ Add a pilot',
+    // Editor radio
+    'editor.radio.radiosChannelsLabel':  'Radios & channels',
+    'editor.radio.addRadio':             '+ Add radio',
+    'editor.radio.addChannel':           '+ Channel',
+    // Preview
+    'preview.theaterMap':                'THEATER MAP',
+    'preview.radioAnnexHeader':          'ANNEX ░ RADIO PLAN',
+    'preview.airportFallback':           'AIRFIELD',
+    'preview.noMapProvided':             '◯ NO MAP PROVIDED ◯',
+    'preview.receivedOn':                'RECEIVED ON',
+    'preview.atc':           'ATC',
+    'preview.autoinfo':      'Auto-info',
+    'preview.capLabel':      'In/Out',
+    'preview.noRadioItems':              'No radio items defined',
+    'preview.noRadioConfig':             'No radio configured for this aircraft',
+    'preview.guestFallback':             'GUEST',
+    // Misc
+    'editor.phases.subtaskPlaceholder':  'Subtask',
+    'toast.fileMustBeImage':             'File must be an image.',
+    'toast.exportSingle':                '1 page exported ✓',
+    'toast.exportMulti':                 'pages exported ✓',
+    'error.canvasToBlob':                'Canvas → PNG blob conversion failed',
+    'editor.imgZone.removeImageAria': 'Remove image',
+    'editor.annexes.numSigle':        'ANNEX',
+    // ── Toasts ──
+    'toast.langSwitched':      'Interface in English',
+    'toast.briefingSaved':     'Briefing exported ✓',
+    'toast.briefingLoaded':    'Briefing loaded ✓',
+    'toast.briefingReset':     'Briefing reset ✓',
+    'toast.briefingOptimized': 'Briefing optimized — {n} image(s) recompressed ✓',
+    'toast.briefingOptimizedOnLoad': 'Briefing optimized on load — {n} image(s) ✓',
+    'toast.imageCompressing':  'Compressing image…',
+    'toast.imageLoaded':       'Image loaded ✓',
+    'toast.logoInvalid':       '⚠ Invalid logo: ',
+    'toast.imageError':        'Error: ',
+    'toast.jsonInvalid':       '⚠ Invalid JSON file: ',
+    'toast.fileUnreadable':    '⚠ Cannot read file',
+    'toast.exportError':       '⚠ PNG export error: ',
+    'toast.exportGenProgress': 'Generating ',
+    // ── Confirmations ──
+    'confirm.resetBriefing': 'Reset the entire briefing?',
+    'confirm.deletePhase':   'Delete mission',
+    'confirm.deleteRadioAc': 'Delete radio config for aircraft',
+    'confirm.deleteGroup':   'Delete this group?',
+    // ── Preview (aperçu rendu) ──
+    'preview.missionOverview':   'MISSION OVERVIEW',
+    'preview.squadronsEngaged':  'Squadrons Engaged',
+    'preview.farpAirports':      'FARP & Airfields',
+    'preview.radioPlan':         'Radio Plan',
+    'preview.threatsIdentified': 'Identified Threats',
+    'preview.rosterPage':        'CREW ░ ORDER OF BATTLE',
+    'preview.radioAnnex':        'ANNEX ░ RADIO PLAN',
+    'preview.chartPage':         'CHART ░ AIRFIELD',
+    'preview.objective':         '◆ OBJECTIVE',
+    'preview.execution':         '◆ EXECUTION',
+    'preview.flightPlan':        '◆ FLIGHT PLAN',
+    'preview.tacticalNotes':     '◆ TACTICAL NOTES',
+    'preview.noSteps':           'No steps',
+    'preview.missionSingular':   'Mission',
+    'preview.missionPlural':     'Missions',
+    'preview.rosterName':        'NAME / CALLSIGN',
+    'preview.rosterCallsign':    'CALLSIGN',
+    // ── Threat levels ──
+    'threatLevel.low':      'Low',
+    'threatLevel.moderate': 'Moderate',
+    'threatLevel.high':     'High',
+    // ── Classifications ──
+    'classif.confidential':    'CONFIDENTIAL',
+    'classif.secret':          'SECRET',
+    'classif.top-secret':      'TOP SECRET',
+    'classif.unclassified':    'UNCLASSIFIED',
+    'classif.nato-restricted': 'NATO RESTRICTED',
+    'classif.nato-secret':     'NATO SECRET',
+    // ── Graphic themes ──
+    'theme.cw-nato':      'Cold War NATO',
+    'theme.cw-soviet':    'Cold War Soviet',
+    'theme.modern-nato':  'Modern NATO',
+    'theme.modern-east':  'Modern Eastern Bloc'
+  }
+};
+
+// Migration des anciennes valeurs textuelles de classification vers clés canoniques
+const CLASSIF_LEGACY_MAP = {
+  'CONFIDENTIEL DÉFENSE': 'confidential',
+  'SECRET DÉFENSE':       'secret',
+  'TRÈS SECRET':          'top-secret',
+  'NON CLASSIFIÉ':        'unclassified',
+  'NATO RESTRICTED':      'nato-restricted',
+  'NATO SECRET':          'nato-secret'
+};
+
+// Migration des anciennes valeurs textuelles de threatLevel vers clés canoniques
+// Couvre : FR (Faible/Modéré/Élevé), legacy (Danger/Important/Critique)
+const THREAT_LEGACY_MAP = {
+  'Faible':    'low',
+  'Modéré':    'moderate',
+  'Élevé':     'high',
+  'eleve':     'high',
+  'Danger':    'high',
+  'Important': 'high',
+  'Critique':  'high'
+};
+
+let CURRENT_LANG = 'fr'; // initialisé par initLang()
+
+function t(key, fallback) {
+  const dict = I18N[CURRENT_LANG] || I18N.fr;
+  if (key in dict) return dict[key];
+  if (fallback !== undefined) return fallback;
+  if (key in I18N.fr) return I18N.fr[key]; // fallback FR si clé absente en EN
+  console.warn('[i18n] missing key:', key);
+  return key;
+}
+
+function initLang() {
+  try {
+    const stored = localStorage.getItem(KEY_LANG);
+    if (stored === 'fr' || stored === 'en') {
+      CURRENT_LANG = stored;
+      document.documentElement.lang = CURRENT_LANG;
+      return;
+    }
+  } catch(e) { /* localStorage indisponible */ }
+  const nav = (navigator.language || 'fr').toLowerCase();
+  CURRENT_LANG = nav.startsWith('fr') ? 'fr' : 'en';
+  try { localStorage.setItem(KEY_LANG, CURRENT_LANG); } catch(e) { /* ignore */ }
+  document.documentElement.lang = CURRENT_LANG;
+}
+
+// applyI18nStatic : peuple les attributs data-i18n* dans le DOM
+// Appelée à l'init et à chaque bascule de langue.
+// Support : elements classiques + <option data-i18n> (textContent seul, value= inchangée)
+// Étape B ajoutera les attributs dans le HTML — dès maintenant la fonction
+// est fonctionnelle, elle ne fait juste rien si aucun attribut n'est présent.
+function applyI18nStatic() {
+  // textContent (éléments courants + <option>)
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  // title attribute
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = t(el.dataset.i18nTitle);
+  });
+  // placeholder attribute
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+  // aria-label attribute
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+    el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel));
+  });
+}
+
+function updateFlagButton() {
+  const btn = document.getElementById('btn-lang');
+  if (!btn) return;
+  // Afficher le drapeau de la langue CIBLE (vers laquelle on basculerait)
+  btn.textContent = CURRENT_LANG === 'fr' ? '\uD83C\uDDEC\uD83C\uDDE7' : '\uD83C\uDDEB\uD83C\uDDF7';
+}
+
+function updateDocTitle() {
+  const w = wingConfig ? wingConfig.wing : null;
+  const base = w ? w.shortName : 'MY WING';
+  document.title = base + ' // ' + t('doc.title.suffix');
+}
+
+function setLang(lang) {
+  if (lang !== 'fr' && lang !== 'en') return;
+  if (lang === CURRENT_LANG) return;
+  CURRENT_LANG = lang;
+  try { localStorage.setItem(KEY_LANG, CURRENT_LANG); } catch(e) { /* ignore */ }
+  document.documentElement.lang = CURRENT_LANG;
+  applyI18nStatic();
+  rerenderAllDynamic();     // rejoue les sections construites en JS
+  updateFlagButton();
+  updateDocTitle();
+  schedulePreview();
+  showToast(t('toast.langSwitched'), 'success');
+}
+
+/* rerenderAllDynamic — Phase 9 : rejoue toutes les fonctions de rendu dynamique
+   qui utilisent t() à la construction. Appelée par setLang() pour que la bascule
+   de langue mette à jour l'éditeur (les éléments avec data-i18n* sont déjà gérés
+   par applyI18nStatic, mais le contenu construit en JS via innerHTML ne l'est pas). */
+function rerenderAllDynamic() {
+  // Éditeur — chaque fonction est idempotente (vide son conteneur et reconstruit)
+  try { renderPhaseEditor(); }      catch(e) { console.warn('rerender phase failed:', e); }
+  try { renderCharts(); }           catch(e) { console.warn('rerender charts failed:', e); }
+  try { renderAnnexes(); }          catch(e) { console.warn('rerender annexes failed:', e); }
+  try { renderAirfields(); }        catch(e) { console.warn('rerender airfields failed:', e); }
+  try { renderRoster(); }           catch(e) { console.warn('rerender roster failed:', e); }
+  try { renderRadioItems(); }       catch(e) { console.warn('rerender radio items failed:', e); }
+  try { renderRadioAircrafts(); }   catch(e) { console.warn('rerender radio ac failed:', e); }
+  // P1.B: wing read-only panel re-rendered via renderWingReadOnly() depuis storage listener
+}
 
 /* ============= WING CONFIG (runtime, mutable) =============
    wingConfig is the single source of truth for wing branding and
@@ -426,7 +1106,7 @@ const DEFAULTS = {
     operation: 'FOOTHOLD',
     mission: 'M3',
     date: '1989-03-22',
-    classification: 'CONFIDENTIEL DÉFENSE',
+    classification: 'confidential',
     docRef: 'VEAW-FH-M3-1989'
   },
   cover: {
@@ -455,8 +1135,8 @@ const DEFAULTS = {
       "Missions secondaires possibles (CSAR, S&D)"
     ],
     farp: [
-      "AKROTIRI – Piste en service : 10",
-      "PAPHOS – Piste en service : 11"
+      { icao:'LCRA', name:'Akrotiri', isFarp:false, rwy:'10', atc:true  },
+      { icao:'LCPH', name:'Paphos',   isFarp:false, rwy:'11', atc:true  }
     ],
     threats: {
       tanks: 'T-55 à T-80',
@@ -526,7 +1206,7 @@ const DEFAULTS = {
         {text: "Caisses ATAKA + Roquettes", subtasks: []}
       ],
       flightPlan: 'CAP 352° / Distance 34 Km',
-      threatLevel: 'Faible', notes: '', images: [],
+      threatLevel: 'low', notes: '', images: [],
       squadron: 'KHR-26', aircraft: 'Mi-8', subgroup: 'ANTON'
     },
     {
@@ -537,7 +1217,7 @@ const DEFAULTS = {
         {text: "Suivre le chemin côtier de POLIS jusque KARAVOSTASI", subtasks: []}
       ],
       flightPlan: "Chemin côtier jusqu'à l'IP Mission #3",
-      threatLevel: 'Élevé', notes: 'Route estimée du convoi : voir carte phase 2', images: [],
+      threatLevel: 'high', notes: 'Route estimée du convoi : voir carte phase 2', images: [],
       squadron: 'KHR-26', aircraft: 'Mi-24P', subgroup: 'CAESAR'
     },
     {
@@ -550,7 +1230,7 @@ const DEFAULTS = {
         {text: "Cibles secondaires : APC / MBT", subtasks: []}
       ],
       flightPlan: 'IP : 59° / 32 Km — TGT : 118° / 9 Km',
-      threatLevel: 'Élevé', notes: "Repère : petite île + rivière à 8/9 Km de KARAVOSTASI. Axe d'assaut le long de la côte.",
+      threatLevel: 'high', notes: "Repère : petite île + rivière à 8/9 Km de KARAVOSTASI. Axe d'assaut le long de la côte.",
       images: [], squadron: 'KHR-26', aircraft: 'Mi-24P', subgroup: ''
     }
   ],
@@ -575,6 +1255,11 @@ function loadState() {
     if (raw) {
       const parsed = JSON.parse(raw);
       state = mergeDeep(structuredClone(DEFAULTS), parsed);
+      // Migration classification : legacy texte → clé canonique (v2.2.0)
+      if (state.meta && state.meta.classification) {
+        const migrated = CLASSIF_LEGACY_MAP[state.meta.classification];
+        if (migrated) state.meta.classification = migrated;
+      }
       if (Array.isArray(state.phases)) {
         state.phases.forEach(ph => {
           ph.execution = normalizeExecution(ph.execution);
@@ -602,24 +1287,24 @@ function persistState() {
    Called both at import and at localStorage load to guard against corruption. */
 function validateWingConfig(obj) {
   const errors = [];
-  if (!obj || typeof obj !== 'object') return { ok: false, errors: ['Objet invalide'] };
+  if (!obj || typeof obj !== 'object') return { ok: false, errors: [t('validate.schemaMissing')] };
   if (obj.configSchemaVersion !== 1)
-    errors.push('configSchemaVersion doit être 1');
+    errors.push(t('validate.schemaMissing'));
   if (!obj.wing || typeof obj.wing !== 'object') {
-    errors.push('Champ wing manquant');
+    errors.push(t('validate.wingMissing'));
   } else {
     if (!obj.wing.shortName)
-      errors.push('wing.shortName manquant');
+      errors.push(t('validate.shortNameMissing'));
     if (!obj.wing.logo || !String(obj.wing.logo).startsWith('data:image/'))
-      errors.push('wing.logo doit être une data URL image valide (data:image/…)');
+      errors.push(t('validate.logoInvalid'));
   }
   if (!Array.isArray(obj.squadrons)) {
-    errors.push('squadrons doit être un tableau');
+    errors.push(t('validate.squadronsNotArray'));
   } else {
     obj.squadrons.forEach((sq, i) => {
-      if (!sq.id)                      errors.push('squadrons[' + i + '].id manquant');
-      if (!sq.callsign)                errors.push('squadrons[' + i + '].callsign manquant');
-      if (!Array.isArray(sq.aircraft)) errors.push('squadrons[' + i + '].aircraft doit être un tableau');
+      if (!sq.id)                      errors.push('squadrons[' + i + ']' + t('validate.sqIdMissing'));
+      if (!sq.callsign)                errors.push('squadrons[' + i + ']' + t('validate.sqCallsignMissing'));
+      if (!Array.isArray(sq.aircraft)) errors.push('squadrons[' + i + ']' + t('validate.sqAircraftNotArray'));
     });
   }
   return errors.length === 0 ? { ok: true } : { ok: false, errors };
@@ -641,8 +1326,7 @@ function loadWingConfig() {
 }
 
 /* Debounced write of wingConfig to localStorage (200 ms).
-   Called by the wing editor UI after every user change.
-   Not called automatically — only the editor triggers persistence. */
+   Called by importWingConfig/resetWingConfig (P1.B: wing editor moved to HQ). */
 let _wingPersistTimer = null;
 function persistWingConfig() {
   if (_wingPersistTimer) clearTimeout(_wingPersistTimer);
@@ -651,7 +1335,7 @@ function persistWingConfig() {
       localStorage.setItem(KEY_WING, JSON.stringify(wingConfig));
     } catch(e) {
       if (e.name === 'QuotaExceededError') {
-        showToast('⚠ Espace de stockage saturé — exportez votre wing puis réinitialisez');
+        showToast(t('toast.wingStorageFull'));
       } else {
         console.warn('[Wing] Erreur persistance :', e);
       }
@@ -687,7 +1371,7 @@ function setByPath(obj, path, val) {
 function compressImageFile(file) {
   return new Promise((resolve, reject) => {
     if (!file.type.startsWith('image/')) {
-      reject(new Error('Le fichier doit être une image.'));
+      reject(new Error(t('toast.fileMustBeImage')));
       return;
     }
     const reader = new FileReader();
@@ -845,7 +1529,9 @@ function renderEditorBindings() {
   renderRoster();
   renderCharts();
   renderAnnexes();   // nouveau
-  renderWingEditor();  // populate wing editor inputs and squadron list
+  renderAirfields(); // aérodromes structurés (Partie 1)
+  migrateAirfieldStrings(); // migration silencieuse strings→objets
+  renderWingReadOnly();  // P1.B : afficher wing courant en read-only
 }
 
 /* Returns all unique squadron+subgroup+aircraft combos from missions */
@@ -932,7 +1618,7 @@ function renderRoster() {
   if (missionGroups.length === 0) {
     const warn = document.createElement('div');
     warn.className = 'phase-empty';
-    warn.innerHTML = '⚠ Aucune mission définie. Renseignez des missions avec des escadrons pour créer des groupes d\'équipage.';
+    warn.textContent = '⚠ ' + t('editor.roster.help');
     list.appendChild(warn);
     return;
   }
@@ -940,7 +1626,7 @@ function renderRoster() {
   if (state.roster.groups.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'phase-empty';
-    empty.textContent = 'Aucun groupe. Toucher « + Ajouter un groupe ».';
+    empty.textContent = t('editor.roster.noGroup');
     list.appendChild(empty);
     return;
   }
@@ -961,19 +1647,19 @@ function renderRoster() {
     }).join('');
 
     card.innerHTML = `
-      <div class="phase-num">GROUPE ${gi + 1}</div>
-      <button type="button" class="phase-rm" data-grp-rm="${gi}">Suppr.</button>
+      <div class="phase-num">${t('editor.roster.groupSigle')} ${gi + 1}</div>
+      <button type="button" class="phase-rm" data-grp-rm="${gi}">${t('editor.imgCard.remove')}</button>
       <div class="ed-field" style="margin-top:8px;">
-        <label>Groupe / sous-groupe (depuis les missions)</label>
+        <label>${t('editor.roster.groupSelectLabel')}</label>
         <select class="roster-grp-select">
-          <option value="">— Sélectionner un groupe —</option>
+          <option value="">${t('select.noGroup')}</option>
           ${opts}
         </select>
       </div>
       <div class="ed-field">
-        <label>Pilotes</label>
+        <label>${t('editor.roster.pilotsLabel')}</label>
         <div class="roster-pilots-list"></div>
-        <button type="button" class="ed-btn-add" data-pilot-add="${gi}">+ Ajouter un pilote</button>
+        <button type="button" class="ed-btn-add" data-pilot-add="${gi}">${t('editor.roster.addPilot')}</button>
       </div>
     `;
     list.appendChild(card);
@@ -984,7 +1670,7 @@ function renderRoster() {
     });
 
     card.querySelector(`[data-grp-rm="${gi}"]`).addEventListener('click', () => {
-      if (!confirm('Supprimer ce groupe ?')) return;
+      if (!confirm(t('confirm.deleteGroup'))) return;
       state.roster.groups.splice(gi, 1);
       renderRoster(); schedulePreview();
     });
@@ -1012,7 +1698,7 @@ function renderPilots(container, gi) {
     const empty = document.createElement('div');
     empty.className = 'phase-empty';
     empty.style.fontSize = '11px';
-    empty.textContent = 'Aucun pilote.';
+    empty.textContent = t('editor.roster.noPilot');
     container.appendChild(empty);
     return;
   }
@@ -1021,8 +1707,8 @@ function renderPilots(container, gi) {
     const row = document.createElement('div');
     row.className = 'roster-pilot-row';
     row.innerHTML = `
-      <input type="text" class="rp-name"    placeholder="Nom / indicatif pilote" value="${escapeAttr(pilot.name || '')}">
-      <input type="text" class="rp-callsign" placeholder="Callsign"              value="${escapeAttr(pilot.callsign || '')}">
+      <input type="text" class="rp-name"    placeholder="${t('editor.roster.pilotPlaceholder')}" value="${escapeAttr(pilot.name || '')}">
+      <input type="text" class="rp-callsign" placeholder="${t('editor.roster.callsignPlaceholder')}" value="${escapeAttr(pilot.callsign || '')}">
       <button type="button" class="ed-btn-icon" data-pilot-rm="${pi}">×</button>
     `;
     container.appendChild(row);
@@ -1046,6 +1732,165 @@ const RADIO_AIRCRAFT_MAX = 6;
 const RADIO_RADIOS_MAX = 3;
 const RADIO_CHANNELS_MAX = 12;
 
+/* ============= BASE RADIO PAR APPAREIL (copie depuis Comm Plan Editor) =============
+   Synchroniser si CPE fait évoluer sa ACFT_RADIO_MAP.
+   Clé = type DCS, valeur = {slot: "Nom radio (bande)"}. */
+const ACFT_RADIO_MAP = {
+  // ─── Soviétiques / Russes ─────────────────────────────────────────────
+  "Mi-24P":      { 1: "R-863 (VHF/UHF)",   2: "R-828 (VHF FM)",      3: "Jadro-1I (HF)" },
+  "Mi-8MT":      { 1: "R-863 (VHF/UHF)",   2: "R-828 (VHF FM)",      3: "Jadro-1A (HF)" },
+  "Ka-50_3":     { 1: "R-800L1 (VHF/UHF)", 2: "R-828 (VHF FM)" },
+  "MiG-29A":     { 1: "R-862 (VHF/UHF)" },
+  "MiG-29S":     { 1: "R-862 (VHF/UHF)" },
+  "MiG-29G":     { 1: "R-862 (VHF/UHF)" },
+  "MiG-29 Fulcrum": { 1: "R-862 (VHF/UHF)" },
+  "MiG-21Bis":   { 1: "R-832M (VHF/UHF)" },
+  "MiG-15bis":   { 1: "RSI-6K (HF)" },
+  "Su-25T":      { 1: "R-862 (VHF/UHF)" },
+  "Su-27":       { 1: "R-862 (VHF/UHF)" },
+  "Su-33":       { 1: "R-862 (VHF/UHF)" },
+  // ─── OTAN — chasseurs ─────────────────────────────────────────────────
+  "F-5E-3":      { 1: "AN/ARC-164 (UHF)" },
+  "F-4E-45MC":   { 1: "AN/ARC-164(V) (UHF COMM)",     2: "AN/ARC-164 (UHF AUX)" },
+  "F-14B":       { 1: "AN/ARC-159 (UHF - COMM 1)",    2: "AN/ARC-182 (V/UHF - COMM 2)" },
+  "F-14A-135-GR":{ 1: "AN/ARC-159 (UHF - COMM 1)",    2: "AN/ARC-182 (V/UHF - COMM 2)" },
+  "F-14A-135-GR-Early": { 1: "AN/ARC-159 (UHF - COMM 1)", 2: "AN/ARC-182 (V/UHF - COMM 2)" },
+  "F-15C":       { 1: "AN/ARC-164 (UHF)" },
+  "F-15ESE":     { 1: "AN/ARC-164 (UHF - COMM 1)",    2: "AN/ARC-186 (V/UHF - COMM 2)" },
+  "F-16C_50":    { 1: "AN/ARC-164 (UHF - COMM 1)",    2: "AN/ARC-222 (V/UHF - COMM 2)" },
+  "FA-18C_hornet":{ 1: "AN/ARC-210 (V/UHF - COMM 1)", 2: "AN/ARC-210 (V/UHF - COMM 2)" },
+  "JF-17":       { 1: "R&S M3AR (V/UHF - COMM 1)",    2: "R&S M3AR (V/UHF - COMM 2)" },
+  // ─── OTAN — Mirage F1 ─────────────────────────────────────────────────
+  "Mirage-F1CE": { 1: "TRAP 138 (UHF - Principale)",  2: "TRAP 139 (V/UHF - Auxiliaire)" },
+  "Mirage-F1BE": { 1: "TRAP 138 (UHF - Principale)",  2: "TRAP 139 (V/UHF - Auxiliaire)" },
+  "Mirage-F1CR": { 1: "TRAP 138 (UHF - Principale)",  2: "TRAP 139 (V/UHF - Auxiliaire)" },
+  "Mirage-F1EE": { 1: "TRAP 136 (V/UHF - Verte)",     2: "TRAP 137B (UHF - Rouge)" },
+  "Mirage-F1M":  { 1: "TRAP 136 (V/UHF - Verte)",     2: "TRAP 137B (UHF - Rouge)" },
+  "M-2000C":     { 1: "TRT ERA 7000 (V/UHF)",          2: "TRT ERA 7200 (UHF Auxiliaire)" },
+  // ─── Attaque / CAS ────────────────────────────────────────────────────
+  "A-10C":       { 1: "AN/ARC-186 (VHF AM)", 2: "AN/ARC-164 (UHF)",  3: "AN/ARC-186 (VHF FM)" },
+  "A-10C_2":     { 1: "AN/ARC-186 (VHF AM)", 2: "AN/ARC-164 (UHF)",  3: "AN/ARC-186 (VHF FM)" },
+  "AV8BNA":      { 1: "AN/ARC-210 (V/UHF - COMM 1)", 2: "AN/ARC-210 (V/UHF - COMM 2)" },
+  // ─── Hélicoptères OTAN ────────────────────────────────────────────────
+  "AH-64D_BLK_II": {
+    1: "AN/ARC-186 (VHF - COMM 1)", 2: "AN/ARC-164 (UHF - COMM 2)",
+    3: "AN/ARC-201D (FM1 - COMM 3)", 4: "AN/ARC-201D (FM2 - COMM 4)",
+    5: "AN/ARC-220 (HF - COMM 5)"
+  },
+  "CH-47Fbl1": {
+    1: "AN/ARC-186 (VHF AM/FM)", 2: "AN/ARC-164 (UHF AM)",
+    3: "AN/ARC-201D (VHF FM1)", 4: "AN/ARC-201D (VHF FM2)", 5: "AN/ARC-220 (HF)"
+  },
+  "UH-1H":       { 1: "AN/ARC-134 (VHF AM)", 2: "AN/ARC-131 (VHF FM)", 3: "AN/ARC-51BX (UHF)" },
+  "OH58D":       { 1: "AN/ARC-186 (VHF AM/FM)", 2: "AN/ARC-164 (UHF)", 3: "AN/ARC-201 (VHF FM)" },
+  // ─── Hélicoptères français — Gazelles ─────────────────────────────────
+  "SA342L":      { 1: "Manta TRAP 138 (V/UHF)", 2: "Manta TRAP 139 (V/UHF)" },
+  "SA342M":      { 1: "Manta TRAP 138 (V/UHF)", 2: "Manta TRAP 139 (V/UHF)" },
+  "SA342Minigun":{ 1: "Manta TRAP 138 (V/UHF)", 2: "Manta TRAP 139 (V/UHF)" },
+  "SA342Mistral":{ 1: "Manta TRAP 138 (V/UHF)", 2: "Manta TRAP 139 (V/UHF)" },
+  // ─── Transport ────────────────────────────────────────────────────────
+  "C-130J-30":   { 1: "AN/ARC-210 (V/UHF - COMM 1)", 2: "AN/ARC-210 (V/UHF - COMM 2)" },
+  "Hercules":    { 1: "AN/ARC-164 (UHF)", 2: "AN/ARC-186 (VHF)" },
+};
+
+/* Alias libellé BG (libre) → clé DCS de ACFT_RADIO_MAP.
+   Normalisation : toLowerCase().trim(), espaces/tirets condensés en espace simple.
+   Priorité : exact → alias → sous-chaîne → null. */
+const AIRCRAFT_RADIO_ALIAS = {
+  // Mi-24
+  "mi 24p": "Mi-24P", "mi24p": "Mi-24P", "mi-24p": "Mi-24P",
+  "mi 24": "Mi-24P",  "mi24":  "Mi-24P",  "hind":  "Mi-24P",
+  // Mi-8
+  "mi 8mt": "Mi-8MT", "mi8mt": "Mi-8MT", "mi-8mt": "Mi-8MT",
+  "mi 8": "Mi-8MT",   "mi8":   "Mi-8MT",  "hip":   "Mi-8MT",
+  // Ka-50
+  "ka 50": "Ka-50_3", "ka50": "Ka-50_3", "ka-50": "Ka-50_3", "hokum": "Ka-50_3",
+  // F-16
+  "f 16": "F-16C_50", "f16": "F-16C_50", "f-16": "F-16C_50", "viper": "F-16C_50",
+  "f 16c": "F-16C_50", "f16c": "F-16C_50",
+  // F-4
+  "f 4": "F-4E-45MC", "f4": "F-4E-45MC", "f-4": "F-4E-45MC",
+  "phantom": "F-4E-45MC", "f 4e": "F-4E-45MC", "f4e": "F-4E-45MC",
+  "f 4e phantom ii": "F-4E-45MC", "f-4e phantom ii": "F-4E-45MC",
+  // F-5
+  "f 5": "F-5E-3", "f5": "F-5E-3", "f-5": "F-5E-3",
+  "f 5e": "F-5E-3", "f5e": "F-5E-3", "tiger ii": "F-5E-3",
+  // F-15
+  "f 15e": "F-15ESE", "f15e": "F-15ESE", "f-15e": "F-15ESE",
+  "strike eagle": "F-15ESE", "f 15e strike eagle": "F-15ESE",
+  "f 15": "F-15C",  "f15":  "F-15C",  "f-15": "F-15C", "eagle": "F-15C",
+  // F-14
+  "f 14": "F-14B", "f14": "F-14B", "f-14": "F-14B", "tomcat": "F-14B",
+  "f 14b": "F-14B", "f14b": "F-14B",
+  // FA-18
+  "fa 18": "FA-18C_hornet", "fa18": "FA-18C_hornet", "fa-18": "FA-18C_hornet",
+  "f 18": "FA-18C_hornet",  "f18":  "FA-18C_hornet",  "hornet": "FA-18C_hornet",
+  "f/a 18": "FA-18C_hornet", "f/a18": "FA-18C_hornet",
+  // Mirage F1
+  "mirage f1": "Mirage-F1CE", "miragem f1": "Mirage-F1CE",
+  "f1": "Mirage-F1CE", "mirage f1ce": "Mirage-F1CE",
+  // M-2000
+  "m 2000": "M-2000C", "m2000": "M-2000C", "m-2000": "M-2000C",
+  "mirage 2000": "M-2000C", "mirage2000": "M-2000C",
+  // A-10
+  "a 10": "A-10C_2", "a10": "A-10C_2", "a-10": "A-10C_2",
+  "warthog": "A-10C_2", "hog": "A-10C_2",
+  // AH-64
+  "ah 64": "AH-64D_BLK_II", "ah64": "AH-64D_BLK_II", "ah-64": "AH-64D_BLK_II",
+  "apache": "AH-64D_BLK_II", "apache ah 64d": "AH-64D_BLK_II",
+  "ah 64d": "AH-64D_BLK_II", "ah-64d": "AH-64D_BLK_II",
+  // UH-1
+  "uh 1": "UH-1H", "uh1": "UH-1H", "uh-1": "UH-1H",
+  "huey": "UH-1H", "iroquois": "UH-1H",
+  // Gazelle
+  "gazelle": "SA342M", "sa342": "SA342M", "sa 342": "SA342M",
+  "sa342m": "SA342M", "sa 342m": "SA342M",
+  // MiG-29
+  "mig 29": "MiG-29S", "mig29": "MiG-29S", "mig-29": "MiG-29S", "fulcrum": "MiG-29S",
+  // MiG-21
+  "mig 21": "MiG-21Bis", "mig21": "MiG-21Bis", "mig-21": "MiG-21Bis", "fishbed": "MiG-21Bis",
+  // Su-25
+  "su 25": "Su-25T", "su25": "Su-25T", "su-25": "Su-25T", "frogfoot": "Su-25T",
+  // Su-27
+  "su 27": "Su-27", "su27": "Su-27", "su-27": "Su-27", "flanker": "Su-27",
+};
+
+function _normalizeAcft(name) {
+  return (name || '').toLowerCase().trim().replace(/[\s\-]+/g, ' ');
+}
+
+function resolveAircraftRadioKey(name) {
+  if (!name) return null;
+  // 1. Match exact
+  if (ACFT_RADIO_MAP[name]) return name;
+  const norm = _normalizeAcft(name);
+  // 2. Alias
+  if (AIRCRAFT_RADIO_ALIAS[norm]) return AIRCRAFT_RADIO_ALIAS[norm];
+  // 3. Sous-chaîne heuristique (clé contient le nom ou inversement)
+  const normLow = norm;
+  for (const key of Object.keys(ACFT_RADIO_MAP)) {
+    const keyNorm = _normalizeAcft(key);
+    if (keyNorm.includes(normLow) || normLow.includes(keyNorm)) return key;
+  }
+  return null;
+}
+
+// Catalogue complet dédupliqué + trié (repli appareil non reconnu)
+function getRadioCatalogue() {
+  const set = new Set();
+  for (const slots of Object.values(ACFT_RADIO_MAP)) {
+    for (const name of Object.values(slots)) set.add(name);
+  }
+  return Array.from(set).sort();
+}
+
+// Radios pour un appareil donné, ou null si non résolu
+function getRadiosForAircraft(name) {
+  const key = resolveAircraftRadioKey(name);
+  if (!key) return null;
+  return Object.values(ACFT_RADIO_MAP[key]);
+}
+
 function genId(prefix) {
   return prefix + '_' + Math.random().toString(36).slice(2, 8);
 }
@@ -1054,7 +1899,11 @@ function ensureRadioPlanShape() {
   if (!state.radioPlan) state.radioPlan = { items: [], aircraftPlans: [] };
   if (!Array.isArray(state.radioPlan.items)) state.radioPlan.items = [];
   if (!Array.isArray(state.radioPlan.aircraftPlans)) state.radioPlan.aircraftPlans = [];
-  state.radioPlan.items.forEach(it => { if (!it.id) it.id = genId('it'); });
+  // Migration silencieuse (2b) : items sans showOnOverview → cocher les ≤6 premiers
+  state.radioPlan.items.forEach((it, idx) => {
+    if (!it.id) it.id = genId('it');
+    if (it.showOnOverview === undefined) it.showOnOverview = idx < 6;
+  });
 }
 
 function renderRadioPlan() {
@@ -1069,30 +1918,58 @@ function renderRadioItems() {
   list.innerHTML = '';
   const items = state.radioPlan.items;
   const addBtn = document.getElementById('radio-item-add');
-  if (addBtn) addBtn.disabled = items.length >= RADIO_ITEMS_MAX;
+  if (addBtn) addBtn.disabled = false; // illimité — RADIO_ITEMS_MAX retiré (2b)
+
+  // Compteur showOnOverview (2b)
+  const checkedCount = items.filter(it => it.showOnOverview).length;
+
+  // Mise à jour du compteur dans le label de section (2b)
+  const sectionLabel = document.querySelector('[data-i18n="editor.radio.items"]');
+  if (sectionLabel) {
+    sectionLabel.textContent = t('editor.radio.items') + '  ' + checkedCount + '/6';
+  }
 
   items.forEach((it, i) => {
     const row = document.createElement('div');
     row.className = 'ed-radio-item-row';
+    const isChecked = it.showOnOverview;
+    // Désactiver si déjà 6 cochés et celui-ci n'est pas coché (2b)
+    const checkDisabled = !isChecked && checkedCount >= 6;
     row.innerHTML = `
-      <input type="text" data-ri-label placeholder="Libellé (ex: ATC)">
-      <input type="text" data-ri-freq placeholder="Fréq.">
+      <label class="ri-overview-check" title="${t('editor.radio.overviewCheckTooltip') || 'Afficher dans l\'aperçu (max 6)'}">
+        <input type="checkbox" data-ri-overview ${isChecked ? 'checked' : ''} ${checkDisabled ? 'disabled' : ''}>
+      </label>
+      <input type="text" data-ri-label placeholder="${t('editor.radio.labelEx')}">
+      <input type="text" data-ri-freq placeholder="${t('editor.radio.freqLabel')}">
       <select data-ri-mod>
         <option value="AM">AM</option>
         <option value="FM">FM</option>
       </select>
-      <button type="button" class="ed-btn-icon" data-ri-rm aria-label="Supprimer">×</button>
+      <button type="button" class="ed-btn-icon" data-ri-rm aria-label="${t('editor.phases.remove')}">×</button>
     `;
     row.querySelector('[data-ri-label]').value = it.label || '';
     row.querySelector('[data-ri-freq]').value = it.frequency || '';
     row.querySelector('[data-ri-mod]').value = it.modulation || 'AM';
 
+    row.querySelector('[data-ri-overview]').addEventListener('change', e => {
+      items[i].showOnOverview = e.target.checked;
+      renderRadioItems(); // re-render pour recalculer le compteur et les disabled (2b)
+      schedulePreview();
+    });
+    // Debounce pour éviter le jank avec beaucoup d'appareils/canaux (2a)
+    let _riDebounce = null;
+    const scheduleAircraftRefresh = () => {
+      clearTimeout(_riDebounce);
+      _riDebounce = setTimeout(() => renderRadioAircrafts(), 150);
+    };
     row.querySelector('[data-ri-label]').addEventListener('input', e => {
       items[i].label = e.target.value;
+      scheduleAircraftRefresh(); // met à jour les dropdowns en temps réel (2a)
       schedulePreview();
     });
     row.querySelector('[data-ri-freq]').addEventListener('input', e => {
       items[i].frequency = e.target.value;
+      scheduleAircraftRefresh(); // met à jour les dropdowns en temps réel (2a)
       schedulePreview();
     });
     row.querySelector('[data-ri-mod]').addEventListener('change', e => {
@@ -1119,7 +1996,7 @@ function renderRadioItems() {
   if (items.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'phase-empty';
-    empty.textContent = 'Aucun item radio. Touchez « + Ajouter un item ».';
+    empty.textContent = t('editor.radio.addItem');
     list.appendChild(empty);
   }
 }
@@ -1130,12 +2007,12 @@ function renderRadioAircrafts() {
   list.innerHTML = '';
   const plans = state.radioPlan.aircraftPlans;
   const addBtn = document.getElementById('radio-aircraft-add');
-  if (addBtn) addBtn.disabled = plans.length >= RADIO_AIRCRAFT_MAX;
+  if (addBtn) addBtn.disabled = false; // illimité — RADIO_AIRCRAFT_MAX retiré (2a)
 
   if (plans.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'phase-empty';
-    empty.textContent = 'Aucun appareil configuré. Touchez « + Ajouter un appareil ».';
+    empty.textContent = t('editor.radio.addAircraft');
     list.appendChild(empty);
     return;
   }
@@ -1144,29 +2021,29 @@ function renderRadioAircrafts() {
     const card = document.createElement('div');
     card.className = 'ed-phase-card';
     card.innerHTML = `
-      <div class="phase-num">APPAREIL ${ai + 1}</div>
-      <button type="button" class="phase-rm" data-ap-rm="${ai}">Suppr.</button>
-      <div class="ed-field"><label>Type d'appareil</label>
+      <div class="phase-num">${t('editor.phases.aircraftSigle')} ${ai + 1}</div>
+      <button type="button" class="phase-rm" data-ap-rm="${ai}">${t('editor.imgCard.remove')}</button>
+      <div class="ed-field"><label>${t('editor.phases.aircraft')}</label>
         <select data-ap-aircraft="${ai}">
           ${getAllAircraft().map(a => `<option value="${escapeAttr(a)}">${escapeHtml(a)}</option>`).join('')}
-          <option value="__custom__">— Autre (libre) —</option>
+          <option value="__custom__">${t('select.customAircraft')}</option>
         </select>
       </div>
       <div class="ed-field" data-ap-custom-wrap="${ai}" style="display:none;">
-        <label>Nom personnalisé</label>
+        <label>${t('editor.radio.customName')}</label>
         <input type="text" data-ap-custom="${ai}">
       </div>
       <div class="ed-field">
-        <label>Image radio (optionnelle — remplace la table)</label>
+        <label>${t('editor.radio.helpAircraft').substring(0, 35)}...</label>
         <label class="ed-img-zone" data-img-bind="radioPlan.aircraftPlans.${ai}.image">
           <input type="file" accept="image/*">
-          <span class="img-text">▲ CHARGER IMAGE ▲</span>
+          <span class="img-text" data-i18n="editor.imgZone.tap">▲ CHARGER IMAGE ▲</span>
         </label>
       </div>
       <div class="ed-field" data-radios-wrap="${ai}">
-        <label>Radios &amp; canaux</label>
+        <label>${t('editor.radio.radiosChannelsLabel')}</label>
         <div data-radios-list="${ai}"></div>
-        <button type="button" class="ed-btn-add" data-radio-add="${ai}">+ Ajouter une radio</button>
+        <button type="button" class="ed-btn-add" data-radio-add="${ai}">${t('editor.radio.addRadio')}</button>
       </div>
     `;
     list.appendChild(card);
@@ -1202,7 +2079,7 @@ function renderRadioAircrafts() {
     });
 
     card.querySelector(`[data-ap-rm="${ai}"]`).addEventListener('click', () => {
-      if (!confirm(`Supprimer la configuration radio de l'appareil ${ai + 1} ?`)) return;
+      if (!confirm(t('confirm.deleteRadioAc') + ' ' + (ai + 1) + ' ?')) return;
       plans.splice(ai, 1);
       renderRadioAircrafts();
       schedulePreview();
@@ -1215,7 +2092,7 @@ function renderRadioAircrafts() {
       const note = document.createElement('div');
       note.className = 'ed-help';
       note.style.color = 'var(--amber)';
-      note.textContent = '⚠ Image fournie : la table sera remplacée par l\'image dans le briefing.';
+      note.textContent = t('editor.radio.imgNote');
       radiosWrap.insertBefore(note, radiosWrap.firstChild);
     }
 
@@ -1225,7 +2102,7 @@ function renderRadioAircrafts() {
     card.querySelector(`[data-radio-add="${ai}"]`).addEventListener('click', () => {
       if (!plans[ai].radios) plans[ai].radios = [];
       if (plans[ai].radios.length >= RADIO_RADIOS_MAX) return;
-      plans[ai].radios.push({ name: 'R-???', channels: [] });
+      plans[ai].radios.push({ name: '', channels: [] }); // champ vide → combobox datalist (P0)
       renderRadioAircrafts();
       schedulePreview();
     });
@@ -1240,13 +2117,18 @@ function renderAircraftRadios(container, ai) {
   (ap.radios || []).forEach((r, ri) => {
     const block = document.createElement('div');
     block.className = 'ed-radio-block';
+    // Combobox nom radio : filtré par appareil ou catalogue complet (B.4)
+    const dlId = `dl-radio-${ai}-${ri}`;
+    const radioOptions = getRadiosForAircraft(ap.aircraft) || getRadioCatalogue();
+    const datalistHtml = `<datalist id="${dlId}">${radioOptions.map(n => `<option value="${escapeAttr(n)}">`).join('')}</datalist>`;
     block.innerHTML = `
       <div class="ed-radio-block-head">
-        <input type="text" data-r-name placeholder="Nom radio (R-863, UHF, ...)">
-        <button type="button" class="ed-btn-icon" data-r-rm aria-label="Supprimer radio">×</button>
+        ${datalistHtml}
+        <input type="text" list="${dlId}" data-r-name placeholder="${t('editor.radio.radioName')}">
+        <button type="button" class="ed-btn-icon" data-r-rm aria-label="${t('editor.radio.delChanAriaLabel')}">×</button>
       </div>
       <div data-channels-list class="ed-channels-list"></div>
-      <button type="button" class="ed-btn-add ed-btn-add-sm" data-channel-add>+ Canal</button>
+      <button type="button" class="ed-btn-add ed-btn-add-sm" data-channel-add>${t('editor.radio.addChannel')}</button>
     `;
     block.querySelector('[data-r-name]').value = r.name || '';
     block.querySelector('[data-r-name]').addEventListener('input', e => {
@@ -1291,7 +2173,7 @@ function renderChannels(container, ai, ri) {
     toggleBtn.type = 'button';
     toggleBtn.className = 'ed-ch-toggle' + (isCustom ? ' is-custom' : '');
     toggleBtn.textContent = isCustom ? 'FR' : 'IT';
-    toggleBtn.title = isCustom ? 'Fréquence libre — tap pour passer en Item global' : 'Item global — tap pour passer en Fréquence libre';
+    toggleBtn.title = isCustom ? t('editor.radio.freeFreqTooltip') : t('editor.radio.globalItemTooltip');
     toggleBtn.addEventListener('click', () => {
       if (ch.mode === 'custom') {
         ch.mode = 'item';
@@ -1310,7 +2192,7 @@ function renderChannels(container, ai, ri) {
     // Channel number input
     const chNumInput = document.createElement('input');
     chNumInput.type = 'number';
-    chNumInput.placeholder = 'Ch.';
+    chNumInput.placeholder = t('editor.radio.chLabel');
     chNumInput.min = '0';
     chNumInput.value = ch.channel ?? '';
     chNumInput.addEventListener('input', e => {
@@ -1324,7 +2206,7 @@ function renderChannels(container, ai, ri) {
       // Label input
       const labelInput = document.createElement('input');
       labelInput.type = 'text';
-      labelInput.placeholder = 'Libellé';
+      labelInput.placeholder = t('editor.radio.chanLabel');
       labelInput.value = ch.label || '';
       labelInput.addEventListener('input', e => { ch.label = e.target.value; schedulePreview(); });
       row.appendChild(labelInput);
@@ -1332,7 +2214,7 @@ function renderChannels(container, ai, ri) {
       // Frequency input
       const freqInput = document.createElement('input');
       freqInput.type = 'text';
-      freqInput.placeholder = 'Fréq.';
+      freqInput.placeholder = t('editor.radio.chanFreq');
       freqInput.value = ch.frequency || '';
       freqInput.addEventListener('input', e => { ch.frequency = e.target.value; schedulePreview(); });
       row.appendChild(freqInput);
@@ -1345,8 +2227,8 @@ function renderChannels(container, ai, ri) {
       row.appendChild(modSel);
     } else {
       // Item select
-      const opts = ['<option value="">— Item —</option>']
-        .concat(items.map(it => `<option value="${escapeAttr(it.id)}">${escapeHtml(it.label || '?')}</option>`))
+      const opts = [`<option value="">${t('select.noItem')}</option>`]
+        .concat(items.map(it => `<option value="${escapeAttr(it.id)}">${escapeHtml(it.label || it.frequency || '\u2014')}</option>`))
         .join('');
       const itemSel = document.createElement('select');
       itemSel.innerHTML = opts;
@@ -1359,7 +2241,7 @@ function renderChannels(container, ai, ri) {
     const rmBtn = document.createElement('button');
     rmBtn.type = 'button';
     rmBtn.className = 'ed-btn-icon';
-    rmBtn.setAttribute('aria-label', 'Supprimer canal');
+    rmBtn.setAttribute('aria-label', t('editor.radio.delChanAriaLabel'));
     rmBtn.textContent = '×';
     rmBtn.addEventListener('click', () => {
       r.channels.splice(ci, 1);
@@ -1423,22 +2305,22 @@ function renderPhaseEditor() {
 
   if (total === 0) {
     indicator.innerHTML = `<strong>0</strong> / 0`;
-    container.innerHTML = `<div class="phase-empty">Aucune mission définie.<br>Touchez <strong>+</strong> pour ajouter une mission.</div>`;
+    container.innerHTML = `<div class="phase-empty">${t('editor.phases.noMission')}<br>${t('editor.phases.addFirst')}</div>`;
     return;
   }
 
-  indicator.innerHTML = `Mission <strong>${currentPhaseIdx + 1}</strong> / ${total}`;
+  indicator.innerHTML = `${t('editor.phases.indicatorLabel')} <strong>${currentPhaseIdx + 1}</strong> / ${total}`;
 
   const ph = state.phases[currentPhaseIdx];
   const i = currentPhaseIdx;
 
   // Build squadron options — known + guest option
-  const sqOptions = ['<option value="">— Aucun escadron —</option>']
+  const sqOptions = [`<option value="">${t('select.noSquadron')}</option>`]
     .concat(wingConfig.squadrons.map(s => {
       const aircraftLabel = s.aircraft.length === 1 ? s.aircraft[0] : s.aircraft.join(' / ');
       return `<option value="${s.id}">${escapeHtml(s.id)} ${escapeHtml(s.callsign)} — ${escapeHtml(aircraftLabel)}</option>`;
     }))
-    .concat(['<option value="__guest__">— Escadron invité... —</option>'])
+    .concat([`<option value="__guest__">${t('editor.phases.guestOption')}</option>`])
     .join('');
 
   const isGuest = ph.squadron === '__guest__';
@@ -1449,7 +2331,7 @@ function renderPhaseEditor() {
   if (showAircraftSelector) {
     const acOpts = selectedSq.aircraft.map(a => `<option value="${escapeAttr(a)}">${escapeHtml(a)}</option>`).join('');
     aircraftSelectorHtml = `
-      <div class="ed-field"><label>Appareil utilisé</label>
+      <div class="ed-field"><label>${t('editor.phases.aircraft')}</label>
         <select id="pf-aircraft">${acOpts}</select>
       </div>`;
   }
@@ -1458,51 +2340,53 @@ function renderPhaseEditor() {
   const guestData = ph.guestSquadron || { name: '', subgroup: '', aircraft: '' };
   const guestFieldsHtml = isGuest ? `
     <div class="ed-guest-fields">
-      <div class="ed-field"><label>Nom de l'escadron</label>
-        <input id="pf-guest-name" type="text" value="${escapeAttr(guestData.name)}" placeholder="Ex: WOLF">
+      <div class="ed-field"><label>${t('editor.phases.guestName')}</label>
+        <input id="pf-guest-name" type="text" value="${escapeAttr(guestData.name)}" placeholder="${t('placeholder.guestName')}">
       </div>
-      <div class="ed-field"><label>Nom du groupe</label>
-        <input id="pf-guest-sub" type="text" value="${escapeAttr(guestData.subgroup)}" placeholder="Ex: WOLF 1 (optionnel)">
+      <div class="ed-field"><label>${t('editor.phases.guestSub')}</label>
+        <input id="pf-guest-sub" type="text" value="${escapeAttr(guestData.subgroup)}" placeholder="${t('placeholder.guestName')} 1 ${t('placeholder.optional')}">
       </div>
-      <div class="ed-field"><label>Type d'appareil</label>
-        <input id="pf-guest-aircraft" type="text" value="${escapeAttr(guestData.aircraft)}" placeholder="Ex: F-16CM">
+      <div class="ed-field"><label>${t('editor.phases.guestAircraft')}</label>
+        <input id="pf-guest-aircraft" type="text" value="${escapeAttr(guestData.aircraft)}" placeholder="${t('placeholder.guestAircraft')}">
       </div>
     </div>` : '';
 
   container.innerHTML = `
-    <div class="ed-field"><label>Titre de la mission</label><input id="pf-title" type="text" value="${escapeAttr(ph.title || '')}"></div>
-    <div class="ed-field"><label>Escadron affecté</label>
+    <div class="ed-field"><label>${t('editor.phases.title')}</label><input id="pf-title" type="text" value="${escapeAttr(ph.title || '')}"></div>
+    <div class="ed-field"><label>${t('editor.phases.squadron')}</label>
       <select id="pf-squadron">${sqOptions}</select>
     </div>
     ${guestFieldsHtml}
     ${aircraftSelectorHtml}
-    <div class="ed-field"><label>Sous-groupe <span class="ed-label-hint">(optionnel)</span></label>
-      <input id="pf-subgroup" type="text" value="${escapeAttr(ph.subgroup || '')}" placeholder="Ex: ANTON, CAESAR, WOLF 2...">
+    <div class="ed-field"><label>${t('editor.phases.subgroup')} <span class="ed-label-hint">${t('editor.phases.subgroupHint')}</span></label>
+      <input id="pf-subgroup" type="text" value="${escapeAttr(ph.subgroup || '')}" placeholder="${t('placeholder.subgroup')}">
     </div>
-    <div class="ed-field"><label>Objectif</label><textarea id="pf-objective" rows="3">${escapeHtml(ph.objective || '')}</textarea></div>
+    <div class="ed-field"><label>${t('editor.phases.objective')}</label><textarea id="pf-objective" rows="3">${escapeHtml(ph.objective || '')}</textarea></div>
     <div class="ed-field">
-      <label>Étapes d'exécution</label>
+      <label>${t('editor.phases.execSteps')}</label>
       <div class="ed-list" id="phase-exec-list"></div>
-      <button type="button" class="ed-btn-add" id="phase-exec-add">+ Ajouter une étape</button>
+      <button type="button" class="ed-btn-add" id="phase-exec-add">${t('editor.phases.addStep')}</button>
     </div>
     <div class="ed-field-row">
-      <div class="ed-field"><label>Plan de vol</label><input id="pf-flightPlan" type="text" value="${escapeAttr(ph.flightPlan || '')}"></div>
-      <div class="ed-field"><label>Niveau de menace</label>
+      <div class="ed-field"><label>${t('editor.phases.flightPlan')}</label><input id="pf-flightPlan" type="text" value="${escapeAttr(ph.flightPlan || '')}"></div>
+      <div class="ed-field"><label>${t('editor.phases.threatLevel')}</label>
         <select id="pf-threatLevel">
-          <option>Faible</option><option>Modéré</option><option>Élevé</option>
+          <option value="low" data-i18n="threatLevel.low">Faible</option>
+          <option value="moderate" data-i18n="threatLevel.moderate">Modéré</option>
+          <option value="high" data-i18n="threatLevel.high">Élevé</option>
         </select>
       </div>
     </div>
-    <div class="ed-field"><label>Notes / repères tactiques</label><textarea id="pf-notes" rows="3">${escapeHtml(ph.notes || '')}</textarea></div>
+    <div class="ed-field"><label>${t('editor.phases.notes')}</label><textarea id="pf-notes" rows="3">${escapeHtml(ph.notes || '')}</textarea></div>
     <div class="ed-field">
-      <label>Images de mission (pages dédiées, 2 par page)</label>
+      <label>${t('editor.phases.images')}</label>
       <div class="ed-img-list" id="phase-images-list"></div>
-      <button type="button" class="ed-btn-add" id="phase-img-add">+ Ajouter une image</button>
+      <button type="button" class="ed-btn-add" id="phase-img-add">${t('editor.phases.addImage')}</button>
     </div>
   `;
 
   // Set select values
-  container.querySelector('#pf-threatLevel').value = ph.threatLevel || 'Faible';
+  container.querySelector('#pf-threatLevel').value = ph.threatLevel || 'low';
   container.querySelector('#pf-squadron').value = ph.squadron || '';
   if (showAircraftSelector) {
     container.querySelector('#pf-aircraft').value = ph.aircraft || selectedSq.aircraft[0];
@@ -1575,6 +2459,9 @@ function renderPhaseEditor() {
     renderPhaseImages(container.querySelector('#phase-images-list'), i);
     schedulePreview();
   });
+
+  // Traduire les options data-i18n injectées dynamiquement (threatLevel)
+  applyI18nStatic();
 }
 
 /* ============= PHASE IMAGES EDITOR ============= */
@@ -1588,7 +2475,7 @@ function renderPhaseImages(listEl, phaseIdx) {
   if (imgs.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'phase-empty';
-    empty.textContent = 'Aucune image. Toucher « + Ajouter une image ».';
+    empty.textContent = t('editor.phases.noImage');
     listEl.appendChild(empty);
     return;
   }
@@ -1599,24 +2486,24 @@ function renderPhaseImages(listEl, phaseIdx) {
     // Use distinct class names instead of shared data-k attribute to avoid querySelector ambiguity
     card.innerHTML = `
       <div class="ed-img-card-num">IMAGE ${k + 1}</div>
-      <button type="button" class="ed-img-card-rm" data-card-rm="${k}">Suppr.</button>
+      <button type="button" class="ed-img-card-rm" data-card-rm="${k}">${t('editor.imgCard.remove')}</button>
       <div class="ed-field" style="margin-top:8px;">
-        <label>Titre / tâche associée</label>
-        <input type="text" class="img-title-inp" value="${escapeAttr(img.title)}" placeholder="Ex: Route d'approche — Attaque ERCAN">
+        <label>${t('editor.phases.imgTitle')}</label>
+        <input type="text" class="img-title-inp" value="${escapeAttr(img.title)}" placeholder="${t('placeholder.imgTitle')}">
       </div>
       <div class="ed-field">
-        <label>Image</label>
+        <label>${t('editor.image.label')}</label>
         <label class="ed-img-zone ${img.data ? 'has-img' : ''}" data-phase-img-zone="${phaseIdx}-${k}">
           <input type="file" accept="image/*">
           ${img.data
             ? `<img src="${img.data}" alt="Image ${k + 1}">`
-            : '<span class="img-text">▲ TOUCHER POUR CHARGER ▲</span>'}
+            : `<span class="img-text">${t('editor.imgZone.tapShort')}</span>`}
           ${img.data ? `<button type="button" class="img-rm">×</button>` : ''}
         </label>
       </div>
       <div class="ed-field">
-        <label>Commentaire / légende</label>
-        <textarea class="img-caption-inp" rows="2" placeholder="Commentaire optionnel affiché sous l'image">${escapeHtml(img.caption)}</textarea>
+        <label>${t('editor.phases.imgCaption')}</label>
+        <textarea class="img-caption-inp" rows="2" placeholder="${t('editor.phases.imgCaptionPlaceholder')}">${escapeHtml(img.caption)}</textarea>
       </div>
     `;
     listEl.appendChild(card);
@@ -1658,7 +2545,7 @@ function renderPhaseImages(listEl, phaseIdx) {
         renderPhaseImages(listEl, phaseIdx);
         schedulePreview();
       } catch (err) {
-        showToast('Erreur : ' + err.message);
+        showToast(t('toast.imageError') + err.message);
       }
       e.target.value = '';
     });
@@ -1677,12 +2564,20 @@ function renderPhaseImages(listEl, phaseIdx) {
   });
 }
 
-/* Normalize threatLevel to canonical 3-value set */
+/* Normalize threatLevel to canonical keys: 'low' | 'moderate' | 'high'
+   Migre les anciennes valeurs textuelles FR (Faible/Modéré/Élevé) et legacy
+   (Danger, Important) vers les clés canoniques. */
 function normalizeThreatLevel(lvl) {
-  const k = (lvl || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  if (k.includes('elev') || k.includes('danger') || k.includes('important')) return 'Élevé';
-  if (k.includes('moder')) return 'Modéré';
-  return 'Faible';
+  if (!lvl) return 'low';
+  // Déjà canonique
+  if (lvl === 'low' || lvl === 'moderate' || lvl === 'high') return lvl;
+  // Migration exacte depuis la table
+  if (THREAT_LEGACY_MAP[lvl]) return THREAT_LEGACY_MAP[lvl];
+  // Correspondance floue (anciens briefings) — normalisation accentuée
+  const k = lvl.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  if (k.includes('elev') || k.includes('danger') || k.includes('important') || k.includes('critiqu')) return 'high';
+  if (k.includes('moder')) return 'moderate';
+  return 'low';
 }
 
 /* Normalize phase images: migrate legacy mapImage → images[] */
@@ -1690,7 +2585,7 @@ function normalizePhaseImages(ph) {
   if (!Array.isArray(ph.images)) ph.images = [];
   // Migrate legacy single mapImage field
   if (ph.mapImage && ph.images.length === 0) {
-    ph.images = [{ title: 'Carte phase', data: ph.mapImage, caption: '' }];
+    ph.images = [{ title: t('phase.defaultMapTitle'), data: ph.mapImage, caption: '' }];
   }
   // Ensure each entry has all fields
   ph.images = ph.images.map(img => ({
@@ -1745,7 +2640,7 @@ function renderCharts() {
   if (charts.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'phase-empty';
-    empty.textContent = 'Aucune chart. Toucher \u00ab\u00a0+ Ajouter une chart\u00a0\u00bb.';
+    empty.textContent = t('editor.charts.noChart');
     listEl.appendChild(empty);
     return;
   }
@@ -1755,18 +2650,18 @@ function renderCharts() {
     card.className = 'ed-img-card';
     card.innerHTML = `
       <div class="ed-img-card-num">CHART ${k + 1}</div>
-      <button type="button" class="ed-img-card-rm" data-chart-rm="${k}">Suppr.</button>
+      <button type="button" class="ed-img-card-rm" data-chart-rm="${k}">${t('editor.imgCard.remove')}</button>
       <div class="ed-field" style="margin-top:8px;">
-        <label>Nom de l\u2019a\u00e9roport / chart</label>
-        <input type="text" class="chart-name-inp" value="${escapeAttr(chart.name)}" placeholder="Ex: AKROTIRI (LCRA) \u2014 Piste 10">
+        <label>${t('editor.charts.airportLabel')}</label>
+        <input type="text" class="chart-name-inp" value="${escapeAttr(chart.name)}" placeholder="${t('placeholder.chartName')}">
       </div>
       <div class="ed-field">
-        <label>Image</label>
+        <label>${t('editor.image.label')}</label>
         <label class="ed-img-zone ${chart.img ? 'has-img' : ''}" data-chart-img-zone="${k}">
           <input type="file" accept="image/*">
           ${chart.img
             ? `<img src="${chart.img}" alt="Chart ${k + 1}">`
-            : '<span class="img-text">\u25b2 TOUCHER POUR CHARGER \u25b2</span>'}
+            : `<span class="img-text">${t('editor.imgZone.tapShort')}</span>`}
           ${chart.img ? `<button type="button" class="img-rm">\u00d7</button>` : ''}
         </label>
       </div>
@@ -1797,15 +2692,15 @@ function renderCharts() {
     fileInp.addEventListener('change', async e => {
       const f = e.target.files[0];
       if (!f) return;
-      showToast('Compression image...');
+      showToast(t('toast.imageCompressing'));
       try {
         const { dataUrl } = await compressImageFile(f);
         state.charts[k].img = dataUrl;
         renderCharts();
         schedulePreview();
-        showToast('Image chargée ✓');
+        showToast(t('toast.imageLoaded'));
       } catch (err) {
-        showToast('Erreur : ' + err.message);
+        showToast(t('toast.imageError') + err.message);
       }
       e.target.value = '';
     });
@@ -1831,7 +2726,7 @@ function renderAnnexes() {
   if (annexes.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'phase-empty';
-    empty.textContent = 'Aucune annexe. Toucher \u00ab\u00a0+ Ajouter une annexe\u00a0\u00bb.';
+    empty.textContent = t('editor.annexes.noAnnex');
     listEl.appendChild(empty);
     return;
   }
@@ -1840,25 +2735,25 @@ function renderAnnexes() {
     const card = document.createElement('div');
     card.className = 'ed-img-card';
     card.innerHTML = `
-      <div class="ed-img-card-num">ANNEXE ${k + 1}</div>
-      <button type="button" class="ed-img-card-rm" data-annexe-rm="${k}">Suppr.</button>
+      <div class="ed-img-card-num">${t('editor.annexes.numSigle')} ${k + 1}</div>
+      <button type="button" class="ed-img-card-rm" data-annexe-rm="${k}">${t('editor.imgCard.remove')}</button>
       <div class="ed-field" style="margin-top:8px;">
-        <label>Titre</label>
-        <input type="text" class="annexe-title-inp" value="${escapeAttr(annexe.title)}" placeholder="Ex: Notes additionnelles">
+        <label>${t('editor.annexes.titleLabel')}</label>
+        <input type="text" class="annexe-title-inp" value="${escapeAttr(annexe.title)}" placeholder="${t('placeholder.annexeTitle')}">
       </div>
       <div class="ed-field">
-        <label>Image</label>
+        <label>${t('editor.image.label')}</label>
         <label class="ed-img-zone ${annexe.img ? 'has-img' : ''}" data-annexe-img-zone="${k}">
           <input type="file" accept="image/*">
           ${annexe.img
             ? `<img src="${annexe.img}" alt="Annexe ${k + 1}">`
-            : '<span class="img-text">\u25b2 TOUCHER POUR CHARGER \u25b2</span>'}
+            : `<span class="img-text">${t('editor.imgZone.tapShort')}</span>`}
           ${annexe.img ? `<button type="button" class="img-rm">\u00d7</button>` : ''}
         </label>
       </div>
       <div class="ed-field">
-        <label>Commentaire / l\u00e9gende</label>
-        <textarea class="annexe-caption-inp" rows="2" placeholder="Commentaire optionnel affich\u00e9 sous l'image">${escapeHtml(annexe.caption)}</textarea>
+        <label>${t('editor.annexes.captionLabel')}</label>
+        <textarea class="annexe-caption-inp" rows="2" placeholder="${t('editor.annexes.captionPlaceholder')}">${escapeHtml(annexe.caption)}</textarea>
       </div>
     `;
     listEl.appendChild(card);
@@ -1894,15 +2789,15 @@ function renderAnnexes() {
     fileInp.addEventListener('change', async e => {
       const f = e.target.files[0];
       if (!f) return;
-      showToast('Compression image...');
+      showToast(t('toast.imageCompressing'));
       try {
         const { dataUrl } = await compressImageFile(f);
         state.annexes[k].img = dataUrl;
         renderAnnexes();
         schedulePreview();
-        showToast('Image chargée ✓');
+        showToast(t('toast.imageLoaded'));
       } catch (err) {
-        showToast('Erreur : ' + err.message);
+        showToast(t('toast.imageError') + err.message);
       }
       e.target.value = '';
     });
@@ -1917,6 +2812,478 @@ function renderAnnexes() {
       });
     }
   });
+}
+
+
+/* ============= CLOUD PRESETS TABLE (copie depuis Weather Editor — re-sync si WX évolue) ============= */
+const CLOUD_PRESETS_BG = {
+  'Preset1':'FEW',  'Preset2':'FEW',
+  'Preset3':'SCT',  'Preset4':'SCT',  'Preset5':'SCT',  'Preset6':'SCT',
+  'Preset7':'SCT',  'Preset8':'SCT',  'Preset9':'SCT',  'Preset10':'SCT',
+  'Preset11':'SCT', 'Preset12':'SCT',
+  'Preset13':'BKN', 'Preset14':'BKN', 'Preset15':'BKN', 'Preset16':'BKN',
+  'Preset17':'BKN', 'Preset18':'BKN', 'Preset19':'BKN', 'Preset20':'BKN',
+  'Preset21':'OVC', 'Preset22':'OVC', 'Preset23':'OVC', 'Preset24':'OVC',
+  'Preset25':'OVC', 'Preset26':'OVC', 'Preset27':'OVC',
+  'RainyPreset4':'SCT',  'NEWRAINPRESET4':'SCT',
+  'RainyPreset5':'BKN',
+  'RainyPreset1':'OVC',  'RainyPreset2':'OVC',  'RainyPreset3':'OVC', 'RainyPreset6':'OVC',
+};
+
+/* ============= ASSISTANT METAR — 10A (formulaire) + 10C (import .miz) ============= */
+
+function _randomAirportIcao() {
+  const airports = (state.mission.farp || []).filter(a => typeof a === 'object' && !a.isFarp && a.icao);
+  if (!airports.length) return '';
+  return airports[Math.floor(Math.random() * airports.length)].icao;
+}
+
+function buildMetarString(p) {
+  let s = '';
+  if (p.icao)  s += p.icao.toUpperCase() + ' ';
+  if (p.ddhhmm) s += p.ddhhmm + 'Z ';
+  // Vent
+  if (p.calm)       s += '00000KT ';
+  else if (p.vrb)   s += 'VRB' + String(p.windSpd||0).padStart(2,'0') + 'KT ';
+  else {
+    const dir = String(p.windDir||0).padStart(3,'0');
+    const spd = String(p.windSpd||0).padStart(2,'0');
+    const gust = p.windGust ? 'G' + String(p.windGust).padStart(2,'0') : '';
+    s += dir + spd + gust + 'KT ';
+  }
+  // Visibilité
+  if (p.cavok) s += 'CAVOK ';
+  else {
+    const vis = p.visibility;
+    if (!vis || vis >= 10000) s += '9999 ';
+    else s += String(vis) + ' ';
+    // Phénomènes
+    if (p.phenomena && p.phenomena.length) s += p.phenomena.join('') + ' ';
+    // Nuages
+    if (p.cloudCover && p.cloudCover !== 'NSC') {
+      const base = String(Math.round((p.cloudBase||1500)/30.48)).padStart(3,'0');
+      s += p.cloudCover + base + ' ';
+    } else if (p.cloudCover === 'NSC') s += 'NSC ';
+  }
+  // Temp/rosée
+  const temp = p.temp != null ? (p.temp < 0 ? 'M' + String(Math.abs(p.temp)).padStart(2,'0') : String(p.temp).padStart(2,'0')) : 'XX';
+  const dew  = p.dew  != null ? (p.dew  < 0 ? 'M' + String(Math.abs(p.dew)).padStart(2,'0')  : String(p.dew).padStart(2,'0'))  : 'XX';
+  s += temp + '/' + dew + ' ';
+  // QNH
+  if (p.qnh) {
+    if (p.qnhInHg) s += 'A' + Math.round(p.qnh * 100) + ' ';
+    else           s += 'Q' + Math.round(p.qnh) + ' ';
+  }
+  return s.trim();
+}
+
+function parseMetarString(str) {
+  if (!str) return null;
+  try {
+    const p = { icao:'', ddhhmm:'', calm:false, vrb:false, windDir:0, windSpd:0, windGust:null,
+                cavok:false, visibility:9999, phenomena:[], cloudCover:'SCT', cloudBase:1500,
+                temp:20, dew:15, qnh:1013, qnhInHg:false };
+    const parts = str.trim().split(/\s+/);
+    let i = 0;
+    // ICAO
+    if (/^[A-Z]{4}$/.test(parts[i])) { p.icao = parts[i++]; }
+    // DDhhmmZ
+    if (/^\d{6}Z$/.test(parts[i])) { p.ddhhmm = parts[i++].replace('Z',''); }
+    // Vent
+    if (parts[i]) {
+      const wm = parts[i].match(/^(\d{3}|VRB)(\d{2,3})(?:G(\d{2,3}))?KT$/);
+      if (wm) {
+        if (wm[1]==='VRB') p.vrb=true;
+        else { p.windDir=parseInt(wm[1]); if(p.windDir===0 && parseInt(wm[2])===0) p.calm=true; }
+        p.windSpd=parseInt(wm[2]);
+        if(wm[3]) p.windGust=parseInt(wm[3]);
+        i++;
+      }
+    }
+    // CAVOK/visibilité
+    if (parts[i]==='CAVOK') { p.cavok=true; i++; }
+    else if (/^\d{4}$/.test(parts[i])) { p.visibility=parseInt(parts[i++]); }
+    // Phénomènes (RA SN BR FG TS DU SA avec intensité)
+    const phRe = /^[-+]?(RA|SN|BR|FG|TS|DU|SA)$/;
+    while (parts[i] && phRe.test(parts[i])) { p.phenomena.push(parts[i++]); }
+    // Nuages
+    const cloudRe = /^(FEW|SCT|BKN|OVC|NSC)(\d{3})?$/;
+    if (parts[i] && cloudRe.test(parts[i])) {
+      const cm = parts[i].match(cloudRe);
+      p.cloudCover = cm[1];
+      if(cm[2]) p.cloudBase = parseInt(cm[2])*30.48;
+      i++;
+    }
+    // Temp/dew
+    if (parts[i] && /^M?\d+\/M?\d+$/.test(parts[i])) {
+      const td = parts[i].split('/');
+      p.temp = parseInt(td[0].replace('M','-').replace(/^-/,v=>v));
+      if(td[0].startsWith('M')) p.temp = -parseInt(td[0].slice(1));
+      p.dew  = parseInt(td[1].replace('M','-'));
+      if(td[1].startsWith('M')) p.dew = -parseInt(td[1].slice(1));
+      i++;
+    }
+    // QNH
+    if (parts[i] && /^Q\d{4}$/.test(parts[i])) { p.qnh=parseInt(parts[i++].slice(1)); }
+    else if (parts[i] && /^A\d{4}$/.test(parts[i])) { p.qnh=parseInt(parts[i++].slice(1))/100; p.qnhInHg=true; }
+    return p;
+  } catch(e) { return null; }
+}
+
+function _missionDateToDDhhmm(mdate) {
+  // mdate = { Year, Day, Month } + state.missionDate.startTime (secondes depuis minuit)
+  // On extrait DD et hhmm depuis la date mission si disponible
+  try {
+    if (mdate && mdate.Day) {
+      const dd = String(mdate.Day).padStart(2,'0');
+      const sec = mdate.startTime || 0;
+      const hh = String(Math.floor(sec/3600)).padStart(2,'0');
+      const mm = String(Math.floor((sec%3600)/60)).padStart(2,'0');
+      return dd + hh + mm;
+    }
+  } catch(e) {}
+  return '';
+}
+
+let _metarParams = null;
+
+function openMetarAssistant() {
+  const panel = document.getElementById('metar-assistant-panel');
+  if (!panel) return;
+  panel.style.display = '';
+  panel.open = true;
+  // Initialiser les params depuis le champ METAR existant ou defaults
+  const existing = state.sitac && state.sitac.metar;
+  let params = existing ? parseMetarString(existing) : null;
+  if (!params) {
+    params = {
+      icao: _randomAirportIcao(), ddhhmm:'', calm:false, vrb:false,
+      windDir:270, windSpd:8, windGust:null,
+      cavok:true, visibility:9999, phenomena:[], cloudCover:'SCT', cloudBase:1500,
+      temp:20, dew:15, qnh:1013, qnhInHg:false
+    };
+    if (existing) {
+      // Avertir parsing échoué mais ne pas écraser le champ
+      console.warn('METAR Assistant: parse failed, starting fresh');
+    }
+  }
+  if (!params.icao) params.icao = _randomAirportIcao();
+  _metarParams = params;
+  renderMetarAssistant(params);
+}
+
+function renderMetarAssistant(p) {
+  const cont = document.getElementById('metar-assistant-content');
+  if (!cont) return;
+  const preview = buildMetarString(p);
+  cont.innerHTML = `
+    <div class="metar-form">
+      <div class="metar-row">
+        <div class="metar-field"><label>ICAO</label>
+          <input id="ma-icao" type="text" value="${escapeAttr(p.icao||'')}" placeholder="LCRA" maxlength="4"></div>
+        <div class="metar-field"><label>DDhhmmZ</label>
+          <input id="ma-ddhhmm" type="text" value="${escapeAttr(p.ddhhmm||'')}" placeholder="250700" maxlength="6"></div>
+      </div>
+      <div class="metar-row">
+        <label class="metar-check-label"><input id="ma-calm" type="checkbox" ${p.calm?'checked':''}> Calme (00000KT)</label>
+        <label class="metar-check-label"><input id="ma-vrb" type="checkbox" ${p.vrb?'checked':''}> VRB</label>
+        <div class="metar-field"><label>Dir °</label>
+          <input id="ma-wdir" type="number" min="0" max="360" value="${p.windDir||0}" ${p.calm||p.vrb?'disabled':''}></div>
+        <div class="metar-field"><label>Vit kt</label>
+          <input id="ma-wspd" type="number" min="0" max="99" value="${p.windSpd||0}" ${p.calm?'disabled':''}></div>
+        <div class="metar-field" id="ma-gust-wrap">
+          <label>Rafales kt</label>
+          <input id="ma-gust" type="number" min="0" max="99" value="${p.windGust||''}" placeholder="—"></div>
+      </div>
+      <div class="metar-row">
+        <label class="metar-check-label"><input id="ma-cavok" type="checkbox" ${p.cavok?'checked':''}> CAVOK</label>
+        <div class="metar-field" ${p.cavok?'style="display:none"':''} id="ma-vis-wrap">
+          <label>Visibilité m</label>
+          <input id="ma-vis" type="number" min="0" max="9999" value="${p.cavok?9999:p.visibility}"></div>
+      </div>
+      <div class="metar-row" id="ma-clouds-wrap" ${p.cavok?'style="display:none"':''}>
+        <div class="metar-field"><label>Nuages</label>
+          <select id="ma-cloud">
+            ${['NSC','FEW','SCT','BKN','OVC'].map(c=>`<option value="${c}" ${p.cloudCover===c?'selected':''}>${c}</option>`).join('')}
+          </select></div>
+        <div class="metar-field" id="ma-base-wrap" ${p.cloudCover==='NSC'?'style="display:none"':''}>
+          <label>Base ft</label>
+          <input id="ma-base" type="number" min="0" step="100" value="${Math.round(p.cloudBase/0.3048/100)*100||1500}"></div>
+      </div>
+      <div class="metar-row">
+        <div class="metar-field"><label>Temp °C</label>
+          <input id="ma-temp" type="number" min="-50" max="50" value="${p.temp!=null?p.temp:20}"></div>
+        <div class="metar-field"><label>Rosée °C</label>
+          <input id="ma-dew" type="number" min="-50" max="50" value="${p.dew!=null?p.dew:15}"></div>
+        <div class="metar-field"><label>QNH hPa</label>
+          <input id="ma-qnh" type="number" min="900" max="1100" value="${p.qnhInHg?Math.round(p.qnh*33.864):p.qnh||1013}"></div>
+      </div>
+      <details class="metar-more">
+        <summary>▸ Plus</summary>
+        <div class="metar-row" style="flex-wrap:wrap;gap:6px;">
+          ${['RA','SN','BR','FG','TS','DU','SA'].map(ph=>`<label class="metar-check-label"><input type="checkbox" class="ma-phenom" value="${ph}" ${(p.phenomena||[]).includes(ph)?'checked':''}> ${ph}</label>`).join('')}
+        </div>
+      </details>
+      <div class="metar-preview-line">${escapeHtml(preview)}</div>
+      <div class="metar-actions">
+        <button type="button" class="ed-btn-add" id="ma-import-miz">📥 Importer .miz</button>
+        <input type="file" id="ma-miz-input" accept=".miz" style="display:none">
+        <button type="button" class="ed-btn-add" id="ma-insert">✔ Insérer dans METAR</button>
+      </div>
+    </div>
+  `;
+
+  // Wirer les événements
+  const update = () => {
+    _metarParams = _readMetarForm();
+    const prev = document.querySelector('.metar-preview-line');
+    if (prev) prev.textContent = buildMetarString(_metarParams);
+  };
+
+  const fields = ['ma-icao','ma-ddhhmm','ma-wdir','ma-wspd','ma-gust','ma-vis','ma-base','ma-temp','ma-dew','ma-qnh'];
+  fields.forEach(id => { const el=document.getElementById(id); if(el) el.addEventListener('input', update); });
+  ['ma-calm','ma-vrb','ma-cavok','ma-cloud'].forEach(id => {
+    const el=document.getElementById(id); if(el) el.addEventListener('change', () => { _metarParams=_readMetarForm(); renderMetarAssistant(_metarParams); });
+  });
+  document.querySelectorAll('.ma-phenom').forEach(cb => cb.addEventListener('change', update));
+
+  document.getElementById('ma-insert').addEventListener('click', () => {
+    const newMetar = buildMetarString(_metarParams);
+    if (state.sitac && state.sitac.metar && state.sitac.metar.trim() && state.sitac.metar.trim() !== newMetar) {
+      if (!confirm(t('editor.sitac.metarOverwrite'))) return;
+    }
+    state.sitac.metar = newMetar;
+    // Mettre à jour le champ data-bind
+    const inp = document.querySelector('[data-bind="sitac.metar"]');
+    if (inp) inp.value = newMetar;
+    schedulePreview();
+    document.getElementById('metar-assistant-panel').open = false;
+  });
+
+  // Import .miz (10C)
+  document.getElementById('ma-import-miz').addEventListener('click', () => {
+    document.getElementById('ma-miz-input').click();
+  });
+  document.getElementById('ma-miz-input').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      await _importMizToMetar(file);
+    } catch(err) {
+      alert('Erreur lecture .miz : ' + err.message);
+    }
+    e.target.value = '';
+  });
+}
+
+function _readMetarForm() {
+  const g = id => document.getElementById(id);
+  const v = id => { const el=g(id); return el?el.value:''; };
+  const c = id => { const el=g(id); return el?el.checked:false; };
+  const n = id => { const el=g(id); const val=parseFloat(el&&el.value); return isNaN(val)?0:val; };
+  const calm = c('ma-calm'), vrb = c('ma-vrb'), cavok = c('ma-cavok');
+  const cloud = v('ma-cloud');
+  const phenom = [...document.querySelectorAll('.ma-phenom:checked')].map(cb=>cb.value);
+  return {
+    icao:     v('ma-icao').toUpperCase().slice(0,4),
+    ddhhmm:   v('ma-ddhhmm').slice(0,6),
+    calm, vrb,
+    windDir:  n('ma-wdir'), windSpd:  n('ma-wspd'),
+    windGust: v('ma-gust') ? n('ma-gust') : null,
+    cavok, visibility: n('ma-vis'),
+    phenomena: phenom,
+    cloudCover: cloud,
+    cloudBase:  n('ma-base') * 0.3048,
+    temp:  n('ma-temp'), dew: n('ma-dew'),
+    qnh:   n('ma-qnh'), qnhInHg: false
+  };
+}
+
+async function _importMizToMetar(file) {
+  // Confirmation si des champs sont déjà remplis
+  if (_metarParams && (_metarParams.windSpd > 0 || _metarParams.cavok === false)) {
+    if (!confirm(t('editor.sitac.metarMizOverwrite'))) return;
+  }
+  // Lecture JSZip (déjà embarqué)
+  const buf = await file.arrayBuffer();
+  const zip  = await JSZip.loadAsync(buf);
+  const missionFile = zip.file('mission');
+  if (!missionFile) throw new Error('Fichier "mission" absent du .miz');
+  const lua = await missionFile.async('string');
+
+  // --- Parsing par regex tolérantes ---
+  function extractNum(re, def) {
+    const m = lua.match(re);
+    return m ? parseFloat(m[1]) : def;
+  }
+  function extractStr(re, def) {
+    const m = lua.match(re);
+    return m ? m[1] : def;
+  }
+
+  // Vent : direction (dir au sol → vient de = (dir+180)%360), vitesse m/s → kt
+  const windDirMiz = extractNum(/\["atGround"\][\s\S]*?\["dir"\]\s*=\s*([\d.]+)/, 0);
+  const windSpdMs  = extractNum(/\["atGround"\][\s\S]*?\["speed"\]\s*=\s*([\d.]+)/, 0);
+  const windDir = Math.round((windDirMiz + 180) % 360);
+  const windSpd = Math.round(windSpdMs * 1.944);
+
+  // QNH : mmHg → hPa
+  const qnhMmhg = extractNum(/\["qnh"\]\s*=\s*([\d.]+)/, 760);
+  const qnh = Math.round(qnhMmhg * 1.333);
+
+  // Visibilité : m ; ≥10000 → CAVOK
+  const visM = extractNum(/\["distance"\]\s*=\s*([\d.]+)/, 9999);
+  const cavok = visM >= 10000;
+
+  // Température °C
+  const temp = Math.round(extractNum(/\["temperature"\]\s*=\s*(-?[\d.]+)/, 15));
+
+  // Nuages : preset → FEW/SCT/BKN/OVC
+  const presetId = extractStr(/\["preset"\]\s*=\s*"([^"]+)"/, '');
+  let cloudCover = 'SCT';
+  let cloudBase  = 1500; // ft par défaut
+  if (presetId && CLOUD_PRESETS_BG[presetId]) {
+    const fam = CLOUD_PRESETS_BG[presetId];
+    cloudCover = fam.replace(/\+RA$/,'').replace(/\+R$/,''); // enlever +RA pour code METAR
+  } else if (!presetId) {
+    // Pas de preset : density → couverture approximative
+    const density = extractNum(/\["density"\]\s*=\s*([\d]+)/, 0);
+    if      (density === 0) cloudCover = 'NSC';
+    else if (density <= 3)  cloudCover = 'FEW';
+    else if (density <= 6)  cloudCover = 'SCT';
+    else if (density <= 8)  cloudCover = 'BKN';
+    else                    cloudCover = 'OVC';
+  }
+  // Base nuages : m → ft
+  const baseM = extractNum(/\["base"\]\s*=\s*([\d.]+)/, 457.2); // ~1500ft
+  cloudBase = Math.round(baseM / 0.3048);
+
+  // Brouillard/brume → phénomènes
+  const phenomena = [];
+  const fogEnabled = /\["enable_fog"\]\s*=\s*true/.test(lua);
+  if (fogEnabled) {
+    const fogVis = extractNum(/\["fog"\][\s\S]*?\["visibility"\]\s*=\s*([\d]+)/, 9999);
+    if (fogVis < 1000) phenomena.push('FG');
+    else if (fogVis < 5000) phenomena.push('BR');
+  }
+  // Dust/Sand
+  if (/\["dust_density"\]\s*=\s*(?!0)/.test(lua)) phenomena.push('DU');
+
+  // Date/heure mission → DDhhmmZ
+  const mDay    = extractNum(/\["Day"\]\s*=\s*([\d]+)/, 1);
+  const startSec = extractNum(/\["start_time"\]\s*=\s*([\d]+)/, 0);
+  const hh = String(Math.floor(startSec/3600)).padStart(2,'0');
+  const mm = String(Math.floor((startSec%3600)/60)).padStart(2,'0');
+  const ddhhmm = String(Math.round(mDay)).padStart(2,'0') + hh + mm;
+
+  // ICAO = aléatoire parmi aérodromes non-FARP du briefing (pas dans le .miz)
+  const icao = _randomAirportIcao() || '';
+
+  const params = {
+    icao, ddhhmm,
+    calm: windSpd === 0, vrb: false,
+    windDir, windSpd, windGust: null,
+    cavok, visibility: Math.min(visM, 9999),
+    phenomena, cloudCover, cloudBase,
+    temp, dew: Math.max(temp - 5, -30),
+    qnh, qnhInHg: false
+  };
+  _metarParams = params;
+  renderMetarAssistant(params);
+}
+
+/* ============= AÉRODROMES STRUCTURÉS (Partie 1 — 10B-lite) =============
+   Copie de re-sync : si le modèle évolue, mettre à jour ici aussi.
+   migration : string → objet (pattern annexes→charts). */
+
+function migrateAirfieldStrings() {
+  if (!state.mission) return;
+  if (!Array.isArray(state.mission.farp)) return;
+  state.mission.farp = state.mission.farp.map(f => {
+    if (typeof f === 'object' && f !== null) return f; // déjà objet
+    // Migration string → objet
+    const str = String(f).trim();
+    const obj = { icao: '', name: '', isFarp: /^(FARP|FOB)\b/i.test(str), rwy: '', atc: false };
+    // Séparer sur ' – ' / ' - ' / ':'
+    const sepMatch = str.match(/^(.+?)(?:\s*[–\-:]\s*(?:Piste en service\s*[:\-]?\s*|Cap D\/A\s*[:\-]?\s*)?)?(\d+)?(.*)$/i);
+    if (sepMatch) {
+      obj.name = (sepMatch[1] || str).trim();
+      if (sepMatch[2]) obj.rwy = sepMatch[2].trim();
+    } else {
+      obj.name = str;
+    }
+    return obj;
+  });
+}
+
+function renderAirfields() {
+  migrateAirfieldStrings();
+  const list = document.getElementById('airfields-list');
+  if (!list) return;
+  list.innerHTML = '';
+  const items = state.mission.farp || [];
+
+  items.forEach((af, i) => {
+    const row = document.createElement('div');
+    row.className = 'ed-airfield-row';
+    const isFarp = !!af.isFarp;
+    const rwyLabel = isFarp ? t('editor.mission.rwyFarp') : t('editor.mission.rwyAirport');
+    row.innerHTML = `
+      <input type="text" class="af-icao" placeholder="ICAO" value="${escapeAttr(af.icao || '')}" ${isFarp ? 'disabled' : ''}>
+      <label class="af-farp-check" title="${t('editor.mission.farpCheck')}">
+        <input type="checkbox" class="af-farp" ${isFarp ? 'checked' : ''}> ${t('editor.mission.farpCheck')}
+      </label>
+      <input type="text" class="af-name" placeholder="${t('editor.mission.name')}" value="${escapeAttr(af.name || '')}">
+      <input type="text" class="af-rwy" placeholder="${rwyLabel}" value="${escapeAttr(af.rwy || '')}">
+      <label class="af-atc-check" title="${t('editor.mission.atc')}">
+        <input type="checkbox" class="af-atc" ${af.atc ? 'checked' : ''}> ${t('editor.mission.atc')}
+      </label>
+      <button type="button" class="ed-btn-icon af-rm" aria-label="${t('editor.imgCard.remove')}">×</button>
+    `;
+
+    const icaoInp = row.querySelector('.af-icao');
+    const farpChk = row.querySelector('.af-farp');
+    const nameInp = row.querySelector('.af-name');
+    const rwyInp  = row.querySelector('.af-rwy');
+    const atcChk  = row.querySelector('.af-atc');
+    const rmBtn   = row.querySelector('.af-rm');
+
+    farpChk.addEventListener('change', e => {
+      items[i].isFarp = e.target.checked;
+      if (e.target.checked) { items[i].icao = ''; }
+      renderAirfields(); schedulePreview();
+    });
+    icaoInp.addEventListener('input', e => { items[i].icao = e.target.value; schedulePreview(); });
+    nameInp.addEventListener('input', e => { items[i].name = e.target.value; schedulePreview(); });
+    rwyInp.addEventListener('input',  e => { items[i].rwy  = e.target.value; schedulePreview(); });
+    atcChk.addEventListener('change', e => { items[i].atc  = e.target.checked; schedulePreview(); });
+    rmBtn.addEventListener('click', () => { items.splice(i, 1); renderAirfields(); schedulePreview(); });
+
+    list.appendChild(row);
+  });
+
+  if (items.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'phase-empty';
+    empty.textContent = t('editor.mission.addFarp');
+    list.appendChild(empty);
+  }
+}
+
+function renderAirfieldPreviewItems() {
+  const items = (state.mission.farp || []).filter(f => typeof f === 'object' && f !== null);
+  if (!items.length) return '';
+  return items.map(af => {
+    const parts = [];
+    if (!af.isFarp && af.icao) parts.push(escapeHtml(af.icao));
+    parts.push(escapeHtml(af.name || '—'));
+    if (af.rwy) {
+      const label = af.isFarp ? t('preview.capLabel') : 'RWY';
+      parts.push(label + ' ' + escapeHtml(af.rwy));
+    }
+    parts.push(af.atc ? t('preview.atc') : t('preview.autoinfo'));
+    return '<li>' + parts.join(' — ') + '</li>';
+  }).join('');
 }
 
 function renderPhaseExec(container, phaseIdx) {
@@ -1983,7 +3350,7 @@ function renderPhaseExec(container, phaseIdx) {
       subRow.className = 'ed-subtask-row';
       const subInp = document.createElement('input');
       subInp.type = 'text'; subInp.value = sub;
-      subInp.placeholder = `Sous-tâche ${String.fromCharCode(97 + k)}`;
+      subInp.placeholder = `${t('editor.phases.subtaskPlaceholder')} ${String.fromCharCode(97 + k)}`;
       subInp.addEventListener('input', () => { steps[j].subtasks[k] = subInp.value; schedulePreview(); });
       const subRm = document.createElement('button');
       subRm.type = 'button'; subRm.className = 'ed-btn-icon'; subRm.textContent = '×';
@@ -1998,7 +3365,7 @@ function renderPhaseExec(container, phaseIdx) {
 
     const addSubBtn = document.createElement('button');
     addSubBtn.type = 'button'; addSubBtn.className = 'ed-btn-subtask-add';
-    addSubBtn.textContent = '+ Sous-tâche';
+    addSubBtn.textContent = t('editor.phases.addSubtask');
     addSubBtn.addEventListener('click', () => {
       steps[j].subtasks.push('');
       renderPhaseExec(container, phaseIdx); schedulePreview();
@@ -2015,9 +3382,9 @@ function refreshImgZone(zone) {
   const url = getByPath(state, path);
   zone.classList.toggle('has-img', !!url);
   if (url) {
-    zone.innerHTML = `<input type="file" accept="image/*"><img src="${url}" alt="Image chargée"><button type="button" class="img-rm" aria-label="Retirer l'image">×</button>`;
+    zone.innerHTML = `<input type="file" accept="image/*"><img src="${url}" alt="Image chargée"><button type="button" class="img-rm" aria-label="${t('editor.imgZone.removeImageAria')}">×</button>`;
   } else {
-    zone.innerHTML = `<input type="file" accept="image/*"><span class="img-text">▲ TOUCHER POUR CHARGER ▲</span>`;
+    zone.innerHTML = `<input type="file" accept="image/*"><span class="img-text">${t('editor.imgZone.tapShort')}</span>`;
   }
   bindImgZoneEvents(zone);
 }
@@ -2028,15 +3395,15 @@ function bindImgZoneEvents(zone) {
   fileInput.addEventListener('change', async e => {
     const f = e.target.files[0];
     if (!f) return;
-    showToast('Compression image...');
+    showToast(t('toast.imageCompressing'));
     try {
       const { dataUrl } = await compressImageFile(f);
       setByPath(state, path, dataUrl);
       refreshImgZone(zone);
       schedulePreview();
-      showToast('Image chargée ✓');
+      showToast(t('toast.imageLoaded'));
     } catch (err) {
-      showToast('Erreur : ' + err.message);
+      showToast(t('toast.imageError') + err.message);
     }
     e.target.value = '';
   });
@@ -2081,8 +3448,8 @@ function bindEditorEvents() {
   });
   document.getElementById('phase-add').addEventListener('click', () => {
     state.phases.push({
-      title: 'Nouvelle mission', objective: '', execution: [],
-      flightPlan: '', threatLevel: 'Faible', notes: '', images: [],
+      title: t('phase.newTitle'), objective: '', execution: [],
+      flightPlan: '', threatLevel: 'low', notes: '', images: [],
       squadron: '', aircraft: '', subgroup: '',
       guestSquadron: { name: '', subgroup: '', aircraft: '' }
     });
@@ -2092,7 +3459,7 @@ function bindEditorEvents() {
   document.getElementById('phase-dup').addEventListener('click', () => {
     if (state.phases.length === 0) return;
     const cloned = JSON.parse(JSON.stringify(state.phases[currentPhaseIdx]));
-    cloned.title = cloned.title + ' (copie)';
+    cloned.title = cloned.title + t('editor.phases.dupSuffix');
     state.phases.splice(currentPhaseIdx + 1, 0, cloned);
     currentPhaseIdx++;
     renderPhaseEditor(); renderRoster(); schedulePreview();
@@ -2115,7 +3482,7 @@ function bindEditorEvents() {
   });
   document.getElementById('phase-rm').addEventListener('click', () => {
     if (state.phases.length === 0) return;
-    if (!confirm(`Supprimer la mission ${currentPhaseIdx + 1} ?`)) return;
+    if (!confirm(t('confirm.deletePhase') + ' ' + (currentPhaseIdx + 1) + ' ?')) return;
     state.phases.splice(currentPhaseIdx, 1);
     if (currentPhaseIdx >= state.phases.length) currentPhaseIdx = Math.max(0, state.phases.length - 1);
     renderPhaseEditor(); renderRoster();
@@ -2134,12 +3501,15 @@ function bindEditorEvents() {
   });
   document.getElementById('radio-item-add').addEventListener('click', () => {
     ensureRadioPlanShape();
-    if (state.radioPlan.items.length >= RADIO_ITEMS_MAX) return;
+    // Plafond RADIO_ITEMS_MAX supprimé — items illimités (2b)
+    // Initialiser showOnOverview selon qu'il reste de la place (2b)
+    const checkedCount = state.radioPlan.items.filter(it => it.showOnOverview).length;
     state.radioPlan.items.push({
       id: genId('it'),
       label: '',
       frequency: '',
-      modulation: 'AM'
+      modulation: 'AM',
+      showOnOverview: checkedCount < 6
     });
     renderRadioPlan();
     schedulePreview();
@@ -2148,7 +3518,7 @@ function bindEditorEvents() {
   // Radio plan: add aircraft button
   document.getElementById('radio-aircraft-add').addEventListener('click', () => {
     ensureRadioPlanShape();
-    if (state.radioPlan.aircraftPlans.length >= RADIO_AIRCRAFT_MAX) return;
+    // Plafond RADIO_AIRCRAFT_MAX supprimé — nombre d'appareils illimité (2a)
     state.radioPlan.aircraftPlans.push({
       aircraft: getAllAircraft()[0] || '',
       radios: [],
@@ -2156,6 +3526,14 @@ function bindEditorEvents() {
     });
     renderRadioAircrafts();
     schedulePreview();
+  });
+  document.getElementById('metar-assistant-btn').addEventListener('click', () => {
+    openMetarAssistant();
+  });
+  document.getElementById('airfield-add').addEventListener('click', () => {
+    if (!state.mission.farp) state.mission.farp = [];
+    state.mission.farp.push({ icao:'', name:'', isFarp:false, rwy:'', atc:false });
+    renderAirfields(); schedulePreview();
   });
   document.getElementById('chart-add').addEventListener('click', () => {
     state.charts.push({ name: '', img: '' });
@@ -2167,7 +3545,7 @@ function bindEditorEvents() {
     renderAnnexes();
     schedulePreview();
   });
-  bindWingEditorEvents();  // wire wing editor (called once at init)
+  // P1.B: wing binding moved to bindWingImportEvent() (called from init)
 }
 
 /* ============= PREVIEW ============= */
@@ -2192,7 +3570,7 @@ function pageHeader(opts) {
     <header class="p-header">
       <div class="p-header-logo" role="img" aria-label="${escapeAttr(wingConfig.wing.shortName)}" style="background-image:url('${wingConfig.wing.logo}')"></div>
       <div class="p-title">
-        <div class="p-classif">${escapeHtml(state.meta.classification)}</div>
+        <div class="p-classif">${escapeHtml(t('classif.' + state.meta.classification, state.meta.classification))}</div>
         <h1>${escapeHtml(wingConfig.wing.shortName)} ░ BRIEFING</h1>
         <div class="p-sub">OPÉRATION ${escapeHtml(state.meta.operation)} • MISSION ${escapeHtml(state.meta.mission)}</div>
       </div>
@@ -2205,7 +3583,7 @@ function pageFooter(pageNum, totalPages) {
   return `
     <footer class="p-footer">
       <span>${escapeHtml(state.meta.docRef)}</span>
-      <span class="p-classif-foot">${escapeHtml(state.meta.classification)}</span>
+      <span class="p-classif-foot">${escapeHtml(t('classif.' + state.meta.classification, state.meta.classification))}</span>
       <span>PAGE ${pageNum.toString().padStart(2, '0')} / ${totalPages.toString().padStart(2, '0')}</span>
     </footer>
   `;
@@ -2213,7 +3591,7 @@ function pageFooter(pageNum, totalPages) {
 
 function imgFrame(label, url) {
   if (url) return `<div class="p-imgframe" data-label="${escapeAttr(label)}"><img src="${url}" alt="${escapeAttr(label)}"></div>`;
-  return `<div class="p-imgframe empty" data-label="${escapeAttr(label)}"></div>`;
+  return `<div class="p-imgframe empty" data-label="${escapeAttr(label)}" data-empty-label="${escapeAttr(t('preview.noMapProvided'))}"></div>`;
 }
 
 function pageMeta() {
@@ -2226,16 +3604,18 @@ function formatMissionDate(d) {
   try {
     const dt = new Date(d);
     if (isNaN(dt)) return d;
-    return dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const locale = CURRENT_LANG === 'fr' ? 'fr-FR' : 'en-GB';  // en-GB : DD/MM/YYYY, format OTAN-conforme
+    return dt.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
   } catch { return d; }
 }
 
 /* ============= RADIO RENDER HELPERS ============= */
 function renderRadioSummary() {
   ensureRadioPlanShape();
-  const items = (state.radioPlan.items || []).filter(it => it.label || it.frequency);
+  // Aperçu page 3 : uniquement les items showOnOverview (2b)
+  const items = (state.radioPlan.items || []).filter(it => it.showOnOverview && (it.label || it.frequency));
   if (items.length === 0) {
-    return '<div class="empty-placeholder">Aucun item radio défini</div>';
+    return '<div class="empty-placeholder">' + t('preview.noRadioItems') + '</div>';
   }
   return `<table class="radio-summary">
     ${items.map(it => `
@@ -2253,7 +3633,7 @@ function renderRadioTable(ap) {
   state.radioPlan.items.forEach(it => { itemsById[it.id] = it; });
   const radios = (ap.radios || []).filter(r => r.name || (r.channels && r.channels.length));
   if (radios.length === 0) {
-    return '<div class="empty-placeholder">Aucune radio configurée pour cet appareil</div>';
+    return '<div class="empty-placeholder">' + t('preview.noRadioConfig') + '</div>';
   }
   return radios.map(r => {
     const channels = (r.channels || []).filter(ch =>
@@ -2304,7 +3684,7 @@ function getPhaseSquadronInfo(ph) {
     const g = ph.guestSquadron || {};
     if (!g.name && !g.aircraft) return null;
     // The guest squadron name IS the squadron identifier (replaces "INVITÉ")
-    const guestName = g.name || 'INVITÉ';
+    const guestName = g.name || t('preview.guestFallback');
     return {
       id: guestName,          // guest name = squadron id (e.g. "WOLF")
       callsign: guestName,    // same — no separate callsign for guests
@@ -2333,12 +3713,12 @@ function buildPages() {
   pages.push({
     body: `
       <div class="p-section">OPÉRATION ${escapeHtml(state.meta.operation)}</div>
-      ${imgFrame('CARTE THÉÂTRE', state.cover.mapImage)}
+      ${imgFrame(t('preview.theaterMap'), state.cover.mapImage)}
       <div class="p-body" style="margin-top:14px;">
         ${(state.cover.narrative || '').split('\n').map(p => p.trim() ? `<p>${escapeHtml(p)}</p>` : '').join('')}
       </div>
-      <div class="stamp-classif">${escapeHtml(state.meta.classification)}</div>
-      <div class="stamp-receipt">REÇU LE<br>${escapeHtml(formatMissionDate(state.meta.date))}<br>${escapeHtml(wingConfig.wing.hqStamp || 'HQ ░ ' + wingConfig.wing.shortName)}</div>
+      <div class="stamp-classif">${escapeHtml(t('classif.' + state.meta.classification, state.meta.classification))}</div>
+      <div class="stamp-receipt">${t('preview.receivedOn')}<br>${escapeHtml(formatMissionDate(state.meta.date))}<br>${escapeHtml(wingConfig.wing.hqStamp || 'HQ ░ ' + wingConfig.wing.shortName)}</div>
     `
   });
 
@@ -2346,13 +3726,13 @@ function buildPages() {
   pages.push({
     body: `
       <div class="p-section">SITAC ░ ${escapeHtml(state.sitac.date || '—')}</div>
-      ${imgFrame('SITUATION TACTIQUE', state.sitac.mapImage)}
-      <div class="p-subsection">Points de Situation</div>
+      ${imgFrame(t('preview.sitacImgCaption'), state.sitac.mapImage)}
+      <div class="p-subsection">${t('preview.sitrepPoints')}</div>
       <ul class="p-bullets">
-        ${(state.sitac.points || []).filter(p=>p).map(p => `<li>${escapeHtml(p)}</li>`).join('') || '<li class="empty-placeholder">Aucun point renseigné</li>'}
+        ${(state.sitac.points || []).filter(p=>p).map(p => `<li>${escapeHtml(p)}</li>`).join('') || '<li class="empty-placeholder">' + t('preview.noPoints') + '</li>'}
       </ul>
-      <div class="p-subsection">METAR</div>
-      <div class="metar-line">${escapeHtml(state.sitac.metar || '— METAR NON RENSEIGNÉ —')}</div>
+      <div class="p-subsection">${t('preview.metar')}</div>
+      <div class="metar-line">${escapeHtml(state.sitac.metar || t('preview.metarMissing'))}</div>
     `
   });
 
@@ -2369,15 +3749,15 @@ function buildPages() {
 
   pages.push({
     body: `
-      <div class="p-section">APERÇU MISSION</div>
+      <div class="p-section">${t('preview.missionOverview')}</div>
 
-      <div class="p-subsection">Objectifs</div>
+      <div class="p-subsection">${t('preview.objectives')}</div>
       <ul class="p-bullets">
         ${(state.mission.objectives || []).filter(o=>o).map(o => `<li>${escapeHtml(o)}</li>`).join('')}
       </ul>
 
       ${engagedList.length ? `
-        <div class="p-subsection">Escadrons Engagés</div>
+        <div class="p-subsection">${t('preview.squadronsEngaged')}</div>
         <div class="squadron-grid">
           ${engagedList.map(e => {
             const info = e.info;
@@ -2395,7 +3775,7 @@ function buildPages() {
                 <div class="squadron-info">
                   <strong>${escapeHtml(info.id)} ░ ${escapeHtml(primaryName)}</strong>
                   <div class="squadron-aircraft">${escapeHtml(info.aircraft)}</div>
-                  <div class="squadron-phases">Mission${e.phases.length > 1 ? 's' : ''} ${e.phases.join(', ')}</div>
+                  <div class="squadron-phases">${e.phases.length > 1 ? t('preview.missionPlural') : t('preview.missionSingular')} ${e.phases.join(', ')}</div>
                 </div>
               </div>`;
           }).join('')}
@@ -2404,23 +3784,23 @@ function buildPages() {
 
       <div class="p-2col" style="margin-top:14px;">
         <div>
-          <div class="p-subsection">FARP & Aéroports</div>
+          <div class="p-subsection">${t('preview.farpAirports')}</div>
           <ul class="p-bullets">
-            ${(state.mission.farp || []).filter(f=>f).map(f => `<li>${escapeHtml(f)}</li>`).join('')}
+            ${renderAirfieldPreviewItems()}
           </ul>
         </div>
         <div>
-          <div class="p-subsection">Plan Radio</div>
+          <div class="p-subsection">${t('preview.radioPlan')}</div>
           ${renderRadioSummary()}
         </div>
       </div>
 
-      <div class="p-subsection">Menaces Identifiées</div>
+      <div class="p-subsection">${t('preview.threatsIdentified')}</div>
       <div class="menace-grid">
-        <div class="menace-cell"><strong>◣ Chars / MBT</strong>${escapeHtml(state.mission.threats.tanks || '—')}</div>
-        <div class="menace-cell"><strong>◣ APC / VBL</strong>${escapeHtml(state.mission.threats.apc || '—')}</div>
-        <div class="menace-cell"><strong>◣ AAA</strong>${escapeHtml(state.mission.threats.aaa || '—')}</div>
-        <div class="menace-cell"><strong>◣ SAM</strong>${escapeHtml(state.mission.threats.sam || '—')}</div>
+        <div class="menace-cell"><strong>${t('preview.threatTanks')}</strong>${escapeHtml(state.mission.threats.tanks || '—')}</div>
+        <div class="menace-cell"><strong>${t('preview.threatApc')}</strong>${escapeHtml(state.mission.threats.apc || '—')}</div>
+        <div class="menace-cell"><strong>${t('preview.threatAaa')}</strong>${escapeHtml(state.mission.threats.aaa || '—')}</div>
+        <div class="menace-cell"><strong>${t('preview.threatSam')}</strong>${escapeHtml(state.mission.threats.sam || '—')}</div>
       </div>
       ${state.mission.threats.note ? `<div class="txt-small" style="margin-top:6px;font-style:italic;">▲ ${escapeHtml(state.mission.threats.note)}</div>` : ''}
     `
@@ -2475,8 +3855,8 @@ function buildPages() {
                 ${renderGroupHead(right)}
               </tr>
               <tr class="rmt-row-cols">
-                <th>NOM / INDICATIF</th><th>CALLSIGN</th>
-                <th class="rmt-sep">NOM / INDICATIF</th><th>CALLSIGN</th>
+                <th>${t('preview.rosterName')}</th><th>${t('preview.rosterCallsign')}</th>
+                <th class="rmt-sep">${t('preview.rosterName')}</th><th>${t('preview.rosterCallsign')}</th>
               </tr>
             </thead>
             <tbody>
@@ -2487,7 +3867,7 @@ function buildPages() {
       };
 
       // Build all mega-tables (one per pair)
-      let body = '<div class="p-section">ÉQUIPAGE ░ ORDRE DE BATAILLE</div>';
+      let body = '<div class="p-section">' + t('preview.rosterPage') + '</div>';
       body += '<div class="roster-tables">';
       for (let i = 0; i < activeGroups.length; i += 2) {
         body += renderPair(activeGroups[i], activeGroups[i + 1]);
@@ -2532,20 +3912,20 @@ function buildPages() {
         <div class="phase-title">
           <span class="phase-num-tag">M${i + 1}</span>
           <span style="flex:1;">${escapeHtml(ph.title || '—')}</span>
-          <span class="threat-chip ${tcls}">⚠ ${escapeHtml(ph.threatLevel || '—')}</span>
+          <span class="threat-chip ${tcls}">⚠ ${escapeHtml(t('threatLevel.' + (ph.threatLevel || 'low'), ph.threatLevel || '—'))}</span>
         </div>
 
         <div class="phase-block">
-          <div class="phase-block-label">◆ Objectif</div>
+          <div class="phase-block-label">${t('preview.objective')}</div>
           <div>${escapeHtml(ph.objective || '—')}</div>
         </div>
 
         <div class="phase-block">
-          <div class="phase-block-label">◆ Exécution</div>
+          <div class="phase-block-label">${t('preview.execution')}</div>
           ${(() => {
             const steps = normalizeExecution(ph.execution);
             const nonEmpty = steps.filter(s => s.text);
-            if (!nonEmpty.length) return '<div class="empty-placeholder">Aucune étape</div>';
+            if (!nonEmpty.length) return '<div class="empty-placeholder">' + t('preview.noSteps') + '</div>';
             return `<ol class="p-bullets-num">${nonEmpty.map(s => {
               const subs = (s.subtasks || []).filter(st => st);
               const subsHtml = subs.length
@@ -2557,13 +3937,13 @@ function buildPages() {
         </div>
 
         <div class="phase-block">
-          <div class="phase-block-label">◆ Plan de Vol</div>
+          <div class="phase-block-label">${t('preview.flightPlan')}</div>
           <div style="font-family:var(--f-mono); letter-spacing:1px;">${escapeHtml(ph.flightPlan || '—')}</div>
         </div>
 
         ${ph.notes ? `
           <div class="phase-block">
-            <div class="phase-block-label">◆ Notes Tactiques</div>
+            <div class="phase-block-label">${t('preview.tacticalNotes')}</div>
             <div>${escapeHtml(ph.notes)}</div>
           </div>` : ''}
       `
@@ -2694,7 +4074,7 @@ function buildPages() {
         rightLogo: logoSrc,
         rightAlt: logoAlt,
         body: `
-          <div class="p-section">ANNEXE ░ PLAN RADIO ░ ${escapeHtml(titleLabel)}</div>
+          <div class="p-section">${t('preview.radioAnnexHeader')} ░ ${escapeHtml(titleLabel)}</div>
           ${bodyContent}
         `
       });
@@ -2718,15 +4098,15 @@ function buildPages() {
         const ap2 = ungroupedPlans[i + 1];
         pages.push({
           body: `
-            <div class="p-section">ANNEXE ░ PLAN RADIO</div>
+            <div class="p-section">${t('preview.radioAnnex')}</div>
             <div class="p-2col">
               <div>
-                <div class="p-subsection">${escapeHtml(ap1.aircraft || 'APPAREIL')}</div>
+                <div class="p-subsection">${escapeHtml(ap1.aircraft || t('editor.phases.aircraftSigle'))}</div>
                 ${ap1.image ? imgFrame(ap1.aircraft + ' — RADIO', ap1.image) : renderRadioTable(ap1)}
               </div>
               <div>
                 ${ap2 ? `
-                  <div class="p-subsection">${escapeHtml(ap2.aircraft || 'APPAREIL')}</div>
+                  <div class="p-subsection">${escapeHtml(ap2.aircraft || t('editor.phases.aircraftSigle'))}</div>
                   ${ap2.image ? imgFrame(ap2.aircraft + ' — RADIO', ap2.image) : renderRadioTable(ap2)}
                 ` : ''}
               </div>
@@ -2742,8 +4122,8 @@ function buildPages() {
     if (chart.img || chart.name) {
       pages.push({
         body: `
-          <div class="p-section">CHART ░ AÉROPORT ${idx + 1}</div>
-          <div class="p-subsection">${escapeHtml(chart.name || 'AÉROPORT')}</div>
+          <div class="p-section">${t('preview.chartPage')} ${idx + 1}</div>
+          <div class="p-subsection">${escapeHtml(chart.name || t('preview.airportFallback'))}</div>
           ${imgFrame('CHART OPS', chart.img)}
         `
       });
@@ -2767,11 +4147,9 @@ function buildPages() {
 }
 
 function threatClass(lvl) {
-  const k = (lvl || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  // Legacy values (Important, Danger) → Élevé
-  if (k.includes('danger') || k.includes('important')) return 't-eleve';
-  if (k.includes('elev') || k.includes('élev')) return 't-eleve';
-  if (k.includes('moder') || k.includes('modér')) return 't-modere';
+  // Opère sur les clés canoniques (low/moderate/high)
+  if (lvl === 'high')     return 't-eleve';
+  if (lvl === 'moderate') return 't-modere';
   return 't-faible';
 }
 
@@ -2866,7 +4244,7 @@ function fallbackDownload(blob, fname, toastMsg) {
   a.click();
   document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  showToast(toastMsg || 'Briefing exporté ✓');
+  showToast(toastMsg || t('toast.briefingSaved'));
 }
 
 function loadJsonFile(file) {
@@ -2875,6 +4253,11 @@ function loadJsonFile(file) {
     try {
       const parsed = JSON.parse(reader.result);
       state = mergeDeep(structuredClone(DEFAULTS), parsed);
+      // Migration classification : legacy texte → clé canonique (v2.2.0)
+      if (state.meta && state.meta.classification) {
+        const migrated = CLASSIF_LEGACY_MAP[state.meta.classification];
+        if (migrated) state.meta.classification = migrated;
+      }
       if (Array.isArray(state.phases)) {
         state.phases.forEach(ph => {
           ph.execution = normalizeExecution(ph.execution);
@@ -2906,36 +4289,36 @@ function loadJsonFile(file) {
           const extra = missingIds.length > MAX_SHOWN ? ` (+${missingIds.length - MAX_SHOWN} autres)` : '';
           showToast(
             `⚠ Ce briefing référence ${missingIds.length} escadron(s) absent(s) du wing courant : ${shown}${extra}. ` +
-            `Importez un wing compatible ou modifiez les missions concernées.`
+            t('toast.wingIncompatibleHint')
           );
         } else {
-          showToast('Briefing chargé ✓');
+          showToast(t('toast.briefingLoaded'));
         }
       } else {
-        showToast('Briefing chargé ✓');
+        showToast(t('toast.briefingLoaded'));
       }
       // Toast supplémentaire si recompression effectuée
       if (recompressed > 0) {
         setTimeout(() => {
-          showToast(`Briefing optimisé — ${recompressed} image(s) recompressée(s) ✓`);
+          showToast(t('toast.briefingOptimized').replace('{n}', recompressed));
         }, 1500);
       }
     } catch (e) {
-      showToast('⚠ Fichier JSON invalide : ' + e.message);
+      showToast(t('toast.jsonInvalid') + e.message);
     }
   };
-  reader.onerror = () => showToast('⚠ Lecture impossible');
+  reader.onerror = () => showToast(t('toast.fileUnreadable'));
   reader.readAsText(file);
 }
 
 function resetAll() {
-  if (!confirm('Réinitialiser tout le briefing ?')) return;
+  if (!confirm(t('confirm.resetBriefing'))) return;
   state = structuredClone(DEFAULTS);
   currentPhaseIdx = 0;
   renderEditorBindings();
   schedulePreview();
   persistState();
-  showToast('Briefing réinitialisé ✓');
+  showToast(t('toast.briefingReset'));
 }
 
 /* ============= WING EDITOR ============= */
@@ -2944,500 +4327,25 @@ function resetAll() {
    Separate from compressImageFile (1600px/0.82) — logos need smaller footprint. */
 const LOGO_MAX_SIZE = 256;
 
-function compressLogoFile(file) {
-  return new Promise((resolve, reject) => {
-    if (!file.type.startsWith('image/')) {
-      reject(new Error('Le fichier doit être une image.')); return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        try {
-          let { width, height } = img;
-          // Scale down keeping aspect ratio, capped at LOGO_MAX_SIZE on longest side
-          if (width > LOGO_MAX_SIZE || height > LOGO_MAX_SIZE) {
-            if (width >= height) {
-              height = Math.round(height * LOGO_MAX_SIZE / width);
-              width  = LOGO_MAX_SIZE;
-            } else {
-              width  = Math.round(width * LOGO_MAX_SIZE / height);
-              height = LOGO_MAX_SIZE;
-            }
-          }
-          const canvas = document.createElement('canvas');
-          canvas.width = width; canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          // No background fill — preserve alpha channel for kraft texture blending
-          ctx.drawImage(img, 0, 0, width, height);
-          resolve({ dataUrl: canvas.toDataURL('image/png'), width, height });
-        } catch (e) { reject(e); }
-      };
-      img.onerror = () => reject(new Error('Image illisible.'));
-      img.src = reader.result;
-    };
-    reader.onerror = () => reject(new Error('Lecture du fichier impossible.'));
-    reader.readAsDataURL(file);
-  });
-}
+/* compressLogoFile — supprimé P1.B, édition wing déléguée à HQ */
 
-/* --- Size counter ---
-   Displays compressed JSON byte count. Warn threshold: 3 500 Ko (leaves ~1.5 MB for briefing state). */
-function updateWingSizeCounter() {
-  const el = document.getElementById('wing-size-counter');
-  if (!el) return;
-  const kb = Math.round(JSON.stringify(wingConfig).length / 1024);
-  el.textContent = 'Taille config : ' + kb + ' Ko';
-  el.classList.toggle('warn', kb > 3500);
-}
+/* updateWingSizeCounter — supprimé P1.B */
 
-/* --- Wing main logo zone ---
-   Manages #wing-logo-zone independently from state-based refreshImgZone().
-   Removing the wing logo reverts to DEFAULT_WING_CONFIG.wing.logo (logo can't be empty). */
-function refreshWingLogoZone() {
-  const zone = document.getElementById('wing-logo-zone');
-  if (!zone) return;
-  // Security (§5.3): validate data URL before injecting into src; never trust wingConfig blindly
-  const raw = wingConfig.wing.logo;
-  const url  = (raw && raw.startsWith('data:image/')) ? raw : '';
-  zone.classList.toggle('has-img', !!url);
-  zone.classList.remove('wing-logo-loading');  // always clear loading state on (re)render
+/* refreshWingLogoZone — supprimé P1.B */
 
-  if (url) {
-    zone.innerHTML = '<input type="file" accept="image/*" id="wing-logo-input">' +
-      '<img src="' + escapeAttr(url) + '" alt="Logo wing">' +
-      '<button type="button" class="img-rm" aria-label="Réinitialiser le logo">×</button>' +
-      '<span class="img-info">Cliquer pour remplacer</span>';
-  } else {
-    zone.innerHTML = '<input type="file" accept="image/*" id="wing-logo-input">' +
-      '<span class="img-text">▲ TOUCHER POUR CHARGER UN LOGO ▲</span>';
-  }
+/* refreshSqLogoZone — supprimé P1.B */
 
-  // Bind file picker
-  const inp = zone.querySelector('#wing-logo-input');
-  inp.addEventListener('change', async e => {
-    const f = e.target.files[0]; if (!f) return;
-    zone.classList.add('wing-logo-loading');
-    showToast('Compression logo...');
-    try {
-      const { dataUrl } = await compressLogoFile(f);
-      wingConfig.wing.logo = dataUrl;
-      persistWingConfig(); applyWingBranding(); schedulePreview();
-      refreshWingLogoZone(); updateWingSizeCounter();  // rebuilds zone, removes loading class
-      showToast('Logo wing chargé ✓');
-    } catch (err) {
-      zone.classList.remove('wing-logo-loading');  // restore zone on error — no stuck state
-      showToast('⚠ Logo invalide : ' + err.message);
-    }
-    e.target.value = '';
-  });
+/* renderSqAircraftTags — supprimé P1.B */
 
-  // × reverts to default logo (wing logo can't be blank — validator requires data:image/)
-  const rm = zone.querySelector('.img-rm');
-  if (rm) {
-    rm.addEventListener('click', e => {
-      e.preventDefault(); e.stopPropagation();
-      wingConfig.wing.logo = DEFAULT_WING_CONFIG.wing.logo;
-      persistWingConfig(); applyWingBranding(); schedulePreview();
-      refreshWingLogoZone(); updateWingSizeCounter();
-      showToast('Logo réinitialisé ✓');
-    });
-  }
-}
+/* renderWingSquadronCard — supprimé P1.B */
+/* _saveWingOpenState + renderWingSquadrons — supprimé P1.B */
+/* renderWingSquadrons (résidu) — supprimé P1.B */
 
-/* --- Squadron logo zone ---
-   sqIdx (number) captured in closure — NEVER the squadron object itself.
-   Empty logo is allowed on squadrons; PDF renderer falls back to wing logo. */
-function refreshSqLogoZone(zone, sqIdx) {
-  if (!zone) return;
-  // SAFETY: always read through index, not captured object reference
-  const raw = wingConfig.squadrons[sqIdx] ? wingConfig.squadrons[sqIdx].logo : '';
-  // Security (§5.3): validate data URL before injecting into src
-  const url  = (raw && raw.startsWith('data:image/')) ? raw : '';
-  zone.classList.toggle('has-img', !!url);
-  zone.classList.remove('wing-logo-loading');  // clear loading state on (re)render
-
-  if (url) {
-    zone.innerHTML = '<input type="file" accept="image/*">' +
-      '<img src="' + escapeAttr(url) + '" alt="Logo escadron">' +
-      '<button type="button" class="img-rm" aria-label="Retirer le logo">×</button>';
-  } else {
-    zone.innerHTML = '<input type="file" accept="image/*">' +
-      '<span class="img-text">▲ LOGO ESCADRON ▲</span>';
-  }
-
-  const inp = zone.querySelector('input[type=file]');
-  inp.addEventListener('change', async e => {
-    const f = e.target.files[0]; if (!f) return;
-    if (!wingConfig.squadrons[sqIdx]) return;   // guard: squadron removed before async resolves
-    zone.classList.add('wing-logo-loading');
-    showToast('Compression logo...');
-    try {
-      const { dataUrl } = await compressLogoFile(f);
-      wingConfig.squadrons[sqIdx].logo = dataUrl;   // sqIdx (number) — safe
-      persistWingConfig(); applyWingBranding(); schedulePreview();
-      refreshSqLogoZone(zone, sqIdx); updateWingSizeCounter();  // rebuilds zone, removes loading
-      showToast('Logo escadron chargé ✓');
-    } catch (err) {
-      zone.classList.remove('wing-logo-loading');  // restore zone on error — no stuck state
-      showToast('⚠ Logo invalide : ' + err.message);
-    }
-    e.target.value = '';
-  });
-
-  const rm = zone.querySelector('.img-rm');
-  if (rm) {
-    rm.addEventListener('click', ev => {
-      ev.preventDefault(); ev.stopPropagation();
-      if (!wingConfig.squadrons[sqIdx]) return;
-      wingConfig.squadrons[sqIdx].logo = '';   // sqIdx (number)
-      persistWingConfig(); applyWingBranding(); schedulePreview();
-      refreshSqLogoZone(zone, sqIdx); updateWingSizeCounter();
-    });
-  }
-}
-
-/* --- Aircraft tag row for one squadron ---
-   sqIdx (number) and acIdx (number) are BOTH captured as primitives in every listener.
-   NEVER capture the aircraft string or the squadron object. */
-function renderSqAircraftTags(container, sqIdx) {
-  if (!container || !wingConfig.squadrons[sqIdx]) return;
-  container.innerHTML = '';
-
-  // Existing tags
-  // Iterate by index — closure captures acIdx (number), not the string value
-  wingConfig.squadrons[sqIdx].aircraft.forEach((_, acIdx) => {
-    const tag = document.createElement('span');
-    tag.className = 'wing-ac-tag';
-
-    const label = document.createElement('span');
-    label.textContent = wingConfig.squadrons[sqIdx].aircraft[acIdx];  // read through index
-
-    const rmBtn = document.createElement('button');
-    rmBtn.type = 'button';
-    rmBtn.setAttribute('aria-label', 'Supprimer appareil');
-    rmBtn.textContent = '×';
-    rmBtn.addEventListener('click', () => {
-      if (!wingConfig.squadrons[sqIdx]) return;
-      wingConfig.squadrons[sqIdx].aircraft.splice(acIdx, 1);  // acIdx (number) — safe
-      persistWingConfig(); schedulePreview(); updateWingSizeCounter();
-      renderSqAircraftTags(container, sqIdx);  // re-render tags only, no full list rebuild
-    });
-
-    tag.appendChild(label);
-    tag.appendChild(rmBtn);
-    container.appendChild(tag);
-  });
-
-  // Add-new row
-  const addRow = document.createElement('div');
-  addRow.className = 'wing-ac-add-row';
-
-  const addInp = document.createElement('input');
-  addInp.type = 'text';
-  addInp.placeholder = 'F-4E Phantom II';
-  addInp.maxLength = 60;
-
-  const addBtn = document.createElement('button');
-  addBtn.type = 'button';
-  addBtn.className = 'ed-btn-add-sm';
-  addBtn.textContent = '+';
-
-  const doAdd = () => {
-    const val = addInp.value.trim(); if (!val) return;
-    if (!wingConfig.squadrons[sqIdx]) return;
-    wingConfig.squadrons[sqIdx].aircraft.push(val);  // sqIdx (number) — safe
-    addInp.value = '';
-    persistWingConfig(); schedulePreview(); updateWingSizeCounter();
-    renderSqAircraftTags(container, sqIdx);
-  };
-  addBtn.addEventListener('click', doAdd);
-  addInp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doAdd(); } });
-
-  addRow.appendChild(addInp);
-  addRow.appendChild(addBtn);
-  container.appendChild(addRow);
-}
-
-/* --- Build one squadron card DOM element ---
-   CRITICAL: sqIdx (number) captured in ALL closures — never the squadron object.
-   The local `sq` variable is used ONLY to read initial values for HTML building,
-   never referenced inside any event listener. */
-function renderWingSquadronCard(sqIdx) {
-  // Read-only snapshot for initial HTML values ONLY
-  const sq = wingConfig.squadrons[sqIdx];
-
-  const card = document.createElement('div');
-  card.className = 'wing-sq-card';
-  card.dataset.sqIdx = sqIdx;
-
-  /* ── Header (toggle + controls) ── */
-  const header = document.createElement('div');
-  header.className = 'wing-sq-header';
-
-  const toggle = document.createElement('span');
-  toggle.className = 'wing-sq-toggle';
-  toggle.textContent = sq.id || '(sans id)';
-  toggle.addEventListener('click', () => { card.classList.toggle('open'); });
-
-  const btnUp = document.createElement('button');
-  btnUp.type = 'button'; btnUp.className = 'ed-btn-icon'; btnUp.title = 'Monter';
-  btnUp.innerHTML = '↑';
-  btnUp.addEventListener('click', () => {
-    if (sqIdx === 0) return;
-    const sqs = wingConfig.squadrons;
-    [sqs[sqIdx - 1], sqs[sqIdx]] = [sqs[sqIdx], sqs[sqIdx - 1]];  // sqIdx (number)
-    persistWingConfig(); applyWingBranding(); schedulePreview();
-    renderWingSquadrons();
-  });
-
-  const btnDown = document.createElement('button');
-  btnDown.type = 'button'; btnDown.className = 'ed-btn-icon'; btnDown.title = 'Descendre';
-  btnDown.innerHTML = '↓';
-  btnDown.addEventListener('click', () => {
-    const sqs = wingConfig.squadrons;
-    if (sqIdx >= sqs.length - 1) return;
-    [sqs[sqIdx], sqs[sqIdx + 1]] = [sqs[sqIdx + 1], sqs[sqIdx]];  // sqIdx (number)
-    persistWingConfig(); applyWingBranding(); schedulePreview();
-    renderWingSquadrons();
-  });
-
-  const btnDel = document.createElement('button');
-  btnDel.type = 'button'; btnDel.className = 'ed-btn-icon danger'; btnDel.title = 'Supprimer escadron';
-  btnDel.innerHTML = '×';
-  btnDel.addEventListener('click', () => {
-    const sqId   = wingConfig.squadrons[sqIdx] ? wingConfig.squadrons[sqIdx].id : '?';  // sqIdx
-    const isLast = wingConfig.squadrons.length === 1;
-    const extra  = isLast ? '\n\n⚠ Il s\'agit du dernier escadron du wing.' : '';
-    if (!confirm('Supprimer l\'escadron "' + escapeHtml(sqId) + '" ?' + extra + '\nLes missions qui le référencent seront affichées grisées.')) return;
-    wingConfig.squadrons.splice(sqIdx, 1);  // sqIdx (number)
-    persistWingConfig(); applyWingBranding(); schedulePreview();
-    renderWingSquadrons();
-  });
-
-  header.appendChild(toggle);
-  header.appendChild(btnUp);
-  header.appendChild(btnDown);
-  header.appendChild(btnDel);
-  card.appendChild(header);
-
-  /* ── Body (fields) ── */
-  const body = document.createElement('div');
-  body.className = 'wing-sq-body';
-
-  // Helper: make a labelled input row, bound via sqIdx (number) + field name string
-  // fieldName is a plain string (a primitive) — safe to capture in closure
-  function makeField(labelText, fieldName, value, placeholder, hint) {
-    const wrap = document.createElement('div');
-    wrap.className = 'ed-field';
-    const lbl = document.createElement('label');
-    lbl.innerHTML = escapeHtml(labelText) + (hint ? ' <span class="wing-hint">(' + escapeHtml(hint) + ')</span>' : '');
-    const inp = document.createElement('input');
-    inp.type = 'text'; inp.value = value || ''; inp.placeholder = placeholder || '';
-    inp.addEventListener('input', () => {
-      if (!wingConfig.squadrons[sqIdx]) return;
-      wingConfig.squadrons[sqIdx][fieldName] = inp.value;  // sqIdx (number), fieldName (string)
-      // Update card header label when id changes
-      if (fieldName === 'id') {
-        toggle.textContent = inp.value || '(sans id)';
-        // Visual warning: squadron id must not contain spaces or slashes
-        inp.classList.toggle('wing-id-warning', /[\s/]/.test(inp.value) && inp.value.length > 0);
-      }
-      persistWingConfig(); applyWingBranding(); schedulePreview(); updateWingSizeCounter();
-    });
-    // Initial validation state for id fields when card is first rendered
-    if (fieldName === 'id' && value) {
-      inp.classList.toggle('wing-id-warning', /[\s/]/.test(value));
-    }
-    wrap.appendChild(lbl); wrap.appendChild(inp);
-    return wrap;
-  }
-
-  const rowIdName = document.createElement('div');
-  rowIdName.className = 'ed-field-row';
-  rowIdName.appendChild(makeField('Identifiant', 'id', sq.id, 'KHR-26', 'clé stable, ne pas modifier après création'));
-  rowIdName.appendChild(makeField('Callsign', 'callsign', sq.callsign, 'DUFF', ''));
-  body.appendChild(rowIdName);
-
-  body.appendChild(makeField('Nom complet', 'name', sq.name, '541st Tactical Fighter Squadron', ''));
-
-  const rowNickAc = document.createElement('div');
-  rowNickAc.className = 'ed-field-row';
-  rowNickAc.appendChild(makeField('Surnom', 'nickname', sq.nickname, 'Bounty Hunter', ''));
-  body.appendChild(rowNickAc);
-
-  // Aircraft multi-tags
-  const acWrap = document.createElement('div');
-  acWrap.className = 'ed-field';
-  const acLbl = document.createElement('label');
-  acLbl.textContent = 'Appareils';
-  const acTags = document.createElement('div');
-  acTags.className = 'wing-aircraft-tags';
-  acWrap.appendChild(acLbl);
-  acWrap.appendChild(acTags);
-  body.appendChild(acWrap);
-  renderSqAircraftTags(acTags, sqIdx);  // sqIdx (number)
-
-  // Squadron logo
-  const logoWrap = document.createElement('div');
-  logoWrap.className = 'ed-field';
-  const logoLbl = document.createElement('label');
-  logoLbl.textContent = 'Logo escadron';
-  const logoZone = document.createElement('label');
-  logoZone.className = 'ed-img-zone wing-logo-zone';
-  logoWrap.appendChild(logoLbl);
-  logoWrap.appendChild(logoZone);
-  body.appendChild(logoWrap);
-  refreshSqLogoZone(logoZone, sqIdx);  // sqIdx (number)
-
-  card.appendChild(body);
-  return card;
-}
-
-/* --- Squadron list renderer ---
-   Preserves open/closed state of cards across re-renders using squadron id strings,
-   not indices (indices shift on move/delete). */
-let _wingOpenSqIds = new Set();
-
-function _saveWingOpenState() {
-  _wingOpenSqIds = new Set();
-  document.querySelectorAll('.wing-sq-card.open').forEach(card => {
-    const idx = parseInt(card.dataset.sqIdx, 10);
-    if (!isNaN(idx) && wingConfig.squadrons[idx]) {
-      _wingOpenSqIds.add(wingConfig.squadrons[idx].id);
-    }
-  });
-}
-
-function renderWingSquadrons(openLastCard) {
-  _saveWingOpenState();
-  const list = document.getElementById('wing-squadrons-list');
-  if (!list) return;
-  list.innerHTML = '';
-
-  // Iterate by index — _ is the squadron object, NEVER used in closures below
-  wingConfig.squadrons.forEach((_, sqIdx) => {
-    // sqIdx is a number primitive — safe to pass to renderWingSquadronCard
-    const card = renderWingSquadronCard(sqIdx);
-    // Restore open state by squadron id (not index, which can shift)
-    const isLast = openLastCard && (sqIdx === wingConfig.squadrons.length - 1);
-    if (isLast || _wingOpenSqIds.has(wingConfig.squadrons[sqIdx].id)) {
-      card.classList.add('open');
-    }
-    list.appendChild(card);
-  });
-
-  updateWingSizeCounter();
-}
-
-/* --- Populate static wing-identity inputs from wingConfig ---
-   Called on init and after import/reset. */
-function renderWingEditor() {
-  const w = wingConfig.wing;
-  const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-  setVal('wing-shortName', w.shortName);
-  setVal('wing-id',        w.id);
-  setVal('wing-fullName',  w.fullName);
-  setVal('wing-appTitle',  w.appTitle);
-  setVal('wing-hqStamp',   w.hqStamp);
-  refreshWingLogoZone();
-  renderWingSquadrons();
-  updateWingSizeCounter();
-}
-
-/* --- Bind wing editor events (called ONCE from bindEditorEvents on init) ---
-   Static elements (inputs, buttons) only — squadron cards are re-created by renderWingSquadrons. */
-function bindWingEditorEvents() {
-
-  // ── Wing identity inputs ──
-  // Each field name and element id are string primitives — safe in closures
-  [
-    ['wing-shortName', 'shortName'],
-    ['wing-id',        'id'       ],
-    ['wing-fullName',  'fullName' ],
-    ['wing-appTitle',  'appTitle' ],
-    ['wing-hqStamp',   'hqStamp'  ]
-  ].forEach(([elId, field]) => {   // elId and field are string primitives — closure-safe
-    const inp = document.getElementById(elId);
-    if (!inp) return;
-    inp.addEventListener('input', () => {
-      wingConfig.wing[field] = inp.value;   // field (string primitive) — safe
-      // Visual warning on wing id: no spaces or slashes allowed
-      if (field === 'id') {
-        inp.classList.toggle('wing-id-warning', /[\s/]/.test(inp.value) && inp.value.length > 0);
-      }
-      persistWingConfig(); applyWingBranding(); schedulePreview(); updateWingSizeCounter();
-    });
-    // Initial validation state for wing id on load
-    if (field === 'id') {
-      inp.classList.toggle('wing-id-warning', /[\s/]/.test(inp.value) && inp.value.length > 0);
-    }
-  });
-
-  // ── Wing logo: initial bind (zone may be re-rendered, refreshWingLogoZone re-binds) ──
-  // The zone itself is static in the HTML; refreshWingLogoZone() re-binds after each render
-  refreshWingLogoZone();
-
-  // ── Add squadron ──
-  const btnAddSq = document.getElementById('wing-sq-add');
-  if (btnAddSq) {
-    btnAddSq.addEventListener('click', () => {
-      wingConfig.squadrons.push({
-        id: '', name: '', nickname: '', callsign: '',
-        aircraft: [], logo: ''
-      });
-      persistWingConfig(); applyWingBranding(); schedulePreview();
-      renderWingSquadrons(true);  // true = open last card
-      showToast('Escadron ajouté — pensez à renseigner l\'id ✓');
-    });
-  }
-
-  // ── Import config ──
-  const importInp = document.getElementById('wing-import-input');
-  if (importInp) {
-    importInp.addEventListener('change', e => {
-      if (e.target.files[0]) importWingConfig(e.target.files[0]);
-      e.target.value = '';
-    });
-  }
-
-  // ── Export config ──
-  const btnExport = document.getElementById('wing-export-btn');
-  if (btnExport) {
-    btnExport.addEventListener('click', exportWingConfig);
-  }
-
-  // ── Reset to default ──
-  const btnReset = document.getElementById('wing-reset-btn');
-  if (btnReset) {
-    btnReset.addEventListener('click', resetWingConfig);
-  }
-}
-
+/* renderWingEditor — supprimé P1.B */
+/* bindWingEditorEvents — supprimé P1.B */
 /* ============= WING ACTIONS ============= */
 
-/* Serialize wingConfig to JSON and offer download.
-   Mirrors downloadJson() — Web Share API first, fallbackDownload as safety net. */
-function exportWingConfig() {
-  const blob = new Blob([JSON.stringify(wingConfig, null, 2)], { type: 'application/json' });
-  const wid  = (wingConfig.wing.id || 'wing').toLowerCase().replace(/[\s/]+/g, '_');
-  const fname = 'wing_config_' + wid + '_' + Date.now() + '.json';
-
-  if (navigator.share && navigator.canShare) {
-    try {
-      const file = new File([blob], fname, { type: 'application/json' });
-      if (navigator.canShare({ files: [file] })) {
-        navigator.share({
-          files: [file],
-          title: 'Config ' + wingConfig.wing.shortName,
-          text: fname
-        }).catch(() => fallbackDownload(blob, fname, 'Config wing exportée ✓'));
-        return;
-      }
-    } catch (e) {}
-  }
-  fallbackDownload(blob, fname, 'Config wing exportée ✓');
-}
+/* exportWingConfig — supprimé P1.B */
 
 /* Read a JSON file, validate it as a wing config, and apply it.
    On error, shows a toast — never throws / alerts. */
@@ -3448,36 +4356,33 @@ function importWingConfig(file) {
       const parsed = JSON.parse(reader.result);
       const check  = validateWingConfig(parsed);
       if (!check.ok) {
-        showToast('⚠ Config invalide : ' + check.errors.slice(0, 2).join(' · ') +
+        showToast(t('toast.wingInvalid') + check.errors.slice(0, 2).join(' · ') +
           (check.errors.length > 2 ? ' (+' + (check.errors.length - 2) + ')' : ''));
         return;
       }
       wingConfig = parsed;
       persistWingConfig();
       applyWingBranding();
-      renderEditorBindings();
+      renderWingReadOnly();
       schedulePreview();
-      showToast('Config wing chargée ✓ — ' + escapeHtml(wingConfig.wing.shortName));
+      showToast(t('toast.wingLoaded'));
     } catch (e) {
-      showToast('⚠ JSON invalide : ' + e.message);
+      showToast(t('toast.wingJsonInvalid') + e.message);
     }
   };
-  reader.onerror = () => showToast('⚠ Lecture du fichier impossible');
+  reader.onerror = () => showToast(t('toast.wingFileError'));
   reader.readAsText(file);
 }
 
 /* Hard reset to the embedded DEFAULT_WING_CONFIG, wiping localStorage entry. */
 function resetWingConfig() {
-  if (!confirm(
-    'Réinitialiser au wing par défaut ?\n' +
-    'La configuration wing actuelle sera perdue.'
-  )) return;
+  if (!confirm(t('editor.wing.resetConfirm.ro') || 'Réinitialiser le wing au défaut ?')) return;
   wingConfig = structuredClone(DEFAULT_WING_CONFIG);
   localStorage.removeItem(KEY_WING);
   applyWingBranding();
-  renderEditorBindings();
+  renderWingReadOnly();
   schedulePreview();
-  showToast('Wing réinitialisé ✓');
+  showToast(t('toast.wingReset'));
 }
 
 
@@ -3510,6 +4415,49 @@ function bindTabBar() {
   });
 }
 
+/* ============= WING READ-ONLY PANEL (P1.B) ============= */
+/* Renders current wingConfig as read-only info in #wing-ro-info.
+   Called on init, after import, after reset, and on storage event. */
+function renderWingReadOnly() {
+  const el = document.getElementById('wing-ro-info');
+  if (!el) return;
+  const w = wingConfig.wing;
+  const sqCount = Array.isArray(wingConfig.squadrons) ? wingConfig.squadrons.length : 0;
+  const logoHtml = (w.logo && w.logo.startsWith('data:image/'))
+    ? '<img src="' + escapeAttr(w.logo) + '" alt="Logo" class="wing-ro-logo">'
+    : '';
+  el.innerHTML =
+    '<div class="wing-ro-row">' + logoHtml +
+    '<div class="wing-ro-text">' +
+      '<div class="wing-ro-name">' + escapeHtml(w.shortName || '') + '</div>' +
+      '<div class="wing-ro-full">' + escapeHtml(w.fullName || '') + '</div>' +
+      '<div class="wing-ro-meta">' + escapeHtml(w.id || '') +
+        (sqCount ? ' · ' + sqCount + ' ' + t('editor.wing.roSquadrons') : '') +
+      '</div>' +
+    '</div></div>';
+}
+
+/* Bind the standalone wing import input (P1.B filet standalone). Called once from init(). */
+function bindWingImportEvent() {
+  const inp = document.getElementById('wing-import-input');
+  if (inp) {
+    inp.addEventListener('change', e => {
+      if (e.target.files[0]) importWingConfig(e.target.files[0]);
+      e.target.value = '';
+    });
+  }
+  const btnReset = document.getElementById('wing-reset-btn');
+  if (btnReset) btnReset.addEventListener('click', resetWingConfig);
+  /* Storage listener: refresh wing when HQ writes wing_config_v1 (sous shell). */
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'wing_config_v1') {
+      wingConfig = loadWingConfig();
+      applyWingBranding();
+      renderWingReadOnly();
+    }
+  });
+}
+
 /* ============= WING BRANDING ============= */
 /* Apply wing identity to all dynamic HTML entry-points.
    Must be called:
@@ -3520,8 +4468,8 @@ function bindTabBar() {
    them at DOMContentLoaded so they never appear if wingConfig is loaded. */
 function applyWingBranding() {
   const w = wingConfig.wing;
-  // <title>
-  document.title = w.shortName + ' // ' + w.appTitle;
+  // <title> — délégué à updateDocTitle() pour intégrer l'i18n (Phase 9)
+  updateDocTitle();
   // Toolbar brand
   const brandEl = document.querySelector('.tb-brand-main');
   if (brandEl) brandEl.textContent = w.shortName;
@@ -3603,13 +4551,18 @@ function initOverflowObserver() {
 
 /* ============= INIT ============= */
 function init() {
-  applyTheme(loadTheme());          // poser le thème AVANT le branding (cf. brief E)
+  initLang();                          // Phase 9 — lire la langue avant tout
+  applyTheme(loadTheme());             // poser le thème AVANT le branding (cf. brief E)
   wingConfig = loadWingConfig();
   loadState();
   applyWingBranding();
+  renderWingReadOnly();  // P1.B — panneau wing read-only
+  applyI18nStatic();                   // Phase 9 — peupler les data-i18n (Étape B)
+  updateFlagButton();                  // Phase 9 — afficher le bon drapeau
   renderEditorBindings();
   bindEditorEvents();
   bindTabBar();
+  bindWingImportEvent();  // P1.B — filet import + storage listener
   setActiveTab('meta');
   renderPreview();
   initOverflowObserver();  // chatE étape A : détection débordement via MutationObserver
@@ -3619,7 +4572,7 @@ function init() {
     if (recompressed > 0) {
       persistState();
       schedulePreview();
-      showToast(`Briefing optimisé au chargement — ${recompressed} image(s) ✓`);
+      showToast(t('toast.briefingOptimizedOnLoad').replace('{n}', recompressed));
     }
   });
   document.getElementById('btn-save').addEventListener('click', downloadJson);
@@ -3631,6 +4584,9 @@ function init() {
   document.getElementById('btn-print').addEventListener('click', openExportModal);
   document.getElementById('btn-reset').addEventListener('click', resetAll);
   document.getElementById('theme-select').addEventListener('change', e => applyTheme(e.target.value));
+  document.getElementById('btn-lang').addEventListener('click', () => {
+    setLang(CURRENT_LANG === 'fr' ? 'en' : 'fr');
+  });
 
   window.addEventListener('resize', () => {
     applyPreviewScale();
@@ -3652,7 +4608,7 @@ function openExportModal() {
   // Reset à l'état "choix initial"
   document.getElementById('export-png-config').hidden = true;
   document.querySelector('.export-modal-choices').hidden = false;
-  document.getElementById('export-modal-title').textContent = 'Exporter le briefing';
+  document.getElementById('export-modal-title').textContent = t('modal.export.title');
   // Focus pour accessibilité
   document.getElementById('export-choice-pdf').focus();
 }
@@ -3717,7 +4673,7 @@ function handleExportPngChoice() {
   // Passer au step 2 dans la modale
   document.querySelector('.export-modal-choices').hidden = true;
   document.getElementById('export-png-config').hidden = false;
-  document.getElementById('export-modal-title').textContent = 'Export PNG kneeboard';
+  document.getElementById('export-modal-title').textContent = t('modal.export.titlePng');
   updatePngExportCount();
 }
 
@@ -3760,7 +4716,7 @@ async function renderPageToPng(pageEl) {
     return new Promise(function(resolve, reject) {
       canvas.toBlob(function(blob) {
         if (blob) resolve(blob);
-        else reject(new Error('Conversion canvas → blob PNG échouée'));
+        else reject(new Error(t('error.canvasToBlob')));
       }, 'image/png');
     });
 
@@ -3795,7 +4751,7 @@ async function executePngExport() {
   goBtn.setAttribute('aria-busy', 'true');
 
   function updateProgress(current) {
-    const msg = 'Génération ' + current + '/' + total + '…';
+    const msg = t('toast.exportGenProgress') + current + '/' + total + '…';
     goBtn.innerHTML = msg;
     showToast(msg);
   }
@@ -3808,7 +4764,7 @@ async function executePngExport() {
       const fname = 'kb_' + String(realIdx + 1).padStart(2, '0') + '.png';
       const blob = await renderPageToPng(toExport[0]);
       closeExportModal();
-      fallbackDownload(blob, fname, '1 page exportée ✓');
+      fallbackDownload(blob, fname, t('toast.exportSingle'));
 
     } else {
       // Plusieurs pages : ZIP
@@ -3823,10 +4779,10 @@ async function executePngExport() {
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       closeExportModal();
       fallbackDownload(zipBlob, 'briefing_kneeboard.zip',
-        total + ' pages exportées ✓');
+        total + ' ' + t('toast.exportMulti'));
     }
   } catch (err) {
-    showToast('⚠ Erreur export PNG : ' + err.message);
+    showToast(t('toast.exportError') + err.message);
     console.error('[Export PNG]', err);
   } finally {
     // Restauration systématique du bouton, même en cas d'erreur
@@ -3866,7 +4822,7 @@ document.addEventListener('DOMContentLoaded', function bindExportModal() {
   document.getElementById('export-png-back').addEventListener('click', function() {
     document.getElementById('export-png-config').hidden = true;
     document.querySelector('.export-modal-choices').hidden = false;
-    document.getElementById('export-modal-title').textContent = 'Exporter le briefing';
+    document.getElementById('export-modal-title').textContent = t('modal.export.title');
   });
 
   // Échap pour fermer la modale (quelle que soit l'étape)
@@ -3881,26 +4837,15 @@ document.addEventListener('DOMContentLoaded', function bindExportModal() {
 /* All functions below are globally accessible from the browser console.
    No IIFE wrapping — window scope is intentional (cf. DOCS §2.4).
 
-   Wing config read/write:
+   Wing config read/write (P1.B: editing moved to HQ module):
      wingConfig                          // current wing object (mutable)
      loadWingConfig()                    // → parsed localStorage or DEFAULT_WING_CONFIG
      persistWingConfig()                 // debounced save → localStorage[KEY_WING]
-     validateWingConfig(obj)             // → { ok, errors[] }
-
-   Import / Export / Reset:
-     exportWingConfig()                  // → downloads wing_config_<id>_<ts>.json
      importWingConfig(file)              // file = File object from <input type="file">
      resetWingConfig()                   // → confirm → DEFAULT_WING_CONFIG + localStorage.removeItem
 
    Branding refresh (always call after mutating wingConfig directly):
      applyWingBranding()
-
-   Quick test sequence (paste in console):
-     wingConfig.wing.shortName = 'TEST WING';
-     applyWingBranding();                // toolbar title changes immediately
-     exportWingConfig();                 // download JSON file
-     // Reload page → title back to 'MY WING' (not persisted — expected)
-     // To persist: persistWingConfig() — normally called by the wing editor
 */
 </script>
 
