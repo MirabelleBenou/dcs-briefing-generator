@@ -1,7 +1,7 @@
 # DCS Mission Plan
 
 <!-- Replace with a screenshot of the landing "situation board" (e.g. docs/screenshots/landing.png) -->
-![Intro-image](docs/screenshots/landing.png)
+![Intro-image](docs/screenshots/landing.jpg)
 > Prepare your DCS World missions end to end — a suite of tools behind one operational landing page. **Use it online, or download a single offline file.**
 
 ![License](https://img.shields.io/badge/license-MIT-blue)
