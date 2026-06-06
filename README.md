@@ -1,18 +1,14 @@
-# DCS Mission Plan
+# DCS Mission Tools
 
-<!-- Replace with a screenshot of the landing "situation board" (e.g. docs/screenshots/landing.png) -->
 ![Intro-image](docs/screenshots/landing.jpg)
-> Prepare your DCS World missions end to end — a suite of tools behind one operational landing page. **Use it online, or download a single offline file.**
 
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Platform](https://img.shields.io/badge/platform-Web-green)
-![Offline](https://img.shields.io/badge/offline-yes-success)
-![Tablet & mobile](https://img.shields.io/badge/tablet%20%26%20mobile-ready-orange)
-![Tools](https://img.shields.io/badge/tools-4%20live%20%C2%B7%202%20planned-brown)
+> Edit your DCS World mission files surgically — three editors in one offline page. **Download a single file, drop a `.miz`, edit, save.**
 
-🌐 **[Use it online »](https://mirabellebenou.github.io/dcs-mission-plan/)** &nbsp;·&nbsp; 💾 **[Download the offline file »](../../releases)**
+![License](https://img.shields.io/badge/license-MIT-blue) ![Platform](https://img.shields.io/badge/platform-Web-green) ![Offline](https://img.shields.io/badge/offline-yes-success) ![Tablet & mobile](https://img.shields.io/badge/tablet%20%26%20mobile-ready-orange) ![Tools](https://img.shields.io/badge/tools-3%20live%20%C2%B7%202%20planned-brown)
 
-A single-page **"situation board"** that brings together a suite of mission-prep tools for DCS World virtual pilots and wings — staged like a Cold War operations table. Open the board, pick a tool, prepare your mission. It runs entirely in your browser: **online for those who don't want to download**, or as **one offline HTML file** you can keep, share, and use without internet.
+🌐 **[Use it online »](https://mirabellebenou.github.io/dcs-mission-tools/)** · 💾 **[Download the offline file »](https://github.com/MirabelleBenou/dcs-mission-tools/releases)**
+
+A single-page **workshop** that bundles a suite of surgical `.miz` editors for DCS World virtual pilots and wings. It runs entirely in your browser — **online for those who don't want to download**, or as **one offline HTML file** you can keep, share, and use without internet. Drop a `.miz`, edit it, save — the mission **never leaves your machine**, and your original is left untouched.
 
 Developped with the help of Claude AI (I'm not a dev !)
 
@@ -20,185 +16,167 @@ Developped with the help of Claude AI (I'm not a dev !)
 
 ## 📱 Built for the tablet (and your phone)
 
-Mission Plan is designed to be used **where you actually fly** — on a tablet next to your stick, or on your phone.
+Mission Tools is designed to be used **where you actually fly** — on a tablet next to your stick, or on your phone. Editing your mission shouldn't mean alt-tabbing out of the cockpit.
 
-- **Touch-first UI** — large tap targets, drag-and-drop, no tiny desktop-only controls
-- **Responsive layout** — split view on tablet/desktop, tabbed view on phone
+- **Touch-first UI** — large tap targets, drag-and-drop the `.miz`, no tiny desktop-only controls
+- **Responsive layout** — adapts from desktop down to phone
 - **Rotation-safe** — keeps working when you flip the tablet between landscape and portrait
 - **No install** — open a link or a single file in the mobile browser; works offline once loaded
-- **Export on the go** — generate PDF/PNG straight from the device
+- **Edit on the go** — drop a `.miz`, edit, and save a new one straight from the device
+
+## 🔒 Local-first & non-destructive
+
+Mission Tools edits the **actual mission file**, with surgical precision and nothing sent anywhere.
+
+- **100% local** — JSZip is bundled in; the `.miz` is never uploaded
+- **Surgical patching** — the `.miz` is patched in place, not rewritten from scratch
+- **Strict preservation** — critical data is kept intact (groups/units are read-only so CTLD/MOOSE scripts don't break; the mission's companion files are preserved)
+- **Non-destructive** — saving downloads a new `.miz`; your original stays as-is
 
 ## 🧰 The suite
 
-The landing page presents each tool as a **pinned print** on the board. Active tools open in place; upcoming ones are stamped *Coming soon*.
+The landing page presents each editor as a tile. Active tools open in place; upcoming ones are stamped *Coming soon*.
 
-| Tool | What it does | Status |
-|------|--------------|--------|
-| **HQ** | Command post — configure your wing once (branding, squadrons), shared with the other tools; experimental `.miz` mission reader/patcher | 🧪 Beta `v0.1.0` |
-| **Briefing Generator** | Full mission briefings — SITAC, radio plan, airfields, charts, annexes — PDF & PNG export | ✅ `v2.2.0` |
-| **Recon Station** | Turn a screenshot into a reconnaissance analysis photo — sensor looks, annotations, lossless PNG | ✅ `v1.0.0` |
-| **Field Manual** | In-app documentation for the suite — one illustrated chapter per tool, diagrams, FR/EN, offline | ✅ `v1.0.0` |
-| **Route Planner** | Route legs, turn points, interactive map and loadouts | ⏳ Planned |
-| **Kneeboard Generator** | Printable kneeboard cards — frequencies, waypoints, checklists | ⏳ Planned |
+| Tool                            | What it does                                                                                                                | Status      |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| **Comm Plan Editor** (`C·P`)    | Edit the communications plan — radio frequencies and presets                                                                | ✅ `v1.2.0` |
+| **Ground Unit Swapper** (`G·U`) | Bulk-swap ground unit types and skill, filtered by coalition / group / family                                               | ✅ `v1.2.0` |
+| **Weather Editor** (`W·X`)      | Edit date/time, wind layers, clouds and precipitation — 34 presets                                                          | ✅ `v1.2.0` |
+| **Foothold Configurator** (`F·C`)| Tune Foothold-style mission parameters                                                                                      | ⏳ Planned  |
+| **Loadout Editor** (`L·E`)      | Edit aircraft loadouts and payloads                                                                                         | ⏳ Planned  |
 
-> Each tool is a standalone HTML file with its own build; the landing page embeds the live tools and stages them all on one board.
+> Each tool is a standalone HTML editor; the page bundles the live tools and shares a single working `.miz` between them.
 
-### 🛡️ HQ — your wing, configured once
+### 📡 Comm Plan Editor — in detail
 
-HQ is the suite's **command post**. Its main job today is the **wing hub**: set your wing name, logo, squadrons and callsigns **once**, and Briefing Generator + Recon Station pick it up automatically. HQ also ships an **experimental `.miz` engine** (read a mission, export a mission snapshot, apply surgical patches) — the advanced flight-package UI is still in development and in-game validation is pending, so HQ is published as **beta**.
+The Comm Plan Editor reads your mission's **communications plan** and lets you edit **radio frequencies and presets** with surgical precision.
 
-### 🚀 Briefing Generator — in detail
+- **Lua-aware** — full tokenizer → AST parser → model extraction → in-place patch pipeline
+- **Surgical patching** — only the edited values are rewritten; the rest of the `.miz` is left byte-for-byte intact
+- **Companion files preserved** — scripts, kneeboards and other embedded files are kept
+- **Bilingual FR / EN**, choice remembered
 
-Briefing Generator builds a **complete, shareable mission briefing** as a multi-section document, with **PDF and per-page PNG export** straight from the browser.
+### 🪖 Ground Unit Swapper — in detail
 
-- **Sections** — cover, situation map (SITAC), charts, annexes, and mission phases
-- **Radio & weather** — radio plan, METAR assistant, and **METAR import from a `.miz`**
-- **Airfields** — structured airfield information
-- **Wing branding** — pulled automatically from HQ (name, logo, squadrons)
-- **Images** — drop in your own maps/charts; oversized images are auto-recompressed
-- **4 themes, FR/EN**, multi-wing
+The Ground Unit Swapper lets you **bulk-swap ground unit types and skill** across the mission, with powerful filtering — handy for re-theming a mission or adjusting threat density.
 
-### 🛰️ Recon Station — in detail
+- **Filter** by coalition, group and **family** — Armor, Artillery, **AirDef** (SAM + AAA), Radar / EWR, **Unarmed** (logistics + infrastructure / C2), Infantry
+- **Swap by type** — change unit types in bulk; livery is preserved
+- **Skill editable** — Average / Good / High / Excellent
+- **Safe by design** — `Client` / `Player` units excluded; **group and unit names are strictly read-only** so CTLD / MOOSE / scripted logic keeps working
+- **Bilingual FR / EN**, choice remembered
 
-Recon Station turns any screenshot into a convincing **reconnaissance analysis photo**, fully in the browser, with **lossless full-resolution PNG export** (native Canvas 2D — what you preview is exactly what you export).
+### 🌦️ Weather Editor — in detail
 
-- **Sensor looks** — EO (default), IR white-hot, IR black-hot, SAR (stylizations, not radiometric data)
-- **Image effects** — greyscale, contrast, vignette, grain, scanlines (sliders, off by default)
-- **Annotations** — numbered movable markers, a magnifier/loupe (crops after effects), shapes (ellipse, rectangle, polygon, arrow, bracket), and labels (stamp, cursive grease-pencil, plain)
-- **Editable info block** — 9 fields, bold text, black/white
-- **Classification banner** — top/bottom bars, 4 levels, off by default
-- **Wing logos** — upload manually or pull the shared wing branding from HQ; colour / grey / white modes
+The Weather Editor gives you full control over **mission weather**, from a quick preset to a fully custom setup.
 
-### 📖 Field Manual — in detail
-
-The Field Manual is the suite's **built-in documentation**, opened from the board like any other tool — **no internet, no separate guide to download**.
-
-- **One chapter per tool** — Recon Station, HQ, Briefing Generator (upcoming tools are stubbed)
-- **Diagrams, not screenshots** — each chapter has a hand-drawn-style **SVG schematic** (e.g. *what feeds what* in the Briefing Generator) that adapts to the active theme
-- **"What it's for" first** — plain explanations of each tool's purpose and workflow
-- **4 themes, FR/EN**, fully offline
+- **Date & time** (UTC), **wind on 3 layers**, **clouds** (preset / base / precipitation)
+- **34 presets** with thumbnails
+- **Handles both** preset-based and fully custom weather structures
+- **Read-only context** for derived values (QNH, temperature, visibility…) so nothing inconsistent is written
+- **Bilingual FR / EN**, choice remembered
 
 ## ✨ Features
 
-- **Online or fully offline** — use the hosted version, or one HTML file with no install, no server, no internet
-- **One landing page** — embeds the live tools; open it, use it, share it
-- **Tablet & mobile first** — see above 📱
-- **4 graphical themes** — Cold War NATO (default), Cold War Soviet, Modern NATO, Modern Eastern Bloc — chosen on the board, carried across the tools
-- **Bilingual** — full FR/EN toggle, shared across the suite
-- **Configure your wing once** (HQ) — branding/squadrons shared with the other tools
-- **PDF & PNG export** — straight from your browser
-- **Auto-save** — your work is preserved in your browser's local storage
+- **Fully offline** — one HTML file, no install, no server, no internet
+- **One page, three editors** — bundled tiles, a single working `.miz` shared between tools
+- **Shared working file** — the same `.miz` flows from one tool to the next; edits accumulate until you save
+- **Surgical, non-destructive** — patched in place; a new `.miz` is downloaded, the original is untouched
+- **Strict preservation** — read-only groups/units, kept companion files
+- **Bilingual** — full FR / EN toggle, choice remembered
 
 ## 📸 Screenshots
 
-<!-- Drop your screenshots in docs/screenshots/ and update the paths below -->
-![board](docs/screenshots/board.png)
+![landing](docs/screenshots/landing.png)
 
-![briefing-generator](docs/screenshots/briefing_generator.png)
+![comm-plan-editor](docs/screenshots/comm_plan_editor.png)
 
-![recon-station](docs/screenshots/recon_station.png)
+![ground-unit-swapper](docs/screenshots/ground_unit_swapper.png)
+
+![weather-editor](docs/screenshots/weather_editor.png)
 
 ## 🚀 Quick Start
 
 **Option A — online (nothing to download)**
-1. Open **[the hosted version](https://mirabellebenou.github.io/dcs-mission-plan/)** in your browser (works on phone/tablet too)
-2. Pick a tool on the board and go
+
+1. Open **[the hosted version](https://mirabellebenou.github.io/dcs-mission-tools/)** in your browser (works on phone/tablet too)
+2. Pick a tool, drop a `.miz`, and edit
 
 **Option B — offline file**
-1. Download the latest `dcs_mission_plan.html` from the [Releases](../../releases) page
+
+1. Download the latest `dcs_mission_tools.html` from the [Releases](https://github.com/MirabelleBenou/dcs-mission-tools/releases) page
 2. Open it in any modern browser (Chrome recommended) — on PC or tablet
-3. It keeps working offline; bookmark or "Add to Home Screen" on mobile
+3. Pick a tool, **drop a `.miz`** and edit
 
-No account, no internet required after the first load.
+In both cases, **Save** downloads a new `.miz` (your original is left untouched).
 
-## 🛡️ For wing administrators
-
-Customize the branding for your virtual wing — done once, in **HQ**, and shared with every tool:
-
-1. Open **HQ** from the board
-2. Set the wing name, logo, squadrons, callsigns
-3. The configuration is shared automatically with Briefing Generator and Recon Station (and exportable to hand to your pilots)
-
-The default `MY WING` configuration is generic — replace it with your own.
+> Tip: always keep a backup of your missions before editing. No account, no internet required after the first load.
 
 ## 📓 Changelog
 
-See [CHANGELOG.md](./CHANGELOG.md) for the per-tool version history.
+See [CHANGELOG.md](https://github.com/MirabelleBenou/dcs-mission-tools/blob/main/CHANGELOG.md) for the per-tool version history.
 
 ## 🏗️ Building from source
 
-If you want to modify the code yourself.
+The page is **built**, not hand-written: `build_mission_tools.py` reads the module sources and tiles, base64-encodes them, and produces the single file.
 
 ### Prerequisites
+
 - Python 3.8+ (standard library only)
 
 ### Build
-Each tool builds to a standalone HTML, then the landing page embeds the live tools:
 
-```bash
-# 1) Build the tools
-python3 build_briefing_generator.py             # → dcs_briefing_generator.html
-python3 build_recon_station.py                  # → dcs_recon_station.html
-python3 build_hq.py                             # → dcs_hq.html
-python3 build_field_manual.py                   # → dcs_field_manual.html
-
-# 2) Assemble the landing page (embeds the tools + board tiles)
-python3 build_mission_plan.py                   # → dcs_mission_plan.html
+```
+python3 build_mission_tools.py        # → dcs_mission_tools.html
 ```
 
-The output `dcs_mission_plan.html` is the distributable (and the file published online).
+The output `dcs_mission_tools.html` is the distributable (and the file published on Releases).
 
 ### Project structure
+
 ```
 .
-├── build_mission_plan.py          # Landing/shell builder — embeds tools + tiles
-├── build_briefing_generator.py    # Briefing Generator builder (single script)
-├── build_recon_station.py         # Recon Station builder
-├── build_hq.py                    # HQ builder
-├── build_field_manual.py          # Field Manual builder
-├── assets.json                    # Embedded fonts, kraft texture (base64)
-├── tiles/                         # Board tiles (512² WebP): hq, bg, rs, fm, rp, kg
-├── docs/screenshots/              # README images
+├── build_mission_tools.py     # shell + bundler (embeds modules + tiles)
+├── modules/                   # standalone editors (source of truth)
+│   ├── dcs_comm_plan_editor.html
+│   ├── dcs_ground_unit_swapper.html
+│   └── dcs_weather_editor.html
+├── tiles/                     # landing tiles (512² WebP): cp, gu, wx
+├── dist/                      # built output: dcs_mission_tools.html
 ├── CHANGELOG.md
 ├── README.md
 └── LICENSE
 ```
 
+> The **source of truth** is each standalone module (never the built file). Filenames carry **no version** — versioning lives in GitHub tags / releases.
+
 ## 🗺️ Roadmap
 
-### ⏳ Work in Progress
-- ⏳ **HQ** — flight-package / Commander UI, and in-game `.miz` validation (out of beta)
-- ⏳ **Route Planner** — route legs, turn points, interactive map
-- ⏳ **Kneeboard Generator** — printable kneeboard cards
-- ⏳ **UI polish** and more themes
-
-### 📋 Planned (Briefing Generator)
-- Auto-save indicator, briefing templates (CAS / CAP / SEAD), URL-based sharing
-- Full-screen presentation mode, recurring-charts library
-- Briefing versioning + diff, auto checklist validation
+- ⏳ **Foothold Configurator** (`F·C`) — tune Foothold-style mission parameters
+- ⏳ **Loadout Editor** (`L·E`) — edit aircraft loadouts and payloads
+- ⏳ **UI polish** and shared language toggle across shell and tools
 
 ## 🤝 Contributing
 
-Bug reports and feature suggestions are welcome via the [Issues](../../issues) page.
+Bug reports and feature suggestions are welcome via the [Issues](https://github.com/MirabelleBenou/dcs-mission-tools/issues) page.
 
-For code contributions: fork, branch, study the build scripts to understand the architecture, test by rebuilding and opening the result in a browser, then open a pull request.
+For code contributions: fork, branch, study the build script to understand the architecture, test by rebuilding and opening the result in a browser, then open a pull request.
 
 ## ⚠️ Compatibility
 
-- **Chrome / Edge** (recommended): all features, including print-to-PDF
-- **Firefox**: works; PDF rendering may differ slightly
-- **Safari** (macOS & iOS): works, minor visual variations
-- **Mobile browsers** (Android/iOS): supported and a first-class target — touch, drag, rotation
+- **Chrome / Edge** (recommended): all features
+- **Firefox / Brave**: supported
+- **Mobile browsers** (Android / iOS): supported and a first-class target — touch, drag, rotation
 
 ## 📄 License
 
-[MIT License](./LICENSE) — free to use, modify, and distribute, including commercially.
+[MIT License](https://github.com/MirabelleBenou/dcs-mission-tools/blob/main/LICENSE) — free to use, modify, and distribute, including commercially.
 
 ## 🙏 Acknowledgments
 
 - Built for the DCS World virtual aviation community
-- Initial version developed for the **4th VEAW** virtual wing — distributed as a generic wing config example
-- Cold War kraft SVG file provided by Flappie, thanks to him !
+- Initial version developed for the **4th VEAW** virtual wing — distributed as generic, public tools
+- A companion to **[DCS Mission Plan](https://github.com/MirabelleBenou/dcs-mission-plan)** (briefings, recon, HQ)
 
 ---
 
