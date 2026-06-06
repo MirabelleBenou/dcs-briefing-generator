@@ -10,9 +10,10 @@ Sources modules actifs (à placer à côté de ce script) :
   dcs_hq.html
   DCS_World_Briefing_Generator.html
   dcs_recon_station.html
+  dcs_field_manual.html
 
 Sources images (à placer dans ./tiles/) :
-  tiles/hq.webp  tiles/bg.webp  tiles/rs.webp  tiles/rp.webp  tiles/kg.webp
+  tiles/hq.webp  tiles/bg.webp  tiles/rs.webp  tiles/fm.webp  tiles/rp.webp  tiles/kg.webp
 """
 
 import base64
@@ -25,8 +26,9 @@ OUT_FILE = 'dcs_mission_plan.html'
 # status : 'active' = module embarqué ; 'soon' = carte voilée uniquement
 MODULES = [
     {'id': 'hq', 'status': 'active', 'src': 'dcs_hq.html',                        'tile': 'tiles/hq.webp'},
-    {'id': 'bg', 'status': 'active', 'src': 'DCS_World_Briefing_Generator.html', 'tile': 'tiles/bg.webp'},
+    {'id': 'bg', 'status': 'active', 'src': 'dcs_briefing_generator.html',       'tile': 'tiles/bg.webp'},
     {'id': 'rs', 'status': 'active', 'src': 'dcs_recon_station.html',             'tile': 'tiles/rs.webp'},
+    {'id': 'fm', 'status': 'active', 'src': 'dcs_field_manual.html',              'tile': 'tiles/fm.webp'},
     {'id': 'rp', 'status': 'soon',   'src': '',                                    'tile': 'tiles/rp.webp'},
     {'id': 'kg', 'status': 'soon',   'src': '',                                    'tile': 'tiles/kg.webp'},
 ]
@@ -85,6 +87,7 @@ def build_html(module_html_js, tile_uris):
     tile_hq = tile_uris.get('hq', '')
     tile_bg = tile_uris.get('bg', '')
     tile_rs = tile_uris.get('rs', '')
+    tile_fm = tile_uris.get('fm', '')
     tile_rp = tile_uris.get('rp', '')
     tile_kg = tile_uris.get('kg', '')
 
@@ -112,7 +115,7 @@ def build_html(module_html_js, tile_uris):
   --f-ui:'Oswald','Arial Narrow',sans-serif;
   --f-body:'Barlow Condensed',sans-serif;
   --f-mono:'JetBrains Mono',monospace;
-  --a-hq:#4FB286; --a-bg:#c0892a; --a-rp:#7ac97a; --a-kg:#8fb0c0; --a-rs:#c95a9c;
+  --a-hq:#4FB286; --a-bg:#c0892a; --a-rp:#7ac97a; --a-kg:#8fb0c0; --a-rs:#c95a9c; --a-fm:#7E8FA6;
 }}
 [data-theme="cw-nato"]{{ --paper:#d8c9a5; --paper-edge:#8a7a52; --ink:#1f1c16; --ink-2:#463f30;
   --accent:#a98a4e; --olive:#4a5230; --stamp:#a83524; --amber:#c0892a;
@@ -230,9 +233,12 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
 #card-hq::before{{background:radial-gradient(circle at 12% 8%, rgba(96,64,30,.5), transparent 14%);}}
 #card-bg .shot{{background-image:url("{tile_bg}");}}
 #card-rs .shot{{background-image:url("{tile_rs}");}}
+#card-fm .shot{{background-image:url("{tile_fm}");}}
+#card-fm::before{{background:radial-gradient(circle at 90% 10%, rgba(96,64,30,.5), transparent 14%);}}
 .active-row .print:nth-child(1){{transform:rotate(-1.8deg);}}
 .active-row .print:nth-child(2){{transform:rotate(1.8deg);}}
 .active-row .print:nth-child(3){{transform:rotate(0deg);}}
+.active-row .print:nth-child(4){{transform:rotate(-1.4deg);}}
 .print.active:hover{{transform:rotate(0) translateY(-7px); cursor:pointer; box-shadow:0 30px 64px rgba(0,0,0,.6), 0 0 0 2px var(--card-accent);}}
 .cta{{margin:2px 8px 12px; display:inline-block; font-family:var(--f-ui); font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
   color:#15120c; background:var(--card-accent); border:1px solid var(--paper-edge); padding:9px 15px; border-radius:var(--rad);}}
@@ -395,6 +401,20 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
           </div>
           <span class="cta" data-i18n="cta">▶ Ouvrir le dossier</span>
         </div>
+        <div class="print active reveal d3" id="card-fm" style="--card-accent:var(--a-fm)" tabindex="0" role="button" aria-label="Field Manual">
+          <span class="tape"></span><span class="pin tl"></span><span class="pin tr"></span>
+          <div class="shot"></div>
+          <div class="caption">
+            <div class="cap-row">
+              <span class="logo" style="background:var(--a-fm)">F·M</span>
+              <span class="ptitle">Field Manual</span>
+              <span class="pver">v1.0.0</span>
+            </div>
+            <div class="pdesc" data-i18n="fm.desc">Le manuel d'emploi de la suite — un chapitre par module, schémas et mode d'emploi, entièrement hors-ligne.</div>
+            <div class="pstatus"><span class="dot"></span> <span data-i18n="status.op">Opérationnel</span></div>
+          </div>
+          <span class="cta" data-i18n="cta">▶ Ouvrir le dossier</span>
+        </div>
       </div>
 
       <!-- Modules à venir -->
@@ -445,7 +465,7 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
   /* ── Données ──────────────────────────────────────────────── */
   {module_html_js}
 
-  var APP_VERSION = '1.0';
+  var APP_VERSION = '1.1.0';
   var KEY_LANG  = 'lang_v1';
   var KEY_THEME = 'theme_v1';
 
@@ -462,6 +482,7 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
       'hq.desc': 'Poste de commandement — configuration Wing, identité escadrons, logos partagés avec tous les modules.',
       'bg.desc': 'Briefings complets — SITAC, plan radio, aérodromes, charts, annexes — export PDF prêt à partager.',
       'rs.desc': "Transforme une capture en photo d'analyse de reconnaissance — niveaux de gris, annotations, export PNG pleine résolution.",
+      'fm.desc': "Le manuel d'emploi de la suite — un chapitre par module, schémas et mode d'emploi, entièrement hors-ligne.",
       'status.op': 'Opérationnel',
       cta: '▶ Ouvrir le dossier',
       soon: 'À venir',
@@ -477,6 +498,7 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
       'hq.desc': 'Command hub — Wing configuration, squadron identity, logos shared across all modules.',
       'bg.desc': 'Complete briefings — SITAC, radio plan, airfields, charts, annexes — PDF export ready to share.',
       'rs.desc': 'Turns a screenshot into a reconnaissance analysis photo — greyscale, annotations, full-resolution PNG export.',
+      'fm.desc': "The suite's field manual — one chapter per module, diagrams and how-tos, fully offline.",
       'status.op': 'Operational',
       cta: '▶ Open the file',
       soon: 'Coming soon',
@@ -498,6 +520,22 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
   }}
 
   /* ── Thème ─────────────────────────────────────────────────── */
+  /* ── Tampon escadrille (lecture wing_config_v1) ───────────────── */
+  function wingShortName() {{
+    try {{
+      var c = JSON.parse(localStorage.getItem('wing_config_v1') || 'null');
+      return (c && c.wing && c.wing.shortName) ? c.wing.shortName : '';
+    }} catch(e) {{ return ''; }}
+  }}
+  function refreshWingStamps() {{
+    var name = wingShortName();
+    Object.keys(iframes).forEach(function(iid) {{
+      try {{
+        var lbl = iframes[iid].contentDocument.querySelector('.mp-wing-stamp-label');
+        if (lbl) lbl.textContent = name;
+      }} catch(e) {{}}
+    }});
+  }}
   function setTheme(val) {{
     if (!THEMES[val]) return;
     var d = THEMES[val];
@@ -511,6 +549,10 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
       el.textContent = val.indexOf('modern') === 0 ? (CURRENT_LANG === 'en' ? 'Coming' : 'Bientôt') : t('soon');
     }});
     try {{ localStorage.setItem(KEY_THEME, val); }} catch(e) {{}}
+    /* Propagation live : pousser data-theme dans les modules ouverts (CSS body[data-theme]) */
+    Object.keys(iframes).forEach(function(iid) {{
+      try {{ iframes[iid].contentDocument.body.setAttribute('data-theme', val); }} catch(e) {{}}
+    }});
   }}
 
   /* ── Langue ────────────────────────────────────────────────── */
@@ -597,11 +639,38 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
             + 'margin-right:12px;letter-spacing:.03em;min-height:36px;flex-shrink:0;';
           back.addEventListener('click', goHub);
           toolbar.insertBefore(back, toolbar.firstChild);
+          /* Tampon escadrille — clone du .tb-brand natif de BG (BG exclu : il l'a déjà) */
+          var sn = wingShortName();
+          if (id !== 'bg' && sn && !toolbar.querySelector('.mp-wing-stamp')) {{
+            if (!doc.getElementById('mp-stamp-style')) {{
+              var st = doc.createElement('style');
+              st.id = 'mp-stamp-style';
+              st.textContent =
+                '.mp-wing-stamp{{display:inline-flex;align-items:center;gap:10px;'
+              + 'margin-right:12px;padding-right:12px;border-right:1px solid #807454;'
+              + "font-family:'Stardos Stencil','Impact','Arial Narrow Bold',sans-serif;"
+              + 'font-weight:700;letter-spacing:2px;font-size:15px;color:var(--paper,#e8e3d8);'
+              + 'white-space:nowrap;flex-shrink:0;}}'
+              + '.mp-wing-stamp::before{{content:"";display:inline-block;width:8px;height:8px;'
+              + 'border-radius:50%;background:#c0892a;box-shadow:0 0 8px #c0892a;'
+              + 'animation:mp-pulse 2s ease-in-out infinite;flex-shrink:0;}}'
+              + '@keyframes mp-pulse{{0%,100%{{opacity:1;}}50%{{opacity:.4;}}}}';
+              doc.head.appendChild(st);
+            }}
+            var stamp = doc.createElement('span');
+            stamp.className = 'mp-wing-stamp';
+            var lbl = doc.createElement('span');
+            lbl.className = 'mp-wing-stamp-label';
+            lbl.textContent = sn;
+            stamp.appendChild(lbl);
+            toolbar.insertBefore(stamp, back.nextSibling);
+          }}
           /* Déplacer #btn-lang en fin de toolbar */
           var btnLang = doc.getElementById('btn-lang');
           if (btnLang) toolbar.appendChild(btnLang);
         }}
         console.log('[M·P v' + APP_VERSION + '] Module ' + id + ' chargé');
+        try {{ doc.body.setAttribute('data-theme', document.body.getAttribute('data-theme') || 'cw-nato'); }} catch(e) {{}}
       }});
 
       mv.appendChild(iframe);
@@ -609,6 +678,7 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
     }} else {{
       iframes[id].style.display = 'block';
       document.getElementById('module-loading').classList.add('hidden');
+      try {{ iframes[id].contentDocument.body.setAttribute('data-theme', document.body.getAttribute('data-theme') || 'cw-nato'); }} catch(e) {{}}
     }}
 
     activeModule = id;
@@ -658,8 +728,17 @@ body{{font-family:var(--f-body); background:var(--board-2); color:var(--paper); 
     document.getElementById('card-rs').addEventListener('keydown', function(e) {{
       if (e.key === 'Enter' || e.key === ' ') {{ e.preventDefault(); openModule('rs'); }}
     }});
+    document.getElementById('card-fm').addEventListener('click', function() {{ openModule('fm'); }});
+    document.getElementById('card-fm').addEventListener('keydown', function(e) {{
+      if (e.key === 'Enter' || e.key === ' ') {{ e.preventDefault(); openModule('fm'); }}
+    }});
 
     document.getElementById('flag-btn').addEventListener('click', toggleLang);
+    /* Sync inter-contextes : thème + tampon wing (srcdoc même origine) */
+    window.addEventListener('storage', function(e) {{
+      if (e.key === KEY_THEME && e.newValue && THEMES[e.newValue]) {{ setTheme(e.newValue); }}
+      else if (e.key === 'wing_config_v1') {{ refreshWingStamps(); }}
+    }});
 
     console.log('[M·P v' + APP_VERSION + '] Initialisé — langue: ' + CURRENT_LANG);
   }}
