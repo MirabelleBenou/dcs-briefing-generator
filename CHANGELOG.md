@@ -14,6 +14,16 @@ The suite bundles several **independently-versioned tools**, so entries are grou
 - **Tablet & mobile** first-class target (touch, drag, rotation-safe).
 - Wing configuration shared automatically across embedded tools.
 
+### `v1.1.0`
+#### Added
+- **Field Manual** — a new in-app documentation tool, staged on the board like the others: one illustrated chapter per module (HQ, Briefing Generator, Recon Station), line-art diagrams, FR/EN, fully offline.
+- **Live theme propagation** — changing the theme on the board (or in a tool) now updates every open tool instantly.
+- **Wing stamp in toolbars** — each tool's top bar shows the wing short name with a pulsing accent dot, read from the shared wing config.
+#### Changed
+- The board now stages **4 live tools** (HQ, Briefing Generator, Recon Station, Field Manual) in a 2×2 layout; canonical tile order HQ · BG · RS · FM.
+#### Internal
+- Briefing Generator build **unified** into a single `build_briefing_generator.py` (output renamed `dcs_briefing_generator.html`); the read-only-wing (P1.B) sources were reconstructed against the published build — **no functional change** (byte-identical output).
+
 ---
 
 ## HQ — `v0.1.0` (beta)
@@ -58,3 +68,12 @@ Initial release. Command post for the suite.
 - **Editable info block** (9 fields) and **classification banner** (4 levels).
 - **Wing logos** — manual upload or shared from HQ; colour / grey / white modes.
 - 4 themes, FR/EN.
+
+---
+
+## Field Manual — `v1.0.0`
+
+### Added
+- **In-app suite documentation** — opens on the board like the other tools. One illustrated chapter per module (Recon Station, HQ, Briefing Generator); upcoming tools (Route Planner, Kneeboard) stubbed as *coming*.
+- **No screenshots** — line-art SVG diagrams (one per chapter) and reused board tiles, on a "paper" surface.
+- 4 themes, FR/EN, fully offline.

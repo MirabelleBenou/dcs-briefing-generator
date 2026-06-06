@@ -8,7 +8,7 @@
 ![Platform](https://img.shields.io/badge/platform-Web-green)
 ![Offline](https://img.shields.io/badge/offline-yes-success)
 ![Tablet & mobile](https://img.shields.io/badge/tablet%20%26%20mobile-ready-orange)
-![Tools](https://img.shields.io/badge/tools-3%20live%20%C2%B7%202%20planned-brown)
+![Tools](https://img.shields.io/badge/tools-4%20live%20%C2%B7%202%20planned-brown)
 
 🌐 **[Use it online »](https://mirabellebenou.github.io/dcs-mission-plan/)** &nbsp;·&nbsp; 💾 **[Download the offline file »](../../releases)**
 
@@ -37,6 +37,7 @@ The landing page presents each tool as a **pinned print** on the board. Active t
 | **HQ** | Command post — configure your wing once (branding, squadrons), shared with the other tools; experimental `.miz` mission reader/patcher | 🧪 Beta `v0.1.0` |
 | **Briefing Generator** | Full mission briefings — SITAC, radio plan, airfields, charts, annexes — PDF & PNG export | ✅ `v2.2.0` |
 | **Recon Station** | Turn a screenshot into a reconnaissance analysis photo — sensor looks, annotations, lossless PNG | ✅ `v1.0.0` |
+| **Field Manual** | In-app documentation for the suite — one illustrated chapter per tool, diagrams, FR/EN, offline | ✅ `v1.0.0` |
 | **Route Planner** | Route legs, turn points, interactive map and loadouts | ⏳ Planned |
 | **Kneeboard Generator** | Printable kneeboard cards — frequencies, waypoints, checklists | ⏳ Planned |
 
@@ -67,6 +68,15 @@ Recon Station turns any screenshot into a convincing **reconnaissance analysis p
 - **Editable info block** — 9 fields, bold text, black/white
 - **Classification banner** — top/bottom bars, 4 levels, off by default
 - **Wing logos** — upload manually or pull the shared wing branding from HQ; colour / grey / white modes
+
+### 📖 Field Manual — in detail
+
+The Field Manual is the suite's **built-in documentation**, opened from the board like any other tool — **no internet, no separate guide to download**.
+
+- **One chapter per tool** — Recon Station, HQ, Briefing Generator (upcoming tools are stubbed)
+- **Diagrams, not screenshots** — each chapter has a hand-drawn-style **SVG schematic** (e.g. *what feeds what* in the Briefing Generator) that adapts to the active theme
+- **"What it's for" first** — plain explanations of each tool's purpose and workflow
+- **4 themes, FR/EN**, fully offline
 
 ## ✨ Features
 
@@ -127,9 +137,10 @@ Each tool builds to a standalone HTML, then the landing page embeds the live too
 
 ```bash
 # 1) Build the tools
-python3 build_css.py && python3 build_html.py   # → DCS_World_Briefing_Generator.html
+python3 build_briefing_generator.py             # → dcs_briefing_generator.html
 python3 build_recon_station.py                  # → dcs_recon_station.html
 python3 build_hq.py                             # → dcs_hq.html
+python3 build_field_manual.py                   # → dcs_field_manual.html
 
 # 2) Assemble the landing page (embeds the tools + board tiles)
 python3 build_mission_plan.py                   # → dcs_mission_plan.html
@@ -141,11 +152,12 @@ The output `dcs_mission_plan.html` is the distributable (and the file published 
 ```
 .
 ├── build_mission_plan.py          # Landing/shell builder — embeds tools + tiles
-├── build_html.py / build_css.py   # Briefing Generator builders
+├── build_briefing_generator.py    # Briefing Generator builder (single script)
 ├── build_recon_station.py         # Recon Station builder
 ├── build_hq.py                    # HQ builder
+├── build_field_manual.py          # Field Manual builder
 ├── assets.json                    # Embedded fonts, kraft texture (base64)
-├── tiles/                         # Board tiles (512² WebP): hq, bg, rs, rp, kg
+├── tiles/                         # Board tiles (512² WebP): hq, bg, rs, fm, rp, kg
 ├── docs/screenshots/              # README images
 ├── CHANGELOG.md
 ├── README.md
@@ -158,7 +170,6 @@ The output `dcs_mission_plan.html` is the distributable (and the file published 
 - ⏳ **HQ** — flight-package / Commander UI, and in-game `.miz` validation (out of beta)
 - ⏳ **Route Planner** — route legs, turn points, interactive map
 - ⏳ **Kneeboard Generator** — printable kneeboard cards
-- ⏳ **In-app help** — embedded help module
 - ⏳ **UI polish** and more themes
 
 ### 📋 Planned (Briefing Generator)
